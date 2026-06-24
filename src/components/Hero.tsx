@@ -254,15 +254,15 @@ export default function Hero() {
             {/* Headline */}
             <motion.div variants={childVariants} className="mb-3">
               <h1 className="text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.9]">
-                <span className="block text-white">Dolev</span>
-                <span className="block" style={{
+                <span className="text-white">Dolev </span>
+                <span style={{
                   background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                   backgroundSize: '200% 200%',
                 }}>
-                  Atik.
+                  Atik
                 </span>
               </h1>
             </motion.div>

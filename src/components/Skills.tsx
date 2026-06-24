@@ -1,7 +1,5 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { techStack } from '../data/portfolio'
-import LiveTerminal from './LiveTerminal'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
@@ -117,40 +115,6 @@ function SkillCategoryCard({ cat, delay }: { cat: typeof skillCategories[0]; del
   )
 }
 
-function TechLogo({ tech, index }: { tech: typeof techStack[0]; index: number }) {
-  const color = tech.color
-  return (
-    <FadeIn delay={index * 0.03}>
-      <motion.div
-        className="group flex flex-col items-center gap-2 p-4 rounded-xl cursor-default select-none"
-        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}
-        whileHover={{
-          scale: 1.1,
-          y: -6,
-          background: `${color}0d`,
-          borderColor: `${color}30`,
-          boxShadow: `0 12px 40px ${color}15`,
-        }}
-        animate={{
-          y: [0, index % 2 === 0 ? -5 : 5, 0],
-        }}
-        transition={{
-          y: { duration: 3 + (index % 3), repeat: Infinity, ease: 'easeInOut', delay: index * 0.15 },
-        }}
-      >
-        <motion.div
-          className="w-2.5 h-2.5 rounded-full"
-          style={{ background: color }}
-          animate={{ boxShadow: [`0 0 4px ${color}40`, `0 0 12px ${color}80`, `0 0 4px ${color}40`] }}
-          transition={{ duration: 2, repeat: Infinity, delay: index * 0.1 }}
-        />
-        <span className="text-[11px] font-medium text-white/45 group-hover:text-white/90 transition-colors text-center leading-tight">
-          {tech.name}
-        </span>
-      </motion.div>
-    </FadeIn>
-  )
-}
 
 export default function Skills() {
   return (
@@ -180,41 +144,10 @@ export default function Skills() {
         </FadeIn>
 
         {/* Skill category cards */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-24">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
           {skillCategories.map((cat, i) => (
             <SkillCategoryCard key={cat.title} cat={cat} delay={0.1 + i * 0.08} />
           ))}
-        </div>
-
-        {/* Terminal + Tech stack side by side */}
-        <div className="grid lg:grid-cols-2 gap-10 mb-16">
-          {/* Live Terminal */}
-          <div>
-            <FadeIn>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">Live Terminal</span>
-                <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/30 to-transparent" />
-              </div>
-              <p className="text-white/30 text-sm mb-5">Real commands from real workflows.</p>
-            </FadeIn>
-            <LiveTerminal />
-          </div>
-
-          {/* Tech stack */}
-          <div>
-            <FadeIn>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">Tech Stack</span>
-                <div className="flex-1 h-px bg-gradient-to-r from-purple-500/30 to-transparent" />
-              </div>
-              <p className="text-white/30 text-sm mb-5">Everything in the arsenal.</p>
-            </FadeIn>
-            <div className="grid grid-cols-4 gap-2">
-              {techStack.map((tech, i) => (
-                <TechLogo key={tech.name} tech={tech} index={i} />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </section>

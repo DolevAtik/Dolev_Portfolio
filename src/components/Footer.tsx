@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Mail, Code2, Heart } from 'lucide-react'
+import { Mail, Heart } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { personalInfo } from '../data/portfolio'
 
@@ -15,13 +15,12 @@ export default function Footer() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
-              <Code2 size={14} className="text-white" />
-            </div>
-            <span className="font-semibold text-white text-sm tracking-tight">
-              Dolev Atik
-            </span>
+          <div className="flex items-center">
+            <img
+              src="/logo.png"
+              alt="Dolev Atik"
+              className="h-8 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-200"
+            />
           </div>
 
           {/* Center: copyright */}

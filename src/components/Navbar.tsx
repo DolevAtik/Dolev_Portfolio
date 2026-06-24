@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Code2 } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 const navLinks = [
   { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
+  { label: 'Journey', href: '#journey' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },
   { label: 'Education', href: '#education' },
@@ -58,15 +58,15 @@ export default function Navbar() {
             <motion.a
               href="#hero"
               onClick={(e) => { e.preventDefault(); handleNav('#hero') }}
-              className="flex items-center gap-2 group"
-              whileHover={{ scale: 1.02 }}
+              className="flex items-center group"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <Code2 size={16} className="text-white" />
-              </div>
-              <span className="font-semibold text-white tracking-tight">
-                Dolev<span className="text-gradient-blue">.</span>
-              </span>
+              <img
+                src="/logo.png"
+                alt="Dolev Atik"
+                className="h-9 w-auto object-contain"
+              />
             </motion.a>
 
             {/* Desktop nav */}
