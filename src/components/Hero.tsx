@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, type Variants } from 'framer-motion'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { motion, useMotionValue, useSpring, type Variants } from 'framer-motion'
 import { Mail, ChevronDown, Download, ExternalLink } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { personalInfo } from '../data/portfolio'
 
-const TYPING_SPEED = 80
-const DELETE_SPEED = 40
-const PAUSE_DURATION = 2000
+const TYPING_SPEED = 75
+const DELETE_SPEED = 35
+const PAUSE_DURATION = 2200
 
 function useTypingEffect(words: string[]) {
   const [text, setText] = useState('')
@@ -16,7 +16,6 @@ function useTypingEffect(words: string[]) {
 
   useEffect(() => {
     const currentWord = words[wordIndex]
-
     const tick = () => {
       if (!isDeleting) {
         if (text.length < currentWord.length) {
@@ -35,7 +34,6 @@ function useTypingEffect(words: string[]) {
         }
       }
     }
-
     timeout.current = setTimeout(tick, isDeleting ? DELETE_SPEED : TYPING_SPEED)
     return () => { if (timeout.current) clearTimeout(timeout.current) }
   }, [text, isDeleting, wordIndex, words])
@@ -44,285 +42,329 @@ function useTypingEffect(words: string[]) {
 }
 
 function FloatingParticles() {
+  const particles = useRef(
+    Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2.5 + 0.5,
+      duration: 5 + Math.random() * 6,
+      delay: Math.random() * 5,
+      color: i % 3 === 0 ? 'rgba(59,130,246,0.7)' : i % 3 === 1 ? 'rgba(6,182,212,0.7)' : 'rgba(168,85,247,0.5)',
+    }))
+  )
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 30 }).map((_, i) => (
+      {particles.current.map((p) => (
         <motion.div
-          key={i}
+          key={p.id}
           className="absolute rounded-full"
-          style={{
-            width: Math.random() * 3 + 1,
-            height: Math.random() * 3 + 1,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            background: i % 3 === 0
-              ? 'rgba(59,130,246,0.6)'
-              : i % 3 === 1
-              ? 'rgba(6,182,212,0.6)'
-              : 'rgba(168,85,247,0.6)',
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.8, 0.2],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 4,
-            repeat: Infinity,
-            delay: Math.random() * 4,
-            ease: 'easeInOut',
-          }}
+          style={{ width: p.size, height: p.size, left: `${p.x}%`, top: `${p.y}%`, background: p.color }}
+          animate={{ y: [0, -40, 0], opacity: [0.1, 0.8, 0.1], scale: [1, 1.6, 1] }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: 'easeInOut' }}
         />
       ))}
     </div>
   )
 }
 
-function AnimatedIllustration() {
-  return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      {/* Outer glow ring */}
-      <motion.div
-        className="absolute w-80 h-80 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',
-          border: '1px solid rgba(59,130,246,0.1)',
-        }}
-        animate={{ scale: [1, 1.05, 1], rotate: [0, 360] }}
-        transition={{ scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 30, repeat: Infinity, ease: 'linear' } }}
-      />
+function TechOrbit() {
+  const nodes = [
+    { icon: '🐍', label: 'Python', r: 130, startAngle: 0, speed: 18 },
+    { icon: '⚛️', label: 'React', r: 130, startAngle: 72, speed: 18 },
+    { icon: '🐳', label: 'Docker', r: 130, startAngle: 144, speed: 18 },
+    { icon: '☸️', label: 'K8s', r: 130, startAngle: 216, speed: 18 },
+    { icon: '🤖', label: 'AI', r: 130, startAngle: 288, speed: 18 },
+    { icon: '⚡', label: 'Flask', r: 75, startAngle: 0, speed: -12 },
+    { icon: '🗄️', label: 'MongoDB', r: 75, startAngle: 120, speed: -12 },
+    { icon: '🔀', label: 'CI/CD', r: 75, startAngle: 240, speed: -12 },
+  ]
 
-      {/* Middle ring */}
+  return (
+    <div className="relative w-[340px] h-[340px] flex items-center justify-center">
+      {/* Rings */}
+      <motion.div className="absolute w-64 h-64 rounded-full" style={{ border: '1px solid rgba(59,130,246,0.08)' }}
+        animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: 'linear' }} />
+      <motion.div className="absolute w-40 h-40 rounded-full" style={{ border: '1px dashed rgba(6,182,212,0.12)' }}
+        animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: 'linear' }} />
+
+      {/* Glow core */}
       <motion.div
-        className="absolute w-56 h-56 rounded-full"
-        style={{
-          border: '1px dashed rgba(6,182,212,0.2)',
-        }}
-        animate={{ rotate: [0, -360] }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+        className="absolute w-40 h-40 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%)' }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Core */}
       <motion.div
-        className="relative z-10 w-32 h-32 rounded-2xl flex items-center justify-center"
+        className="relative z-10 w-28 h-28 rounded-2xl flex flex-col items-center justify-center gap-1"
         style={{
-          background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.15))',
-          border: '1px solid rgba(59,130,246,0.3)',
+          background: 'linear-gradient(135deg, rgba(59,130,246,0.12), rgba(168,85,247,0.08))',
+          border: '1px solid rgba(59,130,246,0.25)',
           backdropFilter: 'blur(20px)',
+          boxShadow: '0 0 40px rgba(59,130,246,0.15)',
         }}
-        animate={{ y: [-8, 8, -8] }}
+        animate={{ y: [-6, 6, -6] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <div className="text-center">
-          <div className="font-mono text-xs text-blue-400 leading-relaxed">
-            <div className="text-purple-400">{'<'}<span className="text-blue-400">AI</span>{'>'}</div>
-            <div className="text-cyan-400 text-lg font-bold">{'{ }'}</div>
-            <div className="text-purple-400">{'</'}<span className="text-blue-400">AI</span>{'>'}</div>
-          </div>
-        </div>
+        <span className="font-mono text-xs text-blue-400">{'<DA/>'}</span>
+        <span className="text-[10px] text-white/30 font-mono">engineer</span>
       </motion.div>
 
       {/* Orbiting nodes */}
-      {[
-        { icon: '🐍', label: 'Python', color: '#3b82f6', angle: 0, radius: 120 },
-        { icon: '⚛️', label: 'React', color: '#06b6d4', angle: 72, radius: 120 },
-        { icon: '🐳', label: 'Docker', color: '#a855f7', angle: 144, radius: 120 },
-        { icon: '☸️', label: 'K8s', color: '#3b82f6', angle: 216, radius: 120 },
-        { icon: '🤖', label: 'AI', color: '#06b6d4', angle: 288, radius: 120 },
-      ].map((node, i) => (
+      {nodes.map((node, i) => (
         <motion.div
           key={i}
           className="absolute"
-          style={{
-            x: Math.cos((node.angle * Math.PI) / 180) * node.radius,
-            y: Math.sin((node.angle * Math.PI) / 180) * node.radius,
-          }}
-          animate={{
-            x: [
-              Math.cos(((node.angle) * Math.PI) / 180) * node.radius,
-              Math.cos(((node.angle + 360) * Math.PI) / 180) * node.radius,
-            ],
-            y: [
-              Math.sin(((node.angle) * Math.PI) / 180) * node.radius,
-              Math.sin(((node.angle + 360) * Math.PI) / 180) * node.radius,
-            ],
-          }}
-          transition={{ duration: 15 + i * 2, repeat: Infinity, ease: 'linear' }}
+          animate={{ rotate: [node.startAngle, node.startAngle + (node.speed > 0 ? 360 : -360)] }}
+          transition={{ duration: Math.abs(node.speed), repeat: Infinity, ease: 'linear' }}
+          style={{ width: node.r * 2, height: node.r * 2 }}
         >
-          <motion.div
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-lg"
+          <div
+            className="absolute"
             style={{
-              background: `rgba(${node.color === '#3b82f6' ? '59,130,246' : node.color === '#06b6d4' ? '6,182,212' : '168,85,247'}, 0.15)`,
-              border: `1px solid ${node.color}40`,
-              backdropFilter: 'blur(8px)',
+              top: 0,
+              left: '50%',
+              transform: `translateX(-50%)`,
             }}
-            whileHover={{ scale: 1.3 }}
           >
-            {node.icon}
-          </motion.div>
+            <motion.div
+              className="flex items-center justify-center w-9 h-9 rounded-xl text-base cursor-default"
+              style={{
+                background: 'rgba(15,15,20,0.8)',
+                border: '1px solid rgba(59,130,246,0.15)',
+                backdropFilter: 'blur(8px)',
+              }}
+              animate={{ rotate: node.speed > 0 ? [-node.startAngle, -node.startAngle - 360] : [-node.startAngle, -node.startAngle + 360] }}
+              transition={{ duration: Math.abs(node.speed), repeat: Infinity, ease: 'linear' }}
+              whileHover={{ scale: 1.3, borderColor: 'rgba(59,130,246,0.5)' }}
+            >
+              {node.icon}
+            </motion.div>
+          </div>
         </motion.div>
       ))}
 
-      {/* Code lines floating */}
+      {/* Floating code snippets */}
       {[
-        { code: 'def deploy():', color: 'text-blue-400', x: 180, y: -80 },
-        { code: 'kubectl apply', color: 'text-cyan-400', x: -160, y: 40 },
-        { code: 'model.predict()', color: 'text-purple-400', x: 140, y: 100 },
-        { code: 'docker build .', color: 'text-blue-300', x: -120, y: -60 },
-      ].map((line, i) => (
+        { text: 'def train_model():', color: '#60a5fa', x: 190, y: -70 },
+        { text: 'kubectl apply -f', color: '#34d399', x: -175, y: 30 },
+        { text: 'rag.query(prompt)', color: '#a78bfa', x: 160, y: 115 },
+        { text: 'docker push', color: '#22d3ee', x: -150, y: -85 },
+      ].map((snip, i) => (
         <motion.div
           key={i}
-          className={`absolute font-mono text-xs ${line.color} opacity-50`}
-          style={{ x: line.x, y: line.y }}
-          animate={{ opacity: [0.3, 0.7, 0.3], y: [line.y, line.y - 10, line.y] }}
-          transition={{ duration: 3 + i, repeat: Infinity, delay: i * 0.8 }}
+          className="absolute font-mono text-[10px] font-medium pointer-events-none select-none"
+          style={{ color: snip.color, x: snip.x, y: snip.y, opacity: 0.55 }}
+          animate={{ opacity: [0.3, 0.7, 0.3], y: [snip.y, snip.y - 8, snip.y] }}
+          transition={{ duration: 3 + i * 0.8, repeat: Infinity, delay: i * 0.9 }}
         >
-          {line.code}
+          {snip.text}
         </motion.div>
       ))}
     </div>
   )
 }
 
+function MouseGlow() {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const springX = useSpring(x, { damping: 25, stiffness: 120 })
+  const springY = useSpring(y, { damping: 25, stiffness: 120 })
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    x.set(e.clientX)
+    y.set(e.clientY)
+  }, [x, y])
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [handleMouseMove])
+
+  return (
+    <motion.div
+      className="fixed pointer-events-none z-0"
+      style={{
+        x: springX,
+        y: springY,
+        translateX: '-50%',
+        translateY: '-50%',
+        width: 500,
+        height: 500,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, rgba(168,85,247,0.03) 40%, transparent 70%)',
+      }}
+    />
+  )
+}
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+}
+const childVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+}
+
 export default function Hero() {
   const typedText = useTypingEffect(personalInfo.roles)
-
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.12 } },
-  }
-  const childVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-  }
 
   return (
     <section
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg"
     >
-      {/* Background gradients */}
+      <MouseGlow />
+
+      {/* Layered background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[150px]" />
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-[140px]"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.08), transparent)' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[120px]"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.07), transparent)' }} />
+        <div className="absolute top-3/4 left-1/3 w-[300px] h-[300px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.05), transparent)' }} />
       </div>
 
       <FloatingParticles />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-16">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
+        <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+
           {/* Left: Text */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {/* Badge */}
+          <motion.div variants={containerVariants} initial="hidden" animate="visible">
+
+            {/* Status badge */}
             <motion.div variants={childVariants} className="inline-flex items-center gap-2 mb-8">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-blue-500/20 text-xs font-medium text-blue-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"
+                style={{ background: 'rgba(16,185,129,0.05)', borderColor: 'rgba(16,185,129,0.2)', color: '#34d399' }}>
+                <motion.span
+                  className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                  animate={{ opacity: [1, 0.3, 1], scale: [1, 1.3, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
                 Available for opportunities
               </div>
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 variants={childVariants} className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[0.95] mb-6">
-              <span className="text-white">{personalInfo.name}</span>
-            </motion.h1>
+            <motion.div variants={childVariants} className="mb-3">
+              <h1 className="text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.9]">
+                <span className="block text-white">Dolev</span>
+                <span className="block" style={{
+                  background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  backgroundSize: '200% 200%',
+                }}>
+                  Atik.
+                </span>
+              </h1>
+            </motion.div>
 
             {/* Typing role */}
-            <motion.div variants={childVariants} className="h-10 mb-6 flex items-center">
-              <span className="text-xl md:text-2xl font-semibold text-gradient-blue">
+            <motion.div variants={childVariants} className="flex items-center gap-2 h-9 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+              <span className="text-lg md:text-xl font-semibold text-white/80">
                 {typedText}
               </span>
-              <span className="ml-0.5 w-0.5 h-7 bg-blue-400 animate-blink inline-block" />
+              <span className="w-0.5 h-6 bg-blue-400 animate-blink flex-shrink-0" />
             </motion.div>
 
             {/* Tagline */}
-            <motion.p variants={childVariants} className="text-lg text-white/50 leading-relaxed max-w-xl mb-10">
+            <motion.p variants={childVariants} className="text-base md:text-lg text-white/45 leading-relaxed max-w-lg mb-8">
               {personalInfo.tagline}
             </motion.p>
 
-            {/* Stats row */}
-            <motion.div variants={childVariants} className="flex items-center gap-8 mb-10">
+            {/* Stats */}
+            <motion.div variants={childVariants} className="flex items-center gap-6 mb-10 py-5 border-y border-white/[0.04]">
               {[
-                { label: 'GPA', value: '93' },
-                { label: 'Production Sites', value: '20+' },
-                { label: 'Projects Shipped', value: '25+' },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-2xl font-bold text-white">{stat.value}</div>
-                  <div className="text-xs text-white/40 mt-0.5">{stat.label}</div>
+                { val: '93', unit: 'GPA', desc: 'Computer Science' },
+                { val: '20+', unit: 'Sites', desc: 'In production' },
+                { val: '3+', unit: 'Years', desc: 'Building software' },
+              ].map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-2xl font-black text-white">{s.val}</div>
+                  <div className="text-xs font-bold text-blue-400 mt-0.5">{s.unit}</div>
+                  <div className="text-[10px] text-white/30 mt-0.5">{s.desc}</div>
                 </div>
               ))}
+              <div className="w-px h-10 bg-white/[0.06] mx-2" />
+              <div className="text-xs text-white/30 leading-relaxed max-w-[120px]">
+                Co-Founder<br /><span className="text-blue-400">Web4You</span> Agency
+              </div>
             </motion.div>
 
-            {/* CTA Buttons */}
+            {/* CTA */}
             <motion.div variants={childVariants} className="flex flex-wrap gap-3">
               <motion.a
                 href="#projects"
                 onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-500 text-white font-semibold text-sm hover:bg-blue-400 transition-all duration-200 shadow-lg shadow-blue-500/25"
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.98 }}
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+                style={{
+                  background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+                  boxShadow: '0 0 0 0 rgba(59,130,246,0.3)',
+                }}
+                whileHover={{ scale: 1.04, y: -2, boxShadow: '0 8px 30px rgba(59,130,246,0.35)' }}
+                whileTap={{ scale: 0.97 }}
               >
-                <ExternalLink size={16} />
+                <ExternalLink size={15} className="group-hover:rotate-12 transition-transform duration-200" />
                 View Projects
               </motion.a>
 
               <motion.a
                 href="/cv.pdf"
                 download
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass border border-white/10 text-white font-semibold text-sm hover:bg-white/[0.06] transition-all duration-200"
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                whileHover={{ scale: 1.04, y: -2, background: 'rgba(255,255,255,0.07)' }}
+                whileTap={{ scale: 0.97 }}
               >
-                <Download size={16} />
-                Download CV
+                <Download size={15} />
+                Resume
               </motion.a>
 
-              <motion.a
-                href={personalInfo.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-xl glass border border-white/10 text-white/70 hover:text-white font-semibold text-sm hover:bg-white/[0.06] transition-all duration-200"
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <GithubIcon size={16} />
-              </motion.a>
+              {[
+                { icon: <GithubIcon size={16} />, href: personalInfo.github, label: 'GitHub' },
+                { icon: <LinkedinIcon size={16} />, href: personalInfo.linkedin, label: 'LinkedIn' },
+                { icon: <Mail size={16} />, href: `mailto:${personalInfo.email}`, label: 'Email' },
+              ].map(({ icon, href, label }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="inline-flex items-center justify-center w-11 h-11 rounded-xl text-white/50 hover:text-white transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  whileHover={{ scale: 1.1, y: -2, background: 'rgba(59,130,246,0.1)', borderColor: 'rgba(59,130,246,0.3)' }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {icon}
+                </motion.a>
+              ))}
+            </motion.div>
 
-              <motion.a
-                href={personalInfo.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-xl glass border border-white/10 text-white/70 hover:text-white font-semibold text-sm hover:bg-white/[0.06] transition-all duration-200"
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <LinkedinIcon size={16} />
-              </motion.a>
-
-              <motion.a
-                href={`mailto:${personalInfo.email}`}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-xl glass border border-white/10 text-white/70 hover:text-white font-semibold text-sm hover:bg-white/[0.06] transition-all duration-200"
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Mail size={16} />
-              </motion.a>
+            {/* Keyboard shortcut hint */}
+            <motion.div variants={childVariants} className="mt-6 flex items-center gap-2 text-xs text-white/20">
+              <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">⌘K</kbd>
+              <span>to open command palette</span>
             </motion.div>
           </motion.div>
 
-          {/* Right: Animated illustration */}
+          {/* Right: Illustration */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex items-center justify-center h-[500px]"
+            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden lg:flex items-center justify-center"
           >
-            <AnimatedIllustration />
+            <TechOrbit />
           </motion.div>
         </div>
       </div>
@@ -331,15 +373,19 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30"
+        transition={{ delay: 2.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/20"
       >
-        <span className="text-xs font-mono">scroll</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-5 h-8 rounded-full border border-white/[0.1] flex items-start justify-center pt-1.5"
+          animate={{ opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
         >
-          <ChevronDown size={16} />
+          <motion.div
+            className="w-1 h-2 rounded-full bg-white/40"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity }}
+          />
         </motion.div>
       </motion.div>
     </section>

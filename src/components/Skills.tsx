@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { skills, techStack } from '../data/portfolio'
+import { techStack } from '../data/portfolio'
+import LiveTerminal from './LiveTerminal'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
@@ -17,45 +18,149 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-function SkillBar({ name, level, delay }: { name: string; level: number; delay: number }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
+const skillCategories = [
+  {
+    title: 'Backend & APIs',
+    color: 'blue',
+    accent: '#3b82f6',
+    skills: [
+      { name: 'Python', detail: 'Flask, FastAPI, automation', years: '3y' },
+      { name: 'Node.js', detail: 'Express, REST, async patterns', years: '2y' },
+      { name: 'Java', detail: 'OOP, data structures, algorithms', years: '2y' },
+      { name: 'SQL / NoSQL', detail: 'PostgreSQL, MongoDB, queries', years: '2y' },
+    ],
+  },
+  {
+    title: 'AI & Intelligence',
+    color: 'purple',
+    accent: '#a855f7',
+    skills: [
+      { name: 'LLMs & Prompting', detail: 'Ollama, OpenAI API integration', years: '1y' },
+      { name: 'RAG Systems', detail: 'ChromaDB, vector embeddings', years: '1y' },
+      { name: 'ChromaDB', detail: 'Vector storage, semantic search', years: '1y' },
+      { name: 'AI Pipelines', detail: 'End-to-end LLM applications', years: '1y' },
+    ],
+  },
+  {
+    title: 'DevOps & Cloud',
+    color: 'cyan',
+    accent: '#06b6d4',
+    skills: [
+      { name: 'Docker', detail: 'Compose, multi-stage builds', years: '2y' },
+      { name: 'Kubernetes', detail: 'Deployments, pods, services', years: '1y' },
+      { name: 'GitHub Actions', detail: 'CI/CD pipelines, automation', years: '2y' },
+      { name: 'Linux / Bash', detail: 'Shell scripting, system admin', years: '3y' },
+    ],
+  },
+  {
+    title: 'Frontend',
+    color: 'blue',
+    accent: '#60a5fa',
+    skills: [
+      { name: 'React', detail: 'Hooks, context, TypeScript', years: '2y' },
+      { name: 'TypeScript', detail: 'Type safety, interfaces, generics', years: '2y' },
+      { name: 'Tailwind CSS', detail: 'Utility-first, responsive design', years: '2y' },
+      { name: 'Framer Motion', detail: 'Animations, transitions', years: '1y' },
+    ],
+  },
+]
 
+const colorMap: Record<string, { bg: string; border: string; text: string; dot: string }> = {
+  blue: { bg: 'rgba(59,130,246,0.05)', border: 'rgba(59,130,246,0.12)', text: '#60a5fa', dot: '#3b82f6' },
+  purple: { bg: 'rgba(168,85,247,0.05)', border: 'rgba(168,85,247,0.12)', text: '#c084fc', dot: '#a855f7' },
+  cyan: { bg: 'rgba(6,182,212,0.05)', border: 'rgba(6,182,212,0.12)', text: '#22d3ee', dot: '#06b6d4' },
+}
+
+function SkillCategoryCard({ cat, delay }: { cat: typeof skillCategories[0]; delay: number }) {
+  const c = colorMap[cat.color]
   return (
-    <div ref={ref} className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-white/80">{name}</span>
-        <span className="text-xs font-mono text-white/30">{level}%</span>
-      </div>
-      <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: 'linear-gradient(90deg, #3b82f6, #06b6d4)' }}
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${level}%` } : { width: 0 }}
-          transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
-        />
-      </div>
-    </div>
+    <FadeIn delay={delay}>
+      <motion.div
+        className="h-full rounded-2xl p-6 overflow-hidden relative"
+        style={{ background: c.bg, border: `1px solid ${c.border}` }}
+        whileHover={{ scale: 1.01, y: -3 }}
+        transition={{ duration: 0.2 }}
+      >
+        {/* Subtle corner glow */}
+        <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-20 blur-2xl pointer-events-none"
+          style={{ background: c.text }} />
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-2 h-2 rounded-full" style={{ background: c.dot, boxShadow: `0 0 8px ${c.dot}` }} />
+            <h3 className="font-bold text-white text-sm tracking-tight">{cat.title}</h3>
+          </div>
+
+          <div className="space-y-3">
+            {cat.skills.map((skill) => (
+              <motion.div
+                key={skill.name}
+                className="flex items-start gap-3 p-3 rounded-xl group cursor-default"
+                style={{ background: 'rgba(255,255,255,0.02)' }}
+                whileHover={{ background: 'rgba(255,255,255,0.04)', x: 3 }}
+                transition={{ duration: 0.15 }}
+              >
+                <div className="w-1 h-full min-h-[2rem] rounded-full mt-1 flex-shrink-0" style={{ background: c.dot, opacity: 0.6 }} />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
+                    <span className="text-sm font-semibold text-white/90">{skill.name}</span>
+                    <span className="text-[10px] font-mono text-white/25 flex-shrink-0">{skill.years}</span>
+                  </div>
+                  <p className="text-xs text-white/35 leading-relaxed">{skill.detail}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </FadeIn>
   )
 }
 
-const categoryColors: Record<string, string> = {
-  Languages: 'text-blue-400 border-blue-500/20 bg-blue-500/10',
-  Backend: 'text-cyan-400 border-cyan-500/20 bg-cyan-500/10',
-  Frontend: 'text-purple-400 border-purple-500/20 bg-purple-500/10',
-  DevOps: 'text-blue-400 border-blue-500/20 bg-blue-500/10',
-  AI: 'text-purple-400 border-purple-500/20 bg-purple-500/10',
+function TechLogo({ tech, index }: { tech: typeof techStack[0]; index: number }) {
+  const color = tech.color
+  return (
+    <FadeIn delay={index * 0.03}>
+      <motion.div
+        className="group flex flex-col items-center gap-2 p-4 rounded-xl cursor-default select-none"
+        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}
+        whileHover={{
+          scale: 1.1,
+          y: -6,
+          background: `${color}0d`,
+          borderColor: `${color}30`,
+          boxShadow: `0 12px 40px ${color}15`,
+        }}
+        animate={{
+          y: [0, index % 2 === 0 ? -5 : 5, 0],
+        }}
+        transition={{
+          y: { duration: 3 + (index % 3), repeat: Infinity, ease: 'easeInOut', delay: index * 0.15 },
+        }}
+      >
+        <motion.div
+          className="w-2.5 h-2.5 rounded-full"
+          style={{ background: color }}
+          animate={{ boxShadow: [`0 0 4px ${color}40`, `0 0 12px ${color}80`, `0 0 4px ${color}40`] }}
+          transition={{ duration: 2, repeat: Infinity, delay: index * 0.1 }}
+        />
+        <span className="text-[11px] font-medium text-white/45 group-hover:text-white/90 transition-colors text-center leading-tight">
+          {tech.name}
+        </span>
+      </motion.div>
+    </FadeIn>
+  )
 }
 
 export default function Skills() {
   return (
     <section id="skills" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-1/2 top-1/4 w-[600px] h-[400px] bg-blue-600/5 -translate-x-1/2 rounded-full blur-[120px]" />
+        <div className="absolute left-1/2 top-1/3 -translate-x-1/2 w-[600px] h-[500px] bg-blue-600/4 rounded-full blur-[130px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Skills header */}
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">04 — Skills</span>
@@ -64,83 +169,52 @@ export default function Skills() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
             <span className="text-white">Tools of</span>
             <br />
             <span className="text-gradient-blue">the craft.</span>
           </h2>
+          <p className="text-white/35 text-base mb-14 max-w-lg">
+            Not just a list — skills built through shipping real production software.
+          </p>
         </FadeIn>
 
-        {/* Skill categories */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
-          {Object.entries(skills).map(([category, items], catIdx) => (
-            <FadeIn key={category} delay={0.1 + catIdx * 0.08}>
-              <div
-                className="p-6 rounded-2xl h-full"
-                style={{
-                  background: 'rgba(255,255,255,0.02)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                }}
-              >
-                <div className={`inline-flex px-2.5 py-1 rounded-md text-xs font-mono font-semibold border mb-5 ${categoryColors[category]}`}>
-                  {category}
-                </div>
-                <div className="space-y-4">
-                  {items.map((skill, i) => (
-                    <SkillBar
-                      key={skill.name}
-                      name={skill.name}
-                      level={skill.level}
-                      delay={0.15 + catIdx * 0.05 + i * 0.07}
-                    />
-                  ))}
-                </div>
-              </div>
-            </FadeIn>
+        {/* Skill category cards */}
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-24">
+          {skillCategories.map((cat, i) => (
+            <SkillCategoryCard key={cat.title} cat={cat} delay={0.1 + i * 0.08} />
           ))}
         </div>
 
-        {/* Tech Stack */}
-        <FadeIn>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">Tech Stack</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/30 to-transparent" />
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={0.1}>
-          <h3 className="text-2xl font-bold text-white mb-10">Everything in the arsenal.</h3>
-        </FadeIn>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3">
-          {techStack.map((tech, i) => (
-            <FadeIn key={tech.name} delay={i * 0.04}>
-              <motion.div
-                className="group flex flex-col items-center gap-2 p-4 rounded-xl cursor-default"
-                style={{
-                  background: 'rgba(255,255,255,0.02)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                }}
-                whileHover={{
-                  scale: 1.08,
-                  y: -4,
-                  background: `rgba(${tech.color === '#3b82f6' ? '59,130,246' : tech.color === '#06b6d4' ? '6,182,212' : tech.color === '#a855f7' ? '168,85,247' : '249,115,22'}, 0.08)`,
-                  borderColor: `${tech.color}40`,
-                  boxShadow: `0 8px 30px ${tech.color}20`,
-                }}
-                transition={{ duration: 0.2 }}
-                animate={{ y: [0, i % 2 === 0 ? -4 : 4, 0] }}
-              >
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: tech.color, boxShadow: `0 0 8px ${tech.color}80` }}
-                />
-                <span className="text-xs font-medium text-white/50 group-hover:text-white/90 transition-colors text-center leading-tight">
-                  {tech.name}
-                </span>
-              </motion.div>
+        {/* Terminal + Tech stack side by side */}
+        <div className="grid lg:grid-cols-2 gap-10 mb-16">
+          {/* Live Terminal */}
+          <div>
+            <FadeIn>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">Live Terminal</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/30 to-transparent" />
+              </div>
+              <p className="text-white/30 text-sm mb-5">Real commands from real workflows.</p>
             </FadeIn>
-          ))}
+            <LiveTerminal />
+          </div>
+
+          {/* Tech stack */}
+          <div>
+            <FadeIn>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">Tech Stack</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-purple-500/30 to-transparent" />
+              </div>
+              <p className="text-white/30 text-sm mb-5">Everything in the arsenal.</p>
+            </FadeIn>
+            <div className="grid grid-cols-4 gap-2">
+              {techStack.map((tech, i) => (
+                <TechLogo key={tech.name} tech={tech} index={i} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
