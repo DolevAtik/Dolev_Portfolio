@@ -220,14 +220,14 @@ function ProjectCard({ project, index, large }: { project: typeof projects[0]; i
           transition={{ duration: 0.3 }}
         />
 
-        <div className="p-6 flex flex-col flex-1">
+        <div className="p-3 md:p-6 flex flex-col flex-1">
           {/* Badges */}
-          <div className="flex items-center justify-between mb-4">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono text-white/30 border border-white/[0.05]">
+          <div className="flex items-center justify-between mb-2 md:mb-4">
+            <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-mono text-white/30 border border-white/[0.05]">
               {project.category}
             </span>
             {project.featured && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-medium text-blue-400 border border-blue-500/20"
+              <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-medium text-blue-400 border border-blue-500/20"
                 style={{ background: 'rgba(59,130,246,0.08)' }}>
                 Featured
               </span>
@@ -235,56 +235,65 @@ function ProjectCard({ project, index, large }: { project: typeof projects[0]; i
           </div>
 
           {/* Icon + title */}
-          <div className="flex items-start gap-3 mb-3">
-            <span className={large ? 'text-3xl' : 'text-2xl'}>{project.icon}</span>
+          <div className="flex items-start gap-2 md:gap-3 mb-2 md:mb-3">
+            <span className={large ? 'text-xl md:text-3xl' : 'text-lg md:text-2xl'}>{project.icon}</span>
             <div>
-              <h3 className={`font-bold text-white leading-tight ${large ? 'text-xl' : 'text-lg'}`}>{project.title}</h3>
-              <p className="text-xs text-white/35 mt-0.5">{project.subtitle}</p>
+              <h3 className={`font-bold text-white leading-tight ${large ? 'text-sm md:text-xl' : 'text-xs md:text-lg'}`}>{project.title}</h3>
+              <p className="text-[10px] md:text-xs text-white/35 mt-0.5 hidden md:block">{project.subtitle}</p>
             </div>
           </div>
 
-          <p className="text-sm text-white/45 leading-relaxed mb-5 flex-1 line-clamp-3">
+          <p className="text-[11px] md:text-sm text-white/45 leading-relaxed mb-3 md:mb-5 flex-1 line-clamp-2 md:line-clamp-3">
             {project.description}
           </p>
 
           {/* Tech */}
-          <div className="flex flex-wrap gap-1.5 mb-5">
-            {project.tech.slice(0, large ? 7 : 5).map((t) => (
-              <span key={t} className="px-2 py-0.5 rounded text-[10px] text-white/35 border border-white/[0.05]"
+          <div className="flex flex-wrap gap-1 md:gap-1.5 mb-2 md:mb-5">
+            {project.tech.slice(0, large ? 3 : 2).map((t) => (
+              <span key={t} className="px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] text-white/35 border border-white/[0.05]"
+                style={{ background: 'rgba(255,255,255,0.02)' }}>
+                {t}
+              </span>
+            ))}
+            {project.tech.length > (large ? 3 : 2) && (
+              <span className="px-1.5 py-0.5 text-[9px] md:text-[10px] text-white/20 md:hidden">+{project.tech.length - (large ? 3 : 2)}</span>
+            )}
+            {project.tech.slice(large ? 3 : 2, large ? 7 : 5).map((t) => (
+              <span key={t} className="hidden md:inline px-2 py-0.5 rounded text-[10px] text-white/35 border border-white/[0.05]"
                 style={{ background: 'rgba(255,255,255,0.02)' }}>
                 {t}
               </span>
             ))}
             {project.tech.length > (large ? 7 : 5) && (
-              <span className="px-2 py-0.5 text-[10px] text-white/20">+{project.tech.length - (large ? 7 : 5)}</span>
+              <span className="hidden md:inline px-2 py-0.5 text-[10px] text-white/20">+{project.tech.length - (large ? 7 : 5)}</span>
             )}
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
-            <div className="flex gap-2">
+          <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-white/[0.04]">
+            <div className="flex gap-1 md:gap-2">
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
+                className="p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
                 onClick={(e) => e.stopPropagation()}
               >
-                <GithubIcon size={14} />
+                <GithubIcon size={12} />
               </a>
               {project.live && (
                 <a
                   href={project.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
+                  className="p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <ExternalLink size={14} />
+                  <ExternalLink size={12} />
                 </a>
               )}
             </div>
-            <span className="flex items-center gap-1 text-xs text-white/20 group-hover:text-blue-400 transition-colors">
+            <span className="hidden md:flex items-center gap-1 text-xs text-white/20 group-hover:text-blue-400 transition-colors">
               Case study
               <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </span>
@@ -330,14 +339,14 @@ export default function Projects() {
         </FadeIn>
 
         {/* Featured grid */}
-        <div className="grid md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
           {featured.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} large />
           ))}
         </div>
 
         {/* Secondary grid */}
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {rest.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={featured.length + i} />
           ))}

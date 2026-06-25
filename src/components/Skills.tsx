@@ -74,7 +74,7 @@ function SkillCategoryCard({ cat, delay }: { cat: typeof skillCategories[0]; del
   return (
     <FadeIn delay={delay}>
       <motion.div
-        className="h-full rounded-2xl p-6 overflow-hidden relative"
+        className="h-full rounded-2xl p-3 md:p-6 overflow-hidden relative"
         style={{ background: c.bg, border: `1px solid ${c.border}` }}
         whileHover={{ scale: 1.01, y: -3 }}
         transition={{ duration: 0.2 }}
@@ -84,27 +84,27 @@ function SkillCategoryCard({ cat, delay }: { cat: typeof skillCategories[0]; del
           style={{ background: c.text }} />
 
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-5">
-            <div className="w-2 h-2 rounded-full" style={{ background: c.dot, boxShadow: `0 0 8px ${c.dot}` }} />
-            <h3 className="font-bold text-white text-sm tracking-tight">{cat.title}</h3>
+          <div className="flex items-center gap-2 mb-3 md:mb-5">
+            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: c.dot, boxShadow: `0 0 8px ${c.dot}` }} />
+            <h3 className="font-bold text-white text-xs md:text-sm tracking-tight">{cat.title}</h3>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2 md:space-y-3">
             {cat.skills.map((skill) => (
               <motion.div
                 key={skill.name}
-                className="flex items-start gap-3 p-3 rounded-xl group cursor-default"
+                className="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-xl group cursor-default"
                 style={{ background: 'rgba(255,255,255,0.02)' }}
                 whileHover={{ background: 'rgba(255,255,255,0.04)', x: 3 }}
                 transition={{ duration: 0.15 }}
               >
-                <div className="w-1 h-full min-h-[2rem] rounded-full mt-1 flex-shrink-0" style={{ background: c.dot, opacity: 0.6 }} />
+                <div className="w-1 h-full min-h-[1.5rem] rounded-full mt-1 flex-shrink-0" style={{ background: c.dot, opacity: 0.6 }} />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-0.5">
-                    <span className="text-sm font-semibold text-white/90">{skill.name}</span>
-                    <span className="text-[10px] font-mono text-white/25 flex-shrink-0">{skill.years}</span>
+                  <div className="flex items-center justify-between gap-1 mb-0.5">
+                    <span className="text-[11px] md:text-sm font-semibold text-white/90 truncate">{skill.name}</span>
+                    <span className="text-[9px] md:text-[10px] font-mono text-white/25 flex-shrink-0">{skill.years}</span>
                   </div>
-                  <p className="text-xs text-white/35 leading-relaxed">{skill.detail}</p>
+                  <p className="text-[10px] md:text-xs text-white/35 leading-relaxed hidden md:block">{skill.detail}</p>
                 </div>
               </motion.div>
             ))}
@@ -144,7 +144,7 @@ export default function Skills() {
         </FadeIn>
 
         {/* Skill category cards */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
           {skillCategories.map((cat, i) => (
             <SkillCategoryCard key={cat.title} cat={cat} delay={0.1 + i * 0.08} />
           ))}
