@@ -24,7 +24,7 @@ export default function Footer() {
           </div>
 
           {/* Center: copyright */}
-          <p className="text-xs text-white/25 flex items-center gap-1.5">
+          <p className="text-xs text-white/45 flex items-center gap-1.5">
             © {year} Dolev Atik. Built with{' '}
             <Heart size={11} className="text-blue-400 fill-blue-400" />
             {' '}React, TypeScript & Framer Motion.
@@ -43,11 +43,11 @@ export default function Footer() {
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
+                className="inline-flex items-center justify-center w-11 h-11 rounded-lg text-white/45 hover:text-white hover:bg-white/[0.05] transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Icon size={15} />
+                <Icon size={18} />
               </motion.a>
             ))}
           </div>

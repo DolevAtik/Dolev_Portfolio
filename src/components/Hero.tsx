@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useMotionValue, useSpring, type Variants } from 'framer-motion'
-import { Mail, Download, ExternalLink } from 'lucide-react'
+import { Mail, Download, ExternalLink, Code2, Atom, Container, Network, Bot, FlaskConical, Database, GitBranch, type LucideIcon } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { personalInfo } from '../data/portfolio'
-import { isMobileViewport } from '../lib/mobile'
-import { useSiteReady } from '../context/SiteReadyContext'
+import { useMobileViewport } from '../lib/mobile'
 
 const TYPING_SPEED = 75
 const DELETE_SPEED = 35
@@ -72,15 +71,15 @@ function FloatingParticles() {
 }
 
 function TechOrbit() {
-  const nodes = [
-    { icon: '🐍', label: 'Python', r: 130, startAngle: 0, speed: 18 },
-    { icon: '⚛️', label: 'React', r: 130, startAngle: 72, speed: 18 },
-    { icon: '🐳', label: 'Docker', r: 130, startAngle: 144, speed: 18 },
-    { icon: '☸️', label: 'K8s', r: 130, startAngle: 216, speed: 18 },
-    { icon: '🤖', label: 'AI', r: 130, startAngle: 288, speed: 18 },
-    { icon: '⚡', label: 'Flask', r: 75, startAngle: 0, speed: -12 },
-    { icon: '🗄️', label: 'MongoDB', r: 75, startAngle: 120, speed: -12 },
-    { icon: '🔀', label: 'CI/CD', r: 75, startAngle: 240, speed: -12 },
+  const nodes: { Icon: LucideIcon; label: string; r: number; startAngle: number; speed: number; color: string }[] = [
+    { Icon: Code2, label: 'Python', r: 130, startAngle: 0, speed: 18, color: '#60a5fa' },
+    { Icon: Atom, label: 'React', r: 130, startAngle: 72, speed: 18, color: '#22d3ee' },
+    { Icon: Container, label: 'Docker', r: 130, startAngle: 144, speed: 18, color: '#60a5fa' },
+    { Icon: Network, label: 'K8s', r: 130, startAngle: 216, speed: 18, color: '#a78bfa' },
+    { Icon: Bot, label: 'AI', r: 130, startAngle: 288, speed: 18, color: '#c084fc' },
+    { Icon: FlaskConical, label: 'Flask', r: 75, startAngle: 0, speed: -12, color: '#34d399' },
+    { Icon: Database, label: 'MongoDB', r: 75, startAngle: 120, speed: -12, color: '#22d3ee' },
+    { Icon: GitBranch, label: 'CI/CD', r: 75, startAngle: 240, speed: -12, color: '#60a5fa' },
   ]
 
   return (
@@ -112,13 +111,13 @@ function TechOrbit() {
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
         <span className="font-mono text-xs text-blue-400">{'<DA/>'}</span>
-        <span className="text-[10px] text-white/30 font-mono">engineer</span>
+        <span className="text-xs text-white/45 font-mono">engineer</span>
       </motion.div>
 
       {/* Orbiting nodes */}
       {nodes.map((node, i) => (
         <motion.div
-          key={i}
+          key={node.label}
           className="absolute"
           animate={{ rotate: [node.startAngle, node.startAngle + (node.speed > 0 ? 360 : -360)] }}
           transition={{ duration: Math.abs(node.speed), repeat: Infinity, ease: 'linear' }}
@@ -133,7 +132,7 @@ function TechOrbit() {
             }}
           >
             <motion.div
-              className="flex items-center justify-center w-9 h-9 rounded-xl text-base cursor-default"
+              className="flex items-center justify-center w-9 h-9 rounded-xl cursor-default"
               style={{
                 background: 'rgba(15,15,20,0.8)',
                 border: '1px solid rgba(59,130,246,0.15)',
@@ -142,8 +141,9 @@ function TechOrbit() {
               animate={{ rotate: node.speed > 0 ? [-node.startAngle, -node.startAngle - 360] : [-node.startAngle, -node.startAngle + 360] }}
               transition={{ duration: Math.abs(node.speed), repeat: Infinity, ease: 'linear' }}
               whileHover={{ scale: 1.3, borderColor: 'rgba(59,130,246,0.5)' }}
+              title={node.label}
             >
-              {node.icon}
+              <node.Icon size={16} style={{ color: node.color }} aria-hidden />
             </motion.div>
           </div>
         </motion.div>
@@ -158,7 +158,7 @@ function TechOrbit() {
       ].map((snip, i) => (
         <motion.div
           key={i}
-          className="absolute font-mono text-[10px] font-medium pointer-events-none select-none"
+          className="absolute font-mono text-xs font-medium pointer-events-none select-none"
           style={{ color: snip.color, x: snip.x, y: snip.y, opacity: 0.55 }}
           animate={{ opacity: [0.3, 0.7, 0.3], y: [snip.y, snip.y - 8, snip.y] }}
           transition={{ duration: 3 + i * 0.8, repeat: Infinity, delay: i * 0.9 }}
@@ -214,8 +214,7 @@ const childVariants: Variants = {
 
 export default function Hero() {
   const typedText = useTypingEffect(personalInfo.roles)
-  const isMobile = isMobileViewport()
-  const siteReady = useSiteReady()
+  const isMobile = useMobileViewport()
 
   const heroContent = (
     <>
@@ -267,7 +266,7 @@ export default function Hero() {
             </p>
 
             {/* Stats */}
-            <div className="flex items-center gap-6 mb-10 py-5 border-y border-white/[0.04]">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
               {[
                 { val: '93', unit: 'GPA', desc: 'Computer Science' },
                 { val: '20+', unit: 'Sites', desc: 'In production' },
@@ -329,11 +328,12 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* Keyboard shortcut hint */}
-            <div className="mt-6 flex items-center gap-2 text-xs text-white/20">
-              <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">⌘K</kbd>
-              <span>to open command palette</span>
-            </div>
+            {!isMobile && (
+              <div className="mt-6 flex items-center gap-2 text-xs text-white/20">
+                <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">⌘K</kbd>
+                <span>to open command palette</span>
+              </div>
+            )}
     </>
   )
 
@@ -364,13 +364,13 @@ export default function Hero() {
           {isMobile ? (
             <motion.div
               initial={{ opacity: 0 }}
-              animate={siteReady ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.6, delay: siteReady ? 0.08 : 0, ease: [0.22, 1, 0.36, 1] }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               {heroContent}
             </motion.div>
           ) : (
-          <motion.div variants={containerVariants} initial="hidden" animate={siteReady ? 'visible' : 'hidden'}>
+          <motion.div variants={containerVariants} initial="hidden" animate="visible">
             {/* Status badge */}
             <motion.div variants={childVariants} className="inline-flex items-center gap-2 mb-8">
               <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"
@@ -415,7 +415,7 @@ export default function Hero() {
             </motion.p>
 
             {/* Stats */}
-            <motion.div variants={childVariants} className="flex items-center gap-6 mb-10 py-5 border-y border-white/[0.04]">
+            <motion.div variants={childVariants} className="flex flex-wrap items-center gap-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
               {[
                 { val: '93', unit: 'GPA', desc: 'Computer Science' },
                 { val: '20+', unit: 'Sites', desc: 'In production' },

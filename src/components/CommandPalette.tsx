@@ -31,7 +31,7 @@ function getCommands(): Command[] {
   return [
     { id: 'projects', label: 'View Projects', description: 'AI SOC Analyst, MentConnect & more', icon: <Code2 size={16} />, action: () => scrollTo('#projects'), category: 'Navigate', keywords: ['projects', 'work', 'portfolio'] },
     { id: 'about', label: 'About Dolev', description: 'CS student, Co-Founder of Web4You', icon: <User size={16} />, action: () => scrollTo('#about'), category: 'Navigate', keywords: ['about', 'bio', 'me'] },
-    { id: 'experience', label: 'Experience', description: 'Web4You — Co-Founder & Developer', icon: <Briefcase size={16} />, action: () => scrollTo('#experience'), category: 'Navigate', keywords: ['experience', 'job', 'work'] },
+    { id: 'journey', label: 'Journey', description: 'Web4You — Co-Founder & Developer', icon: <Briefcase size={16} />, action: () => scrollTo('#journey'), category: 'Navigate', keywords: ['journey', 'experience', 'job', 'work'] },
     { id: 'skills', label: 'Skills & Stack', description: 'Python, Docker, React, K8s, AI/LLMs', icon: <Terminal size={16} />, action: () => scrollTo('#skills'), category: 'Navigate', keywords: ['skills', 'tech', 'stack', 'languages'] },
     { id: 'education', label: 'Education', description: 'CS Degree, GPA 93 + DevOps Training', icon: <GraduationCap size={16} />, action: () => scrollTo('#education'), category: 'Navigate', keywords: ['education', 'degree', 'university', 'gpa'] },
     { id: 'contact', label: 'Contact', description: 'dolev5454@gmail.com', icon: <Mail size={16} />, action: () => scrollTo('#contact'), category: 'Navigate', keywords: ['contact', 'email', 'hire', 'reach'] },
@@ -107,11 +107,15 @@ export default function CommandPalette() {
   return (
     <>
       {/* Trigger hint */}
-      <div className="fixed bottom-6 right-6 z-40 hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg glass border border-white/[0.06] text-xs text-white/30 cursor-pointer hover:text-white/60 transition-colors"
-        onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        aria-label="Open command palette"
+        className="fixed bottom-6 right-6 z-40 hidden md:flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-lg glass border border-white/[0.08] text-xs text-white/45 cursor-pointer hover:text-white/70 transition-colors"
+        onClick={() => setOpen(true)}
+      >
         <span className="font-mono">⌘K</span>
         <span>Command</span>
-      </div>
+      </button>
 
       <AnimatePresence>
         {open && (
@@ -142,9 +146,9 @@ export default function CommandPalette() {
                   onChange={(e) => { setQuery(e.target.value); setEasterResult(null) }}
                   onKeyDown={handleKeyDown}
                   placeholder="Search or type a command..."
-                  className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-white/25 font-mono"
+                  className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-white/40 font-mono"
                 />
-                <kbd className="px-2 py-0.5 rounded text-xs font-mono text-white/20 border border-white/[0.06]">ESC</kbd>
+                <kbd className="px-2 py-0.5 rounded text-xs font-mono text-white/40 border border-white/[0.08]">ESC</kbd>
               </div>
 
               {/* Easter egg result */}
@@ -167,14 +171,14 @@ export default function CommandPalette() {
               {/* Results */}
               <div className="max-h-80 overflow-y-auto py-2">
                 {filtered.length === 0 && !easterResult ? (
-                  <div className="px-4 py-8 text-center text-sm text-white/25 font-mono">
+                  <div className="px-4 py-8 text-center text-sm text-white/45 font-mono">
                     No results for "{query}"
-                    <div className="text-xs mt-2 text-white/15">try: sudo hire dolev</div>
+                    <div className="text-xs mt-2 text-white/35">try: sudo hire dolev</div>
                   </div>
                 ) : (
                   Object.entries(categoryGroups).map(([cat, cmds]) => (
                     <div key={cat}>
-                      <div className="px-4 py-1.5 text-[10px] font-mono text-white/20 uppercase tracking-widest">{cat}</div>
+                      <div className="px-4 py-1.5 text-xs font-mono text-white/40 uppercase tracking-widest">{cat}</div>
                       {cmds.map((cmd) => {
                         const globalIdx = filtered.indexOf(cmd)
                         return (
@@ -205,10 +209,10 @@ export default function CommandPalette() {
 
               {/* Footer hint */}
               <div className="px-4 py-2.5 border-t border-white/[0.04] flex items-center justify-between">
-                <span className="text-xs text-white/20 font-mono">
+                <span className="text-xs text-white/40 font-mono">
                   Try: sudo hire dolev
                 </span>
-                <div className="flex items-center gap-3 text-[10px] text-white/20">
+                <div className="flex items-center gap-3 text-xs text-white/40">
                   <span><kbd className="font-mono">↑↓</kbd> navigate</span>
                   <span><kbd className="font-mono">↵</kbd> select</span>
                 </div>

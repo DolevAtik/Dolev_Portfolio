@@ -119,7 +119,7 @@ export default function Navbar() {
                   href={link.href}
                   data-nav-link={id}
                   onClick={(e) => { e.preventDefault(); handleNav(link.href) }}
-                  className={`relative shrink-0 px-1.5 md:px-4 py-1.5 md:py-2 text-[11px] md:text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  className={`relative shrink-0 px-2 md:px-4 py-2 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-colors duration-200 ${
                     isActive ? 'text-white' : 'text-white/50 hover:text-white/90'
                   }`}
                   whileHover={{ scale: 1.02 }}
@@ -127,7 +127,7 @@ export default function Navbar() {
                   {isActive && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 bg-white/[0.06] rounded-lg border border-white/[0.08]"
+                      className="absolute inset-0 bg-white/[0.06] rounded-lg border border-white/[0.08] pointer-events-none"
                       transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
                     />
                   )}
