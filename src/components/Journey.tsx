@@ -83,7 +83,7 @@ const CARD_GAP = 20
 
 function MilestoneCard({ m, index, isActive }: { m: typeof MILESTONES[0]; index: number; isActive: boolean }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const inView = useInView(ref, { once: true, margin: '0px' })
   const Icon = m.icon
 
   return (
@@ -91,7 +91,7 @@ function MilestoneCard({ m, index, isActive }: { m: typeof MILESTONES[0]; index:
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
       className="flex-shrink-0 flex flex-col"
       style={{ width: CARD_WIDTH }}
     >

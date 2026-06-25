@@ -33,10 +33,7 @@ export default function App() {
         {loading && <Loader key="loader" onComplete={handleLoaderComplete} />}
       </AnimatePresence>
 
-      <div
-        className="min-h-screen bg-[#070707] text-white relative"
-        style={loading ? { visibility: 'hidden', pointerEvents: 'none' } : undefined}
-      >
+      <div className="min-h-screen bg-[#070707] text-white relative">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-blue-500 focus:text-white focus:font-medium focus:text-sm"

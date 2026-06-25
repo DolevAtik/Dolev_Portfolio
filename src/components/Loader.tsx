@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const BOOT_STEPS = [
   { cmd: 'initializing portfolio...', status: null, delay: 0 },
-  { cmd: 'loading dependencies', status: 'done', delay: 150 },
-  { cmd: 'connecting to docker', status: 'done', delay: 300 },
-  { cmd: 'starting kubernetes cluster', status: 'done', delay: 450 },
-  { cmd: 'initializing AI engine', status: 'done', delay: 600 },
-  { cmd: 'compiling projects...', status: 'done', delay: 750 },
-  { cmd: 'launching portfolio', status: null, delay: 900 },
+  { cmd: 'loading dependencies', status: 'done', delay: 350 },
+  { cmd: 'connecting to docker', status: 'done', delay: 700 },
+  { cmd: 'starting kubernetes cluster', status: 'done', delay: 1050 },
+  { cmd: 'initializing AI engine', status: 'done', delay: 1400 },
+  { cmd: 'compiling projects...', status: 'done', delay: 1750 },
+  { cmd: 'launching portfolio', status: null, delay: 2100 },
 ]
 
 interface LoaderProps {
@@ -30,8 +30,8 @@ export default function Loader({ onComplete }: LoaderProps) {
 
     setTimeout(() => {
       setExiting(true)
-      setTimeout(onComplete, 400)
-    }, 1200)
+      setTimeout(onComplete, 500)
+    }, 2700)
   }, [onComplete])
 
   return (
@@ -41,7 +41,7 @@ export default function Loader({ onComplete }: LoaderProps) {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.04 }}
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#070707] overflow-hidden"
         >
           {/* Animated grid background */}

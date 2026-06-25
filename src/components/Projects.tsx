@@ -6,13 +6,13 @@ import { GithubIcon } from './SocialIcons'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const inView = useInView(ref, { once: true, margin: '0px' })
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.4, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
@@ -427,9 +427,6 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
 }
 
 export default function Projects() {
-  const featured = projects.filter((p) => p.featured)
-  const rest = projects.filter((p) => !p.featured)
-
   return (
     <section id="projects" aria-labelledby="projects-heading" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -456,17 +453,10 @@ export default function Projects() {
           </p>
         </FadeIn>
 
-        {/* Featured grid */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3 md:mb-4">
-          {featured.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={i} large />
-          ))}
-        </div>
-
-        {/* Secondary grid */}
+        {/* 2x2 grid — all projects in order */}
         <div className="grid grid-cols-2 gap-3 md:gap-4">
-          {rest.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={featured.length + i} />
+          {projects.map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i} large={i < 2} />
           ))}
         </div>
       </div>
