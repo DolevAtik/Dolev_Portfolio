@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/portfolio'
-import { ExternalLink, ArrowRight, X, CheckCircle2, ArrowDown, Lock, AlertTriangle, Lightbulb } from 'lucide-react'
+import { ExternalLink, ArrowRight, X, CheckCircle2, ArrowDown, Lock, AlertTriangle, Lightbulb, Smartphone } from 'lucide-react'
 import { GithubIcon } from './SocialIcons'
 import { useMobileViewport } from '../lib/mobile'
 import FadeIn from './FadeIn'
@@ -48,6 +48,62 @@ function ArchFlow({ nodes }: { nodes: string[] }) {
 }
 
 type Project = typeof projects[0]
+
+const storeBtnSm = 'inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium border text-amber-400/70 border-amber-500/25'
+const storeBtnMd = 'inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-amber-400/70 border border-amber-500/25'
+const storeBtnStyle = { background: 'rgba(245,158,11,0.06)' }
+
+function StoreLinks({
+  appStore,
+  googlePlay,
+  size = 'sm',
+  onClick,
+}: {
+  appStore?: string | null
+  googlePlay?: string | null
+  size?: 'sm' | 'md'
+  onClick?: (e: React.MouseEvent) => void
+}) {
+  const cls = size === 'sm' ? storeBtnSm : storeBtnMd
+  const iconSize = size === 'sm' ? 9 : 12
+  const stores = [
+    { href: appStore, label: size === 'sm' ? 'App Store' : 'App Store', aria: 'App Store' },
+    { href: googlePlay, label: size === 'sm' ? 'Google Play' : 'Google Play', aria: 'Google Play' },
+  ] as const
+
+  return (
+    <>
+      {stores.map(({ href, label, aria }) =>
+        href ? (
+          <a
+            key={aria}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={aria}
+            className={cls}
+            style={storeBtnStyle}
+            onClick={onClick}
+          >
+            <Smartphone size={iconSize} />
+            {label}
+          </a>
+        ) : (
+          <span
+            key={aria}
+            aria-label={`${aria} — available soon`}
+            className={`${cls} opacity-45 cursor-not-allowed`}
+            style={storeBtnStyle}
+            onClick={onClick}
+          >
+            <Smartphone size={iconSize} />
+            {label}
+          </span>
+        ),
+      )}
+    </>
+  )
+}
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const arch = architectures[project.id]
@@ -217,7 +273,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           </div>
 
           {/* Links */}
-          <div className="flex gap-2 pt-2 border-t border-white/[0.04]">
+          <div className="flex flex-wrap gap-2 pt-2 border-t border-white/[0.04]">
             {project.github ? (
               <motion.a
                 href={project.github}
@@ -231,12 +287,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 <GithubIcon size={13} />
                 View Source
               </motion.a>
-            ) : isSoon ? (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-amber-400/60 cursor-default"
-                style={{ background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)' }}>
-                <Lock size={12} />
-                Coming Soon
-              </div>
             ) : null}
 
             {project.live ? (
@@ -253,11 +303,11 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 Live Demo
               </motion.a>
             ) : isSoon ? (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-white/35 cursor-default"
-                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <Lock size={12} />
-                Private Project
-              </div>
+              <StoreLinks
+                appStore={'appStore' in project ? project.appStore : null}
+                googlePlay={'googlePlay' in project ? project.googlePlay : null}
+                size="md"
+              />
             ) : null}
           </div>
         </div>
@@ -284,7 +334,7 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
         initial={isMobile ? false : { opacity: 0, y: 40 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: isMobile ? 0 : 0.65, delay: isMobile ? 0 : index * 0.09 }}
-        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col md:h-full"
+        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full aspect-square md:aspect-auto md:min-h-[400px] lg:min-h-[440px]"
         style={
           isSoon
             ? { background: 'rgba(20,10,0,0.6)', border: '1.5px solid rgba(245,158,11,0.35)' }
@@ -322,174 +372,254 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
           transition={{ duration: 0.3 }}
         />
 
-        <div className="p-4 md:p-6 flex flex-col flex-1">
-          {/* Mobile: horizontal header — wider, less tall */}
-          <div className="flex items-start gap-3 mb-3 md:hidden">
-            <span className={`flex-shrink-0 text-2xl ${isSoon ? 'text-amber-100' : ''}`}>{project.icon}</span>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center flex-wrap gap-1.5 mb-1">
-                <h3 className={`font-bold leading-tight ${isSoon ? 'text-amber-100' : 'text-white'} text-base`}>{project.title}</h3>
+        <div className="p-3 md:p-7 flex flex-col flex-1 min-w-0 h-full">
+        {/* Mobile: visual tile — icon-first, minimal text */}
+        <div className="md:hidden flex flex-col h-full relative">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: isSoon
+                ? 'radial-gradient(circle at 50% 20%, rgba(245,158,11,0.12), transparent 65%)'
+                : 'radial-gradient(circle at 50% 20%, rgba(59,130,246,0.08), transparent 65%)',
+            }}
+          />
+
+          <div className="relative z-10 flex items-center justify-between gap-1 mb-1">
+            <span className={`text-[8px] font-mono uppercase tracking-widest truncate ${isSoon ? 'text-amber-400/45' : 'text-white/30'}`}>
+              {project.category.split('/')[0].trim()}
+            </span>
+            {isSoon ? (
+              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[7px] font-bold text-amber-300/90 border border-amber-500/30"
+                style={{ background: 'rgba(245,158,11,0.12)' }}>
+                <motion.span
+                  animate={{ opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 1.4, repeat: Infinity }}
+                  className="w-1 h-1 rounded-full bg-amber-400"
+                />
+                SOON
+              </span>
+            ) : project.live ? (
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[7px] font-semibold text-cyan-300/90 border border-cyan-500/25"
+                style={{ background: 'rgba(6,182,212,0.1)' }}>
+                <span className="w-1 h-1 rounded-full bg-cyan-400" />
+                ON AIR
+              </span>
+            ) : 'localOnly' in project && project.localOnly ? (
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[7px] font-semibold text-purple-300/90 border border-purple-500/25"
+                style={{ background: 'rgba(168,85,247,0.1)' }}>
+                <span className="w-1 h-1 rounded-full bg-purple-400" />
+                Locally
+              </span>
+            ) : project.featured ? (
+              <span className="text-[8px] text-blue-400/70">★</span>
+            ) : null}
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-1 py-1">
+            <div
+              className={`w-11 h-11 rounded-2xl flex items-center justify-center text-2xl mb-2 border ${isSoon ? 'border-amber-500/20' : 'border-white/[0.06]'}`}
+              style={{
+                background: isSoon
+                  ? 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(251,146,60,0.05))'
+                  : 'linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
+                boxShadow: isSoon ? '0 8px 24px rgba(245,158,11,0.12)' : '0 8px 24px rgba(0,0,0,0.2)',
+              }}
+            >
+              {project.icon}
+            </div>
+            <h3 className={`font-bold text-[13px] leading-snug line-clamp-2 ${isSoon ? 'text-amber-50' : 'text-white'}`}>
+              {project.title}
+            </h3>
+            <p className={`text-[9px] leading-tight line-clamp-1 mt-1 max-w-[95%] ${isSoon ? 'text-amber-400/50' : 'text-white/35'}`}>
+              {project.subtitle}
+            </p>
+            <div className="flex flex-wrap justify-center gap-1 mt-2 max-w-full px-0.5">
+              {project.tech.slice(0, 2).map((t) => (
+                <span
+                  key={t}
+                  className={`px-1.5 py-0.5 rounded-md text-[8px] font-medium border truncate max-w-[78px] ${isSoon ? 'text-amber-400/60 border-amber-500/20 bg-amber-500/[0.06]' : 'text-white/45 border-white/[0.07] bg-white/[0.03]'}`}
+                >
+                  {t}
+                </span>
+              ))}
+              {project.tech.length > 2 && (
+                <span className={`px-1 py-0.5 text-[8px] font-mono ${isSoon ? 'text-amber-400/35' : 'text-white/25'}`}>
+                  +{project.tech.length - 2}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="relative z-10 flex items-center justify-between gap-1 pt-2 mt-auto border-t border-white/[0.05]">
+            <div className="flex items-center gap-1 min-w-0 flex-wrap">
+              {isSoon ? (
+                <StoreLinks
+                  appStore={'appStore' in project ? project.appStore : null}
+                  googlePlay={'googlePlay' in project ? project.googlePlay : null}
+                  size="sm"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <>
+                  {project.live && (
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Live demo: ${project.title}`}
+                      className="inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium text-cyan-300/90 border border-cyan-500/25"
+                      style={{ background: 'rgba(6,182,212,0.08)' }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ExternalLink size={9} />
+                      Live
+                    </a>
+                  )}
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`GitHub: ${project.title}`}
+                      className="inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium border text-white/45 border-white/[0.08]"
+                      style={{ background: 'rgba(255,255,255,0.03)' }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <GithubIcon size={9} />
+                      GitHub
+                    </a>
+                  )}
+                </>
+              )}
+            </div>
+            <span className={`flex items-center gap-0.5 text-[8px] font-mono shrink-0 ${isSoon ? 'text-amber-400/40' : 'text-white/25'}`}>
+              Open
+              <ArrowRight size={9} />
+            </span>
+          </div>
+        </div>
+
+          {/* Desktop — unchanged */}
+          <div className="hidden md:flex md:flex-col md:flex-1">
+            <div className="flex items-center justify-between mb-4 gap-1">
+              <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono border ${isSoon ? 'text-amber-400/50 border-amber-500/20' : 'text-white/30 border-white/[0.05]'}`}>
+                {project.category}
+              </span>
+              <div className="flex items-center gap-1.5 shrink-0">
                 {project.live && (
                   <a
                     href={project.live}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open live demo: ${project.title}`}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-medium text-cyan-400 border border-cyan-500/25"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-cyan-400 border border-cyan-500/25 hover:border-cyan-400/50 hover:text-cyan-300 transition-colors"
                     style={{ background: 'rgba(6,182,212,0.07)' }}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <ExternalLink size={9} />
+                    <ExternalLink size={10} />
                     Live
                   </a>
                 )}
                 {project.featured && !isSoon && (
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium text-blue-400 border border-blue-500/20"
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium text-blue-400 border border-blue-500/20"
                     style={{ background: 'rgba(59,130,246,0.08)' }}>
                     Featured
                   </span>
                 )}
                 {isSoon && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold text-amber-300 border border-amber-500/40"
+                  <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide text-amber-300 border border-amber-500/40"
                     style={{ background: 'rgba(245,158,11,0.15)' }}>
                     <motion.span
                       animate={{ opacity: [1, 0.2, 1], scale: [1, 1.3, 1] }}
                       transition={{ duration: 1.4, repeat: Infinity }}
                       className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"
                     />
-                    SOON
+                    IN DEVELOPMENT
                   </span>
                 )}
               </div>
-              <span className={`text-[10px] font-mono ${isSoon ? 'text-amber-400/50' : 'text-white/35'}`}>{project.category}</span>
             </div>
-          </div>
 
-          {/* Desktop badges row */}
-          <div className="hidden md:flex items-center justify-between mb-4 gap-1">
-            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono border ${isSoon ? 'text-amber-400/50 border-amber-500/20' : 'text-white/30 border-white/[0.05]'}`}>
-              {project.category}
-            </span>
-            <div className="flex items-center gap-1.5 shrink-0">
-              {project.live && (
-                <a
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open live demo: ${project.title}`}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-cyan-400 border border-cyan-500/25 hover:border-cyan-400/50 hover:text-cyan-300 transition-colors"
-                  style={{ background: 'rgba(6,182,212,0.07)' }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLink size={10} />
-                  Live
-                </a>
-              )}
-              {project.featured && !isSoon && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-medium text-blue-400 border border-blue-500/20"
-                  style={{ background: 'rgba(59,130,246,0.08)' }}>
-                  Featured
-                </span>
-              )}
-              {isSoon && (
-                <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide text-amber-300 border border-amber-500/40"
-                  style={{ background: 'rgba(245,158,11,0.15)' }}>
-                  <motion.span
-                    animate={{ opacity: [1, 0.2, 1], scale: [1, 1.3, 1] }}
-                    transition={{ duration: 1.4, repeat: Infinity }}
-                    className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"
-                  />
-                  IN DEVELOPMENT
-                </span>
-              )}
+            <div className="flex items-start gap-4 mb-4">
+              <span className={large ? 'text-4xl' : 'text-3xl'}>{project.icon}</span>
+              <div>
+                <h3 className={`font-bold leading-tight ${isSoon ? 'text-amber-100' : 'text-white'} ${large ? 'text-2xl' : 'text-xl'}`}>{project.title}</h3>
+                <p className={`text-sm mt-1 ${isSoon ? 'text-amber-400/60' : 'text-white/50'}`}>{project.subtitle}</p>
+              </div>
             </div>
-          </div>
 
-          {/* Desktop icon + title */}
-          <div className="hidden md:flex items-start gap-3 mb-3">
-            <span className={large ? 'text-3xl' : 'text-2xl'}>{project.icon}</span>
-            <div>
-              <h3 className={`font-bold leading-tight ${isSoon ? 'text-amber-100' : 'text-white'} ${large ? 'text-xl' : 'text-lg'}`}>{project.title}</h3>
-              <p className={`text-sm mt-0.5 ${isSoon ? 'text-amber-400/60' : 'text-white/50'}`}>{project.subtitle}</p>
-            </div>
-          </div>
+            {isSoon && (
+              <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg border border-amber-500/15"
+                style={{ background: 'rgba(245,158,11,0.06)' }}>
+                <Lock size={11} className="text-amber-400/60 flex-shrink-0" />
+                <span className="text-sm text-amber-400/70 font-mono">Confidential Client Project</span>
+              </div>
+            )}
 
-          {/* Confidential banner — desktop only */}
-          {isSoon && (
-            <div className="hidden md:flex items-center gap-2 mb-3 px-2 py-1.5 rounded-lg border border-amber-500/15"
-              style={{ background: 'rgba(245,158,11,0.06)' }}>
-              <Lock size={10} className="text-amber-400/60 flex-shrink-0" />
-              <span className="text-sm text-amber-400/70 font-mono">Confidential Client Project</span>
-            </div>
-          )}
+            <p className={`text-sm leading-relaxed mb-6 flex-1 ${isSoon ? 'text-white/60' : 'text-white/55'}`}>
+              {project.description}
+            </p>
 
-          <p className={`text-sm leading-relaxed mb-3 md:mb-5 md:flex-1 line-clamp-2 md:line-clamp-3 ${isSoon ? 'text-white/60' : 'text-white/55'}`}>
-            {project.description}
-          </p>
-
-          {/* Tech + footer — side by side on mobile for a wider feel */}
-          <div className="flex items-end justify-between gap-3 mt-auto md:block">
-            <div className="flex flex-wrap gap-1 md:gap-1.5 mb-0 md:mb-5 flex-1 min-w-0">
+            <div className="flex flex-wrap gap-2 mb-6">
               {project.tech.slice(0, large ? 3 : 2).map((t) => (
-                <span key={t} className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
+                <span key={t} className={`px-2 py-0.5 rounded text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
                   style={{ background: isSoon ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.02)' }}>
                   {t}
                 </span>
               ))}
-              {project.tech.length > (large ? 3 : 2) && (
-                <span className="px-1.5 py-0.5 text-[9px] md:text-[10px] text-white/20 md:hidden">+{project.tech.length - (large ? 3 : 2)}</span>
-              )}
               {project.tech.slice(large ? 3 : 2, large ? 7 : 5).map((t) => (
-                <span key={t} className={`hidden md:inline px-2 py-0.5 rounded text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
+                <span key={t} className={`px-2 py-0.5 rounded text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
                   style={{ background: isSoon ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.02)' }}>
                   {t}
                 </span>
               ))}
               {project.tech.length > (large ? 7 : 5) && (
-                <span className="hidden md:inline px-2 py-0.5 text-[10px] text-white/20">+{project.tech.length - (large ? 7 : 5)}</span>
+                <span className="px-2 py-0.5 text-[10px] text-white/20">+{project.tech.length - (large ? 7 : 5)}</span>
               )}
             </div>
 
-            {/* Footer */}
-            <div className={`flex items-center gap-1 shrink-0 md:justify-between md:pt-4 md:border-t md:w-full ${isSoon ? 'md:border-amber-500/10' : 'md:border-white/[0.04]'}`}>
-              <div className="flex gap-1 md:gap-2 items-center">
-              {project.github ? (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`GitHub: ${project.title}`}
-                  className="p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <GithubIcon size={12} className="md:hidden" />
-                  <GithubIcon size={14} className="hidden md:block" />
-                </a>
-              ) : isSoon ? (
-                <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] md:text-[10px] text-amber-400/50 border border-amber-500/15"
-                  style={{ background: 'rgba(245,158,11,0.04)' }}>
-                  <Lock size={9} />
-                  <span className="hidden md:inline">Private</span>
-                </span>
-              ) : null}
-              {project.live && (
-                <a
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Live demo: ${project.title}`}
-                  className="p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLink size={12} className="md:hidden" />
-                  <ExternalLink size={14} className="hidden md:block" />
-                </a>
-              )}
-            </div>
-            <span className={`hidden md:flex items-center gap-1 text-xs transition-colors ${isSoon ? 'text-amber-400/55 group-hover:text-amber-400' : 'text-white/40 group-hover:text-blue-400'}`}>
-              Case study
-              <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </span>
+            <div className={`flex items-center justify-between pt-4 border-t ${isSoon ? 'border-amber-500/10' : 'border-white/[0.04]'}`}>
+              <div className="flex gap-2 items-center flex-wrap">
+                {isSoon ? (
+                  <StoreLinks
+                    appStore={'appStore' in project ? project.appStore : null}
+                    googlePlay={'googlePlay' in project ? project.googlePlay : null}
+                    size="md"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ) : (
+                  <>
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`GitHub: ${project.title}`}
+                        className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <GithubIcon size={14} />
+                      </a>
+                    )}
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Live demo: ${project.title}`}
+                        className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink size={14} />
+                      </a>
+                    )}
+                  </>
+                )}
+              </div>
+              <span className={`flex items-center gap-1 text-xs transition-colors ${isSoon ? 'text-amber-400/55 group-hover:text-amber-400' : 'text-white/40 group-hover:text-blue-400'}`}>
+                Case study
+                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+              </span>
             </div>
           </div>
         </div>
@@ -504,7 +634,7 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
 
 export default function Projects() {
   return (
-    <section id="projects" aria-labelledby="projects-heading" className="relative py-32 overflow-hidden">
+    <section id="projects" aria-labelledby="projects-heading" className="relative py-20 md:py-24 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute right-0 top-1/4 w-[500px] h-[500px] rounded-full blur-[130px]"
           style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.05), transparent)' }} />
@@ -524,15 +654,20 @@ export default function Projects() {
             <br />
             <span className="text-gradient-purple">shipped.</span>
           </h2>
-          <p className="text-white/50 text-sm mb-14 max-w-xl">
+          <p className="text-white/50 text-sm mb-8 md:mb-10 max-w-xl">
             Click any project for a full case study — architecture, problem, solution and stack.
           </p>
         </FadeIn>
 
-        {/* Full-width cards until large screens — avoids narrow columns on tablet */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5">
-          {projects.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={i} large={i < 2} />
+        {/* Mobile: 2 per row × 2 rows | Desktop: unchanged */}
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-5 lg:gap-6 mb-3 md:mb-6 lg:mb-8">
+          {projects.slice(0, 2).map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i} large />
+          ))}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-5 lg:gap-6">
+          {projects.slice(2).map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i + 2} />
           ))}
         </div>
       </div>

@@ -56,6 +56,8 @@ export const projects = [
     ],
     github: null,
     live: null,
+    appStore: null,
+    googlePlay: null,
     gradient: 'from-amber-500 via-orange-500 to-rose-500',
     icon: '⭐',
     category: 'Mobile / Client',
@@ -117,6 +119,7 @@ export const projects = [
     category: 'Artificial Intelligence',
     featured: true,
     isComingSoon: false,
+    localOnly: true,
   },
   {
     id: 3,
