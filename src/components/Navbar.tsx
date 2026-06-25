@@ -48,35 +48,16 @@ export default function Navbar() {
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-14 md:h-16 gap-2">
-          {/* Logo */}
-          <motion.a
-            href="#hero"
-            onClick={(e) => { e.preventDefault(); handleNav('#hero') }}
-            className="flex items-center flex-shrink-0"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <img
-              src="/logo.png"
-              alt="Dolev Atik"
-              className="h-8 md:h-9 w-auto object-contain"
-            />
-          </motion.a>
-
-          {/* Nav links — always visible, scrollable on mobile */}
-          <nav
-            className="flex items-center gap-0.5 overflow-x-auto scrollbar-none flex-1 justify-center"
-            aria-label="Main navigation"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
+      <div className="max-w-7xl mx-auto px-2 md:px-8">
+        <div className="flex items-center justify-between h-12 md:h-16">
+          {/* Nav links */}
+          <nav className="flex items-center w-full justify-between" aria-label="Main navigation">
             {navLinks.map((link) => (
               <motion.a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); handleNav(link.href) }}
-                className={`relative flex-shrink-0 px-2.5 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-colors duration-200 ${
+                className={`relative px-1.5 md:px-4 py-1.5 md:py-2 text-[11px] md:text-sm font-medium rounded-lg transition-colors duration-200 ${
                   activeSection === link.href.slice(1)
                     ? 'text-white'
                     : 'text-white/50 hover:text-white/90'
@@ -93,18 +74,18 @@ export default function Navbar() {
                 <span className="relative z-10">{link.label}</span>
               </motion.a>
             ))}
-          </nav>
 
-          {/* CTA */}
-          <motion.a
-            href="#contact"
-            onClick={(e) => { e.preventDefault(); handleNav('#contact') }}
-            className="flex-shrink-0 px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium rounded-lg bg-blue-500 text-white hover:bg-blue-400 transition-colors duration-200 shadow-lg shadow-blue-500/20"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Let's Talk
-          </motion.a>
+            {/* CTA */}
+            <motion.a
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); handleNav('#contact') }}
+              className="px-2.5 md:px-4 py-1.5 md:py-2 text-[11px] md:text-sm font-medium rounded-lg bg-blue-500 text-white hover:bg-blue-400 transition-colors duration-200 shadow-lg shadow-blue-500/20"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Let's Talk
+            </motion.a>
+          </nav>
         </div>
       </div>
     </motion.header>
