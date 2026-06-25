@@ -212,6 +212,7 @@ const childVariants: Variants = {
 
 export default function Hero() {
   const typedText = useTypingEffect(personalInfo.roles)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   return (
     <section
@@ -219,7 +220,7 @@ export default function Hero() {
       aria-label="Introduction — Dolev Atik, Software Engineer"
       className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg"
     >
-      <MouseGlow />
+      {!isMobile && <MouseGlow />}
 
       {/* Layered background */}
       <div className="absolute inset-0 pointer-events-none">
@@ -231,7 +232,7 @@ export default function Hero() {
           style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.05), transparent)' }} />
       </div>
 
-      <FloatingParticles />
+      {!isMobile && <FloatingParticles />}
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
         <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
@@ -358,15 +359,17 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right: Illustration */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex items-center justify-center"
-          >
-            <TechOrbit />
-          </motion.div>
+          {/* Right: Illustration — desktop only (not rendered on mobile) */}
+          {!isMobile && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="hidden lg:flex items-center justify-center"
+            >
+              <TechOrbit />
+            </motion.div>
+          )}
         </div>
       </div>
 

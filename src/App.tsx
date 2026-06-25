@@ -33,7 +33,7 @@ export default function App() {
         >
           Skip to main content
         </a>
-        <CursorGlow />
+        {typeof window !== 'undefined' && window.innerWidth >= 768 && <CursorGlow />}
         <CommandPalette />
         <Navbar />
         <main id="main-content" aria-label="Dolev Atik portfolio sections">

@@ -5,7 +5,7 @@ import { GraduationCap, Award, CheckCircle2 } from 'lucide-react'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '0px' })
+  const inView = useInView(ref, { once: true, margin: '0px 0px 300px 0px' })
   return (
     <motion.div
       ref={ref}

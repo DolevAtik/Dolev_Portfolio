@@ -5,7 +5,7 @@ import { Zap, Server, Brain, Shield, ArrowRight } from 'lucide-react'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '0px' })
+  const inView = useInView(ref, { once: true, margin: '0px 0px 300px 0px' })
   return (
     <motion.div
       ref={ref}
@@ -90,7 +90,7 @@ export default function About() {
         <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-start">
           {/* Left */}
           <div>
-            <FadeIn delay={0.1}>
+            <FadeIn delay={0.05}>
               <h2 id="about-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">
                 <span className="text-white">Building software</span>
                 <br />
@@ -101,7 +101,7 @@ export default function About() {
             {/* Highlighted quote lines */}
             <div className="space-y-4 mb-8">
               {bioHighlights.map((line, i) => (
-                <FadeIn key={i} delay={0.15 + i * 0.08}>
+                <FadeIn key={i} delay={0.08 + i * 0.04}>
                   <div className="flex items-start gap-3">
                     <div className="w-1 h-full min-h-[1.5rem] rounded-full bg-gradient-to-b from-blue-500 to-cyan-500 flex-shrink-0 mt-1" />
                     <p className="text-white/65 leading-relaxed font-medium">{line}</p>
@@ -113,14 +113,14 @@ export default function About() {
             {/* Bio paragraphs */}
             <div className="space-y-4">
               {personalInfo.bio.map((p, i) => (
-                <FadeIn key={i} delay={0.3 + i * 0.1}>
+                <FadeIn key={i} delay={0.1 + i * 0.04}>
                   <p className="text-white/45 leading-relaxed text-sm">{p}</p>
                 </FadeIn>
               ))}
             </div>
 
             {/* CTA to journey */}
-            <FadeIn delay={0.55}>
+            <FadeIn delay={0.15}>
               <motion.a
                 href="#journey"
                 onClick={(e) => { e.preventDefault(); document.querySelector('#journey')?.scrollIntoView({ behavior: 'smooth' }) }}
@@ -139,7 +139,7 @@ export default function About() {
                 const c = colorMap[p.color]
                 const Icon = p.icon
                 return (
-                  <FadeIn key={p.label} delay={0.2 + i * 0.1}>
+                  <FadeIn key={p.label} delay={0.05 + i * 0.04}>
                     <motion.div
                       className={`p-5 rounded-2xl bg-gradient-to-br border ${c.card} h-full`}
                       whileHover={{ scale: 1.03, y: -4 }}
@@ -157,7 +157,7 @@ export default function About() {
             </div>
 
             {/* Stats card */}
-            <FadeIn delay={0.45}>
+            <FadeIn delay={0.1}>
               <div
                 className="p-5 rounded-2xl border border-white/[0.05] relative overflow-hidden"
                 style={{ background: 'rgba(255,255,255,0.02)' }}
