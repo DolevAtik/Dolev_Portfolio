@@ -43,7 +43,7 @@ export default function Education() {
           </h2>
         </FadeIn>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-3 md:gap-6">
           {education.map((edu, i) => {
             const Icon = icons[i]
             return (
@@ -58,35 +58,37 @@ export default function Education() {
                   transition={{ duration: 0.2 }}
                 >
                   {/* Header */}
-                  <div className="p-6 pb-4 border-b border-white/[0.04]">
-                    <div className="flex items-start gap-4">
-                      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                  <div className="p-3 md:p-6 pb-3 md:pb-4 border-b border-white/[0.04]">
+                    <div className="flex items-start gap-2 md:gap-4">
+                      <div className="w-8 h-8 md:w-11 md:h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                         style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(6,182,212,0.1))', border: '1px solid rgba(59,130,246,0.2)' }}>
-                        <Icon size={20} className="text-blue-400" />
+                        <Icon size={15} className="text-blue-400 md:hidden" />
+                        <Icon size={20} className="text-blue-400 hidden md:block" />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-white leading-tight mb-1">{edu.degree}</h3>
-                        <p className="text-sm text-blue-400">{edu.institution}</p>
-                        <p className="text-xs font-mono text-white/30 mt-1">{edu.period}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-white leading-tight mb-0.5 text-xs md:text-base">{edu.degree}</h3>
+                        <p className="text-[11px] md:text-sm text-blue-400 truncate">{edu.institution}</p>
+                        <p className="text-[10px] md:text-xs font-mono text-white/30 mt-0.5">{edu.period}</p>
                       </div>
                     </div>
 
                     {edu.gpa && (
-                      <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                        <span className="text-xs text-white/40">GPA</span>
-                        <span className="text-sm font-bold text-gradient-blue">{edu.gpa}</span>
-                        <span className="text-xs text-white/20">/ 100</span>
+                      <div className="mt-2 md:mt-4 inline-flex items-center gap-1.5 px-2 md:px-3 py-1 md:py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                        <span className="text-[10px] md:text-xs text-white/40">GPA</span>
+                        <span className="text-xs md:text-sm font-bold text-gradient-blue">{edu.gpa}</span>
+                        <span className="text-[10px] md:text-xs text-white/20 hidden md:inline">/ 100</span>
                       </div>
                     )}
                   </div>
 
                   {/* Highlights */}
-                  <div className="p-6">
-                    <div className="text-xs font-mono text-white/30 uppercase tracking-widest mb-3">Coursework & Topics</div>
-                    <ul className="space-y-2">
+                  <div className="p-3 md:p-6">
+                    <div className="text-[10px] md:text-xs font-mono text-white/30 uppercase tracking-widest mb-2 md:mb-3">Coursework</div>
+                    <ul className="space-y-1.5 md:space-y-2">
                       {edu.highlights.map((h) => (
-                        <li key={h} className="flex items-center gap-2.5 text-sm text-white/55">
-                          <CheckCircle2 size={13} className="text-cyan-400 flex-shrink-0" />
+                        <li key={h} className="flex items-center gap-1.5 md:gap-2.5 text-[11px] md:text-sm text-white/55">
+                          <CheckCircle2 size={11} className="text-cyan-400 flex-shrink-0 md:hidden" />
+                          <CheckCircle2 size={13} className="text-cyan-400 flex-shrink-0 hidden md:block" />
                           {h}
                         </li>
                       ))}
