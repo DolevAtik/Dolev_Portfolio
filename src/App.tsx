@@ -29,6 +29,7 @@ function Journey() {
 export default function App() {
   const [loading, setLoading] = useState(true)
   const [revealed, setRevealed] = useState(false)
+  const [revealSettled, setRevealSettled] = useState(false)
   const [showPalette, setShowPalette] = useState(() => !isMobileViewport())
 
   useEffect(() => {
@@ -36,13 +37,22 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!loading) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
+    const shouldLock = loading && !revealed
+
+    if (shouldLock) {
+      const prevBody = document.body.style.overflow
+      const prevHtml = document.documentElement.style.overflow
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prevBody
+        document.documentElement.style.overflow = prevHtml
+      }
     }
-  }, [loading])
+
+    document.body.style.overflow = ''
+    document.documentElement.style.overflow = ''
+  }, [loading, revealed])
 
   useEffect(() => {
     if (showPalette) return
@@ -61,11 +71,15 @@ export default function App() {
 
       <motion.div
         initial={false}
-        animate={{
-          opacity: revealed ? 1 : 0,
-          scale: revealed ? 1 : 1.04,
-          filter: revealed ? 'blur(0px)' : 'blur(14px)',
-        }}
+        animate={
+          revealSettled
+            ? { opacity: 1 }
+            : {
+                opacity: revealed ? 1 : 0,
+                scale: revealed ? 1 : 1.03,
+                filter: revealed ? 'blur(0px)' : 'blur(10px)',
+              }
+        }
         transition={{
           duration: REVEAL_DURATION,
           ease: REVEAL_EASE,
@@ -73,8 +87,15 @@ export default function App() {
           scale: { duration: REVEAL_DURATION, delay: 0.04 },
           filter: { duration: REVEAL_DURATION * 0.75, delay: 0.02 },
         }}
-        className="min-h-screen bg-[#070707] text-white relative origin-center"
-        style={{ willChange: revealed ? 'auto' : 'opacity, transform, filter' }}
+        onAnimationComplete={() => {
+          if (revealed) setRevealSettled(true)
+        }}
+        className="min-h-screen bg-[#070707] text-white relative"
+        style={
+          revealSettled
+            ? { transform: 'none', filter: 'none', willChange: 'auto' }
+            : { willChange: 'opacity, transform, filter' }
+        }
       >
         <a
           href="#main-content"
