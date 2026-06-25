@@ -33,6 +33,8 @@ function progressAt(elapsed: number): number {
   return 100
 }
 
+const FADE_MS = 550
+
 interface LoaderProps {
   onComplete: () => void
 }
@@ -41,8 +43,16 @@ export default function Loader({ onComplete }: LoaderProps) {
   const [visibleSteps, setVisibleSteps] = useState(0)
   const [progress, setProgress] = useState(0)
   const [launchDone, setLaunchDone] = useState(false)
+  const [exiting, setExiting] = useState(false)
   const onCompleteRef = useRef(onComplete)
+  const finishedRef = useRef(false)
   onCompleteRef.current = onComplete
+
+  const finish = () => {
+    if (finishedRef.current) return
+    finishedRef.current = true
+    onCompleteRef.current()
+  }
 
   useEffect(() => {
     const timeouts: ReturnType<typeof setTimeout>[] = []
@@ -65,7 +75,8 @@ export default function Loader({ onComplete }: LoaderProps) {
     })
 
     timeouts.push(window.setTimeout(() => setLaunchDone(true), TIMING.launchDone))
-    timeouts.push(window.setTimeout(() => onCompleteRef.current(), TIMING.total))
+    timeouts.push(window.setTimeout(() => setExiting(true), TIMING.total))
+    timeouts.push(window.setTimeout(finish, TIMING.total + FADE_MS + 80))
 
     return () => {
       cancelAnimationFrame(raf)
@@ -74,7 +85,12 @@ export default function Loader({ onComplete }: LoaderProps) {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden">
+    <div
+      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${exiting ? 'opacity-0' : 'opacity-100'}`}
+      onTransitionEnd={(e) => {
+        if (exiting && e.target === e.currentTarget && e.propertyName === 'opacity') finish()
+      }}
+    >
       <div className="absolute inset-0 bg-[#070707]" />
       <div className="absolute inset-0 grid-bg opacity-30" />
 
