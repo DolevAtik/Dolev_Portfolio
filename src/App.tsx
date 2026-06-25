@@ -1,58 +1,44 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Loader from './components/Loader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
+import JourneyMobile from './components/JourneyMobile'
+import Projects from './components/Projects'
+import Skills from './components/Skills'
+import Education from './components/Education'
+import Contact from './components/Contact'
 import Footer from './components/Footer'
-import CommandPalette from './components/CommandPalette'
 import CursorGlow from './components/CursorGlow'
 import { isMobileViewport } from './lib/mobile'
 
-const Journey = lazy(() => import('./components/Journey'))
-const Projects = lazy(() => import('./components/Projects'))
-const Skills = lazy(() => import('./components/Skills'))
-const Education = lazy(() => import('./components/Education'))
-const Contact = lazy(() => import('./components/Contact'))
+const JourneyDesktop = lazy(() => import('./components/JourneyDesktop'))
+const CommandPalette = lazy(() => import('./components/CommandPalette'))
 
-if (isMobileViewport()) {
-  void import('./components/Journey')
-  void import('./components/Projects')
-  void import('./components/Skills')
-  void import('./components/Education')
-  void import('./components/Contact')
-}
-
-function BelowFoldSections() {
-  const [mounted, setMounted] = useState(() => !isMobileViewport())
-
-  useEffect(() => {
-    if (mounted) return
-    const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => setMounted(true))
-    })
-    return () => cancelAnimationFrame(frame)
-  }, [mounted])
-
-  if (!mounted) return null
-
+function Journey() {
+  if (isMobileViewport()) return <JourneyMobile />
   return (
     <Suspense fallback={null}>
-      <Journey />
-      <Projects />
-      <Skills />
-      <Education />
-      <Contact />
+      <JourneyDesktop />
     </Suspense>
   )
 }
 
 export default function App() {
   const [loading, setLoading] = useState(true)
+  const [showPalette, setShowPalette] = useState(() => !isMobileViewport())
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth'
   }, [])
+
+  useEffect(() => {
+    if (showPalette) return
+    const id = window.setTimeout(() => setShowPalette(true), 800)
+    return () => window.clearTimeout(id)
+  }, [showPalette])
 
   return (
     <>
@@ -67,13 +53,21 @@ export default function App() {
         >
           Skip to main content
         </a>
-        {typeof window !== 'undefined' && window.innerWidth >= 768 && <CursorGlow />}
-        <CommandPalette />
+        {!isMobileViewport() && <CursorGlow />}
+        {showPalette && (
+          <Suspense fallback={null}>
+            <CommandPalette />
+          </Suspense>
+        )}
         <Navbar />
         <main id="main-content" aria-label="Dolev Atik portfolio sections">
           <Hero />
           <About />
-          <BelowFoldSections />
+          <Journey />
+          <Projects />
+          <Skills />
+          <Education />
+          <Contact />
         </main>
         <Footer />
       </div>

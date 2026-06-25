@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useMotionValue, useSpring, type Variants } from 'framer-motion'
-import { Mail, ChevronDown, Download, ExternalLink } from 'lucide-react'
+import { Mail, Download, ExternalLink } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { personalInfo } from '../data/portfolio'
+import { isMobileViewport } from '../lib/mobile'
 
 const TYPING_SPEED = 75
 const DELETE_SPEED = 35
@@ -212,7 +213,127 @@ const childVariants: Variants = {
 
 export default function Hero() {
   const typedText = useTypingEffect(personalInfo.roles)
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const isMobile = isMobileViewport()
+
+  const heroContent = (
+    <>
+            {/* Status badge */}
+            <div className="inline-flex items-center gap-2 mb-8">
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"
+                style={{ background: 'rgba(16,185,129,0.05)', borderColor: 'rgba(16,185,129,0.2)', color: '#34d399' }}>
+                {!isMobile ? (
+                  <motion.span
+                    className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                    animate={{ opacity: [1, 0.3, 1], scale: [1, 1.3, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                ) : (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                )}
+                Available for opportunities
+              </div>
+            </div>
+
+            {/* Headline */}
+            <div className="mb-3">
+              <h1 className="text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.9]">
+                <span className="text-white">Dolev </span>
+                <span style={{
+                  background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  backgroundSize: '200% 200%',
+                }}>
+                  Atik
+                </span>
+              </h1>
+            </div>
+
+            {/* Typing role */}
+            <div className="flex items-center gap-2 h-9 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+              <span className="text-lg md:text-xl font-semibold text-white/80">
+                {typedText}
+              </span>
+              <span className="w-0.5 h-6 bg-blue-400 animate-blink flex-shrink-0" />
+            </div>
+
+            {/* Tagline */}
+            <p className="text-base md:text-lg text-white/45 leading-relaxed max-w-lg mb-8">
+              {personalInfo.tagline}
+            </p>
+
+            {/* Stats */}
+            <div className="flex items-center gap-6 mb-10 py-5 border-y border-white/[0.04]">
+              {[
+                { val: '93', unit: 'GPA', desc: 'Computer Science' },
+                { val: '20+', unit: 'Sites', desc: 'In production' },
+                { val: '3+', unit: 'Years', desc: 'Building software' },
+              ].map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-2xl font-black text-white">{s.val}</div>
+                  <div className="text-xs font-bold text-blue-400 mt-0.5">{s.unit}</div>
+                  <div className="text-[10px] text-white/30 mt-0.5">{s.desc}</div>
+                </div>
+              ))}
+              <div className="w-px h-10 bg-white/[0.06] mx-2" />
+              <div className="text-xs text-white/30 leading-relaxed max-w-[120px]">
+                Co-Founder<br /><span className="text-blue-400">Web4You</span> Agency
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="#projects"
+                onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+                style={{
+                  background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+                  boxShadow: '0 0 0 0 rgba(59,130,246,0.3)',
+                }}
+              >
+                <ExternalLink size={15} />
+                View Projects
+              </a>
+
+              <a
+                href="/cv.pdf"
+                download
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <Download size={15} />
+                Resume
+              </a>
+
+              {[
+                { icon: <GithubIcon size={16} />, href: personalInfo.github, label: 'GitHub' },
+                { icon: <LinkedinIcon size={16} />, href: personalInfo.linkedin, label: 'LinkedIn' },
+                { icon: <Mail size={16} />, href: `mailto:${personalInfo.email}`, label: 'Email' },
+              ].map(({ icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="inline-flex items-center justify-center w-11 h-11 rounded-xl text-white/50 hover:text-white transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+                >
+                  {icon}
+                </a>
+              ))}
+            </div>
+
+            {/* Keyboard shortcut hint */}
+            <div className="mt-6 flex items-center gap-2 text-xs text-white/20">
+              <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">⌘K</kbd>
+              <span>to open command palette</span>
+            </div>
+    </>
+  )
 
   return (
     <section
@@ -238,8 +359,10 @@ export default function Hero() {
         <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
 
           {/* Left: Text */}
+          {isMobile ? (
+            <div>{heroContent}</div>
+          ) : (
           <motion.div variants={containerVariants} initial="hidden" animate="visible">
-
             {/* Status badge */}
             <motion.div variants={childVariants} className="inline-flex items-center gap-2 mb-8">
               <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"
@@ -358,6 +481,7 @@ export default function Hero() {
               <span>to open command palette</span>
             </motion.div>
           </motion.div>
+          )}
 
           {/* Right: Illustration — desktop only (not rendered on mobile) */}
           {!isMobile && (
@@ -373,7 +497,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — desktop only */}
+      {!isMobile && (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -392,6 +517,7 @@ export default function Hero() {
           />
         </motion.div>
       </motion.div>
+      )}
     </section>
   )
 }

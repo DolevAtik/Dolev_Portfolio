@@ -8,149 +8,14 @@ import {
   type MotionValue,
 } from 'framer-motion'
 import {
-  Shield,
-  GraduationCap,
-  Rocket,
-  Brain,
-  Server,
-  Code2,
-  Globe,
   ShieldCheck,
   FileSearch,
   Users,
   Briefcase,
 } from 'lucide-react'
-import { isMobileViewport } from '../lib/mobile'
+import { MILESTONES, type Milestone } from '../data/journey'
 
-const isMobile = isMobileViewport()
 const EASE = [0.16, 1, 0.3, 1] as const
-
-type Milestone = {
-  id: number
-  emoji: string
-  icon: typeof Shield
-  title: string
-  subtitle: string
-  description: string
-  highlights: string[]
-  accent: string
-  glow: string
-  border: string
-  isFuture?: boolean
-  variant?: 'default' | 'gpa' | 'ai' | 'devops' | 'production'
-  gpa?: number
-}
-
-const MILESTONES: Milestone[] = [
-  {
-    id: 1,
-    emoji: '🛰',
-    icon: Shield,
-    title: 'Military Service',
-    subtitle: 'Satellite Communications & Systems Specialist',
-    description:
-      'Built discipline, responsibility and problem-solving under pressure while operating advanced communication systems in the IDF.',
-    highlights: ['High responsibility', 'Technical systems', 'Mission-critical environments', 'Teamwork'],
-    accent: '#94a3b8',
-    glow: 'rgba(148,163,184,0.08)',
-    border: 'rgba(148,163,184,0.18)',
-  },
-  {
-    id: 2,
-    emoji: '🎓',
-    icon: GraduationCap,
-    title: 'Computer Science',
-    subtitle: 'B.Sc. Computer Science — Ramat Gan Academic College',
-    description: 'Deep foundations in computer science — theory and practice every semester.',
-    highlights: [
-      'Algorithms',
-      'Data Structures',
-      'Operating Systems',
-      'Databases',
-      'Networking',
-      'Software Engineering',
-    ],
-    accent: '#3b82f6',
-    glow: 'rgba(59,130,246,0.1)',
-    border: 'rgba(59,130,246,0.22)',
-    variant: 'gpa',
-    gpa: 93,
-  },
-  {
-    id: 3,
-    emoji: '🚀',
-    icon: Rocket,
-    title: 'Co-Founder of Web4You',
-    subtitle: 'Software Agency',
-    description:
-      'Started building real software for clients. Designed and delivered 20+ production websites and custom software solutions.',
-    highlights: ['Client communication', 'Full Stack Development', 'Real deployments', 'Business experience'],
-    accent: '#06b6d4',
-    glow: 'rgba(6,182,212,0.1)',
-    border: 'rgba(6,182,212,0.22)',
-  },
-  {
-    id: 4,
-    emoji: '🤖',
-    icon: Brain,
-    title: 'AI Engineering',
-    subtitle: 'LLM & RAG Systems',
-    description: 'Started building AI-powered applications — production systems, not demos.',
-    highlights: [
-      'LLMs',
-      'RAG Systems',
-      'Vector Databases',
-      'Prompt Engineering',
-      'Ollama',
-      'ChromaDB',
-      'Flask',
-      'MongoDB',
-    ],
-    accent: '#60a5fa',
-    glow: 'rgba(96,165,250,0.1)',
-    border: 'rgba(96,165,250,0.22)',
-    variant: 'ai',
-  },
-  {
-    id: 5,
-    emoji: '⚙',
-    icon: Server,
-    title: 'DevOps Journey',
-    subtitle: 'Cloud-Native Engineering',
-    description: 'Expanded into cloud-native engineering — shipping reliably at scale.',
-    highlights: ['Docker', 'Kubernetes', 'GitHub Actions', 'CI/CD', 'Linux', 'Automation'],
-    accent: '#a855f7',
-    glow: 'rgba(168,85,247,0.1)',
-    border: 'rgba(168,85,247,0.22)',
-    variant: 'devops',
-  },
-  {
-    id: 6,
-    emoji: '💻',
-    icon: Code2,
-    title: 'Building Production Software',
-    subtitle: 'Idea to Deployment',
-    description: 'Developing complete applications from idea to deployment.',
-    highlights: ['AI SOC Analyst', 'AI Agent RAG PDF', 'MentConnect', 'Client Projects'],
-    accent: '#06b6d4',
-    glow: 'rgba(6,182,212,0.1)',
-    border: 'rgba(6,182,212,0.22)',
-    variant: 'production',
-  },
-  {
-    id: 7,
-    emoji: '🌍',
-    icon: Globe,
-    title: "What's Next",
-    subtitle: 'Software Engineer',
-    description: 'Building products that make an impact.',
-    highlights: ['AI Systems', 'Backend Development', 'Cloud Native Engineering'],
-    accent: '#f59e0b',
-    glow: 'rgba(245,158,11,0.12)',
-    border: 'rgba(245,158,11,0.28)',
-    isFuture: true,
-  },
-]
 
 const STATS = [
   { emoji: '🎓', label: 'GPA', value: 93, suffix: '', accent: '#3b82f6' },
@@ -171,10 +36,10 @@ function AnimatedCounter({
 }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
-  const [display, setDisplay] = useState(isMobile ? value : 0)
+  const [display, setDisplay] = useState(0)
 
   useEffect(() => {
-    if (isMobile || !inView) return
+    if (!inView) return
     const controls = animate(0, value, {
       duration: 2,
       ease: EASE,
@@ -211,7 +76,7 @@ function BackgroundParticles() {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {!isMobile && particles.current.map((p) => (
+      {particles.current.map((p) => (
         <motion.div
           key={p.id}
           className="absolute rounded-full"
@@ -307,59 +172,31 @@ const PROJECT_ICONS = [
 function ProjectIcons() {
   return (
     <div className="flex flex-wrap gap-3 mt-1">
-      {PROJECT_ICONS.map(({ icon: Icon, label, color }, i) => {
-        const content = (
-          <>
-            <div>
-              <Icon size={14} style={{ color }} />
-            </div>
-            <span className="text-[11px] font-medium" style={{ color: `${color}cc` }}>
-              {label}
-            </span>
-          </>
-        )
-
-        if (isMobile) {
-          return (
-            <div
-              key={label}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl"
-              style={{
-                background: `${color}10`,
-                border: `1px solid ${color}22`,
-              }}
-            >
-              {content}
-            </div>
-          )
-        }
-
-        return (
+      {PROJECT_ICONS.map(({ icon: Icon, label, color }, i) => (
+        <motion.div
+          key={label}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl"
+          style={{
+            background: `${color}10`,
+            border: `1px solid ${color}22`,
+          }}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 + i * 0.08, duration: 0.4, ease: EASE }}
+          whileHover={{ y: -3, boxShadow: `0 8px 24px ${color}20` }}
+        >
           <motion.div
-            key={label}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl"
-            style={{
-              background: `${color}10`,
-              border: `1px solid ${color}22`,
-            }}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 + i * 0.08, duration: 0.4, ease: EASE }}
-            whileHover={{ y: -3, boxShadow: `0 8px 24px ${color}20` }}
+            animate={{ boxShadow: [`0 0 8px ${color}00`, `0 0 14px ${color}55`, `0 0 8px ${color}00`] }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
           >
-            <motion.div
-              animate={{ boxShadow: [`0 0 8px ${color}00`, `0 0 14px ${color}55`, `0 0 8px ${color}00`] }}
-              transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
-            >
-              <Icon size={14} style={{ color }} />
-            </motion.div>
-            <span className="text-[11px] font-medium" style={{ color: `${color}cc` }}>
-              {label}
-            </span>
+            <Icon size={14} style={{ color }} />
           </motion.div>
-        )
-      })}
+          <span className="text-[11px] font-medium" style={{ color: `${color}cc` }}>
+            {label}
+          </span>
+        </motion.div>
+      ))}
     </div>
   )
 }
@@ -385,14 +222,8 @@ function MilestoneCard({
       className={`w-full md:w-[calc(50%-2.5rem)] ${side === 'left' ? 'md:pr-4 md:ml-0 md:mr-auto' : 'md:pl-4 md:ml-auto md:mr-0'}`}
     >
       <motion.div
-        initial={isMobile ? false : { opacity: 0, x: isMobile ? 0 : slideX, y: 24 }}
-        animate={
-          isMobile
-            ? {}
-            : inView
-              ? { opacity: 1, x: 0, y: 0 }
-              : {}
-        }
+        initial={{ opacity: 0, x: slideX, y: 24 }}
+        animate={inView ? { opacity: 1, x: 0, y: 0 } : {}}
         transition={{ duration: 0.65, delay: index * 0.05, ease: EASE }}
         className="relative"
       >
@@ -583,21 +414,15 @@ function MilestoneRow({
 function StatsSection() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
-  const visible = isMobile || inView
-
-  const Wrapper = isMobile ? 'div' : motion.div
-  const wrapperProps = isMobile
-    ? { ref, className: 'mt-20 pt-12 border-t border-white/[0.06]' }
-    : {
-        ref,
-        initial: { opacity: 0, y: 32 },
-        animate: visible ? { opacity: 1, y: 0 } : {},
-        transition: { duration: 0.7, ease: EASE },
-        className: 'mt-20 pt-12 border-t border-white/[0.06]',
-      }
 
   return (
-    <Wrapper {...wrapperProps}>
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: EASE }}
+      className="mt-20 pt-12 border-t border-white/[0.06]"
+    >
       <div className="text-center mb-10">
         <p className="font-mono text-xs text-white/30 uppercase tracking-widest mb-2">By the numbers</p>
         <h3 className="text-2xl md:text-3xl font-bold text-white">
@@ -606,38 +431,17 @@ function StatsSection() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5">
-        {STATS.map((stat, i) => {
-          const cardStyle = {
-            background: `radial-gradient(ellipse at top, ${stat.accent}10, transparent 70%), rgba(255,255,255,0.02)`,
-            border: '1px solid rgba(255,255,255,0.06)',
-          }
-          const cardClass = 'relative rounded-2xl p-5 text-center overflow-hidden group'
-
-          if (isMobile) {
-            return (
-              <div key={stat.label} className={cardClass} style={cardStyle}>
-                <span className="text-2xl mb-2 block" role="img" aria-hidden="true">
-                  {stat.emoji}
-                </span>
-                <div
-                  className="text-3xl md:text-4xl font-extrabold tabular-nums mb-1"
-                  style={{ color: stat.accent }}
-                >
-                  <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                </div>
-                <p className="text-[11px] text-white/40 leading-snug">{stat.label}</p>
-              </div>
-            )
-          }
-
-          return (
+        {STATS.map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-            className={cardClass}
-            style={cardStyle}
+            className="relative rounded-2xl p-5 text-center overflow-hidden group"
+            style={{
+              background: `radial-gradient(ellipse at top, ${stat.accent}10, transparent 70%), rgba(255,255,255,0.02)`,
+              border: '1px solid rgba(255,255,255,0.06)',
+            }}
             whileHover={{ y: -4, borderColor: `${stat.accent}33` }}
           >
             <span className="text-2xl mb-2 block" role="img" aria-hidden="true">
@@ -651,10 +455,9 @@ function StatsSection() {
             </div>
             <p className="text-[11px] text-white/40 leading-snug">{stat.label}</p>
           </motion.div>
-          )
-        })}
+        ))}
       </div>
-    </Wrapper>
+    </motion.div>
   )
 }
 
@@ -689,7 +492,7 @@ function GrowingTimeline({ progress }: { progress: MotionValue<number> }) {
   )
 }
 
-export default function Journey() {
+export default function JourneyDesktop() {
   const sectionRef = useRef<HTMLElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef(null)
@@ -725,20 +528,13 @@ export default function Journey() {
 
       {/* Ambient glows — follow active milestone */}
       <div className="absolute inset-0 pointer-events-none">
-        {isMobile ? (
-          <div
-            className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full blur-[140px]"
-            style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12), transparent)' }}
-          />
-        ) : (
-          <motion.div
-            className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full blur-[140px]"
-            animate={{
-              background: `radial-gradient(circle, ${activeAccent}12, transparent)`,
-            }}
-            transition={{ duration: 0.8 }}
-          />
-        )}
+        <motion.div
+          className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full blur-[140px]"
+          animate={{
+            background: `radial-gradient(circle, ${activeAccent}12, transparent)`,
+          }}
+          transition={{ duration: 0.8 }}
+        />
         <div
           className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[120px]"
           style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.04), transparent)' }}
@@ -746,43 +542,25 @@ export default function Journey() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
-        {/* Header */}
         <div ref={headerRef}>
-          {isMobile ? (
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">02 — Journey</span>
-                <div className="flex-1 h-px bg-gradient-to-r from-blue-500/30 to-transparent" />
-              </div>
-
-              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4">
-                <span className="text-white">Journey</span>
-              </h2>
-
-              <p className="text-white/40 text-base md:text-lg max-w-xl leading-relaxed">
-                Every project, challenge, and milestone shaped the engineer I am today.
-              </p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">02 — Journey</span>
+              <div className="flex-1 h-px bg-gradient-to-r from-blue-500/30 to-transparent" />
             </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={headerInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, ease: EASE }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">02 — Journey</span>
-                <div className="flex-1 h-px bg-gradient-to-r from-blue-500/30 to-transparent" />
-              </div>
 
-              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4">
-                <span className="text-white">Journey</span>
-              </h2>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+              <span className="text-white">Journey</span>
+            </h2>
 
-              <p className="text-white/40 text-base md:text-lg max-w-xl leading-relaxed">
-                Every project, challenge, and milestone shaped the engineer I am today.
-              </p>
-            </motion.div>
-          )}
+            <p className="text-white/40 text-base md:text-lg max-w-xl leading-relaxed">
+              Every project, challenge, and milestone shaped the engineer I am today.
+            </p>
+          </motion.div>
         </div>
 
         {/* Timeline */}
