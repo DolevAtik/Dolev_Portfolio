@@ -4,11 +4,11 @@
 
   <!-- Main portfolio page -->
   <url>
-    <loc>https://dolevatik.dev/</loc>
+    <loc>https://dolevatik.vercel.app/</loc>
     <lastmod>2026-06-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://dolevatik.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dolevatik.vercel.app/" />
   </url>
 
 </urlset>

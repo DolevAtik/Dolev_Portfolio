@@ -1,12 +1,12 @@
 # robots.txt — Dolev Atik Portfolio
-# https://dolevatik.dev
+# https://dolevatik.vercel.app
 
 # Allow all crawlers full access
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://dolevatik.dev/sitemap.xml
+Sitemap: https://dolevatik.vercel.app/sitemap.xml
 
 # Allow major AI crawlers used by ChatGPT, Perplexity, Gemini, Claude
 User-agent: GPTBot
