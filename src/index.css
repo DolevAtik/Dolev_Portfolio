@@ -181,6 +181,13 @@ a, button { transition-property: color, background-color, border-color, box-shad
 
 /* ─── Reduce motion ─────────────────────────────────────── */
 
+@media (max-width: 767px) {
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

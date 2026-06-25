@@ -1,17 +1,51 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Loader from './components/Loader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
-import Journey from './components/Journey'
-import Projects from './components/Projects'
-import Skills from './components/Skills'
-import Education from './components/Education'
-import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CommandPalette from './components/CommandPalette'
 import CursorGlow from './components/CursorGlow'
+import { isMobileViewport } from './lib/mobile'
+
+const Journey = lazy(() => import('./components/Journey'))
+const Projects = lazy(() => import('./components/Projects'))
+const Skills = lazy(() => import('./components/Skills'))
+const Education = lazy(() => import('./components/Education'))
+const Contact = lazy(() => import('./components/Contact'))
+
+if (isMobileViewport()) {
+  void import('./components/Journey')
+  void import('./components/Projects')
+  void import('./components/Skills')
+  void import('./components/Education')
+  void import('./components/Contact')
+}
+
+function BelowFoldSections() {
+  const [mounted, setMounted] = useState(() => !isMobileViewport())
+
+  useEffect(() => {
+    if (mounted) return
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setMounted(true))
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [mounted])
+
+  if (!mounted) return null
+
+  return (
+    <Suspense fallback={null}>
+      <Journey />
+      <Projects />
+      <Skills />
+      <Education />
+      <Contact />
+    </Suspense>
+  )
+}
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -39,11 +73,7 @@ export default function App() {
         <main id="main-content" aria-label="Dolev Atik portfolio sections">
           <Hero />
           <About />
-          <Journey />
-          <Projects />
-          <Skills />
-          <Education />
-          <Contact />
+          <BelowFoldSections />
         </main>
         <Footer />
       </div>

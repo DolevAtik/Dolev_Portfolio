@@ -3,8 +3,9 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/portfolio'
 import { ExternalLink, ArrowRight, X, CheckCircle2, ArrowDown, Lock, AlertTriangle, Lightbulb } from 'lucide-react'
 import { GithubIcon } from './SocialIcons'
+import { isMobileViewport } from '../lib/mobile'
 
-const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+const isMobile = isMobileViewport()
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
@@ -247,14 +248,15 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
   const isSoon = project.isComingSoon
+  const visible = isMobile || inView
 
   return (
     <>
       <motion.div
         ref={ref}
-        initial={{ opacity: 0, y: 40 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, delay: index * 0.09 }}
+        initial={isMobile ? false : { opacity: 0, y: 40 }}
+        animate={visible ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: isMobile ? 0 : 0.65, delay: isMobile ? 0 : index * 0.09 }}
         className="group relative rounded-2xl overflow-hidden cursor-pointer h-full flex flex-col"
         style={
           isSoon
