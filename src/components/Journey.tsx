@@ -218,7 +218,7 @@ export default function Journey() {
     : 0
 
   return (
-    <section id="journey" className="relative py-28 overflow-hidden">
+    <section id="journey" aria-label="Professional journey and experience" className="relative py-28 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full blur-[160px]"
           style={{ background: 'radial-gradient(ellipse, rgba(59,130,246,0.04), transparent)' }} />

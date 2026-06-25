@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { personalInfo } from '../data/portfolio'
-import { Mail, MapPin, Send, Download, Phone } from 'lucide-react'
+import { Mail, Send, Download, Phone } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -20,11 +20,10 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 const contactLinks = [
-  { icon: Mail, label: 'Email', value: personalInfo.email, href: `mailto:${personalInfo.email}`, color: 'blue' },
-  { icon: GithubIcon, label: 'GitHub', value: 'github.com/Dolev-Atik', href: personalInfo.github, color: 'purple' },
-  { icon: LinkedinIcon, label: 'LinkedIn', value: 'linkedin.com/in/dolev-atik', href: personalInfo.linkedin, color: 'cyan' },
-  { icon: Phone, label: 'Phone', value: personalInfo.phone, href: `tel:${personalInfo.phone.replace(/-/g, '')}`, color: 'blue' },
-  { icon: MapPin, label: 'Location', value: personalInfo.location, href: null, color: 'purple' },
+  { icon: Mail,        label: 'Email',    value: personalInfo.email,              href: `mailto:${personalInfo.email}`,                   color: 'blue'   },
+  { icon: Phone,       label: 'Phone',    value: personalInfo.phone,              href: `tel:${personalInfo.phone.replace(/-/g, '')}`,     color: 'blue'   },
+  { icon: GithubIcon,  label: 'GitHub',   value: 'github.com/Dolev-Atik',        href: personalInfo.github,                              color: 'purple' },
+  { icon: LinkedinIcon,label: 'LinkedIn', value: 'linkedin.com/in/dolev-atik',   href: personalInfo.linkedin,                            color: 'cyan'   },
 ]
 
 const colorClasses: Record<string, string> = {
@@ -48,7 +47,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="relative py-32 overflow-hidden">
+    <section id="contact" aria-labelledby="contact-heading" className="relative py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-600/[0.03] to-transparent" />
@@ -64,7 +63,7 @@ export default function Contact() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+          <h2 id="contact-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
             <span className="text-white">Let's build</span>
             <br />
             <span className="text-gradient-blue">something.</span>
@@ -76,36 +75,39 @@ export default function Contact() {
 
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left: links */}
-          <div className="space-y-4">
-            {contactLinks.map((link, i) => {
-              const Icon = link.icon
-              const content = (
-                <motion.div
-                  className="flex items-center gap-4 p-4 rounded-xl group"
-                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
-                  whileHover={{ scale: 1.02, x: 4, borderColor: 'rgba(59,130,246,0.15)' }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 border ${colorClasses[link.color]}`}>
-                    <Icon size={18} />
-                  </div>
-                  <div>
-                    <div className="text-xs text-white/30 font-mono">{link.label}</div>
-                    <div className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">{link.value}</div>
-                  </div>
-                </motion.div>
-              )
+          <div>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              {contactLinks.map((link, i) => {
+                const Icon = link.icon
+                const content = (
+                  <motion.div
+                    className="flex flex-col gap-2 p-3 md:p-4 rounded-xl group h-full"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
+                    whileHover={{ scale: 1.02, borderColor: 'rgba(59,130,246,0.15)' }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 border ${colorClasses[link.color]}`}>
+                      <Icon size={15} className="md:hidden" />
+                      <Icon size={18} className="hidden md:block" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] md:text-xs text-white/30 font-mono">{link.label}</div>
+                      <div className="text-xs md:text-sm font-medium text-white/80 group-hover:text-white transition-colors truncate">{link.value}</div>
+                    </div>
+                  </motion.div>
+                )
 
-              return (
-                <FadeIn key={link.label} delay={0.15 + i * 0.08}>
-                  {link.href ? (
-                    <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
-                      {content}
-                    </a>
-                  ) : content}
-                </FadeIn>
-              )
-            })}
+                return (
+                  <FadeIn key={link.label} delay={0.15 + i * 0.08}>
+                    {link.href ? (
+                      <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="block h-full">
+                        {content}
+                      </a>
+                    ) : content}
+                  </FadeIn>
+                )
+              })}
+            </div>
 
             <FadeIn delay={0.5}>
               <motion.a

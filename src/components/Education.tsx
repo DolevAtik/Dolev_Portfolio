@@ -22,7 +22,7 @@ const icons = [GraduationCap, Award]
 
 export default function Education() {
   return (
-    <section id="education" className="relative py-32 overflow-hidden">
+    <section id="education" aria-labelledby="education-heading" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute right-0 bottom-0 w-[400px] h-[400px] bg-cyan-600/5 rounded-full blur-[100px]" />
       </div>
@@ -36,7 +36,7 @@ export default function Education() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-16">
+          <h2 id="education-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-16">
             <span className="text-white">Academic</span>
             <br />
             <span className="text-gradient-blue">foundation.</span>

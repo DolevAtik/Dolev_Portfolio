@@ -71,7 +71,7 @@ const bioHighlights = [
 
 export default function About() {
   return (
-    <section id="about" className="relative py-32 overflow-hidden">
+    <section id="about" aria-labelledby="about-heading" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[600px] h-[400px] rounded-full blur-[130px]"
           style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.05), transparent)' }} />
@@ -91,7 +91,7 @@ export default function About() {
           {/* Left */}
           <div>
             <FadeIn delay={0.1}>
-              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">
+              <h2 id="about-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">
                 <span className="text-white">Building software</span>
                 <br />
                 <span className="text-gradient-blue">that actually ships.</span>

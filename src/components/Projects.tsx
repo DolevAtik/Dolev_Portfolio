@@ -313,7 +313,7 @@ export default function Projects() {
   const rest = projects.filter((p) => !p.featured)
 
   return (
-    <section id="projects" className="relative py-32 overflow-hidden">
+    <section id="projects" aria-labelledby="projects-heading" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute right-0 top-1/4 w-[500px] h-[500px] rounded-full blur-[130px]"
           style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.05), transparent)' }} />
@@ -328,7 +328,7 @@ export default function Projects() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+          <h2 id="projects-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
             <span className="text-white">Things I've</span>
             <br />
             <span className="text-gradient-purple">shipped.</span>

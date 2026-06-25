@@ -70,7 +70,7 @@ export default function Navbar() {
             </motion.a>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
               {navLinks.map((link) => (
                 <motion.a
                   key={link.href}
@@ -111,6 +111,9 @@ export default function Navbar() {
             {/* Mobile menu button */}
             <motion.button
               onClick={() => setOpen(!open)}
+              aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
               className="md:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors"
               whileTap={{ scale: 0.95 }}
             >
@@ -124,13 +127,16 @@ export default function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-menu"
+            role="dialog"
+            aria-label="Navigation menu"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
             className="fixed top-16 left-0 right-0 z-40 bg-[#070707]/95 backdrop-blur-xl border-b border-white/[0.06] md:hidden"
           >
-            <nav className="px-6 py-4 flex flex-col gap-1">
+            <nav className="px-6 py-4 flex flex-col gap-1" aria-label="Mobile navigation">
               {navLinks.map((link, i) => (
                 <motion.a
                   key={link.href}

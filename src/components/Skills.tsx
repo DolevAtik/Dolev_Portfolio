@@ -118,7 +118,7 @@ function SkillCategoryCard({ cat, delay }: { cat: typeof skillCategories[0]; del
 
 export default function Skills() {
   return (
-    <section id="skills" className="relative py-32 overflow-hidden">
+    <section id="skills" aria-labelledby="skills-heading" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-1/3 -translate-x-1/2 w-[600px] h-[500px] bg-blue-600/4 rounded-full blur-[130px]" />
       </div>
@@ -133,7 +133,7 @@ export default function Skills() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+          <h2 id="skills-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
             <span className="text-white">Tools of</span>
             <br />
             <span className="text-gradient-blue">the craft.</span>

@@ -216,6 +216,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      aria-label="Introduction — Dolev Atik, Software Engineer"
       className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg"
     >
       <MouseGlow />

@@ -1,0 +1,29 @@
+{
+  "name": "Dolev Atik | Software Engineer",
+  "short_name": "Dolev Atik",
+  "description": "Software Engineer from Israel specializing in AI engineering, backend development, and DevOps. Co-Founder of Web4You.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070707",
+  "theme_color": "#3b82f6",
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["portfolio", "software", "technology"],
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "Dolev Atik Portfolio"
+    }
+  ]
+}

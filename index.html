@@ -1,20 +1,291 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Dolev Atik - Software Engineer, AI Developer & Backend Developer. Building intelligent software, scalable backend systems and modern cloud-native applications." />
-    <meta name="keywords" content="Dolev Atik, Software Engineer, AI Developer, Backend Developer, DevOps, React, Python, Docker, Kubernetes" />
-    <meta property="og:title" content="Dolev Atik - Software Engineer" />
-    <meta property="og:description" content="Building intelligent software, scalable backend systems and modern cloud-native applications." />
+
+    <!-- ========== PRIMARY META TAGS ========== -->
+    <title>Dolev Atik | Software Engineer, AI Developer &amp; Backend Developer — Israel</title>
+    <meta name="title" content="Dolev Atik | Software Engineer, AI Developer &amp; Backend Developer — Israel" />
+    <meta name="description" content="Dolev Atik — Software Engineer from Israel specializing in AI engineering (RAG systems, LLMs, ChromaDB, Ollama), backend development (Python, Flask, Node.js), and DevOps (Docker, Kubernetes, GitHub Actions). Co-Founder of Web4You. 20+ production websites. CS student, GPA 93." />
+    <meta name="keywords" content="Dolev Atik, Software Engineer Israel, Backend Developer Israel, AI Developer Israel, Python Developer Israel, React Developer Israel, DevOps Engineer Israel, Full Stack Developer Israel, RAG Systems, LLM Developer, Flask Developer, Node.js Developer, Docker, Kubernetes, GitHub Actions, ChromaDB, Ollama, Web4You, Computer Science Israel, Software Developer Israel" />
+    <meta name="author" content="Dolev Atik" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="rating" content="general" />
+    <meta name="revisit-after" content="7 days" />
+
+    <!-- ========== CANONICAL & LANGUAGE ========== -->
+    <!-- TODO: Replace https://dolevatik.dev with your actual deployed domain -->
+    <link rel="canonical" href="https://dolevatik.dev/" />
+    <meta name="language" content="English" />
+    <meta http-equiv="content-language" content="en" />
+
+    <!-- ========== GEO / LOCAL SEO ========== -->
+    <meta name="geo.region" content="IL" />
+    <meta name="geo.placename" content="Israel" />
+    <meta name="geo.position" content="31.7683;35.2137" />
+    <meta name="ICBM" content="31.7683, 35.2137" />
+
+    <!-- ========== OPEN GRAPH (Facebook / LinkedIn / Discord) ========== -->
     <meta property="og:type" content="website" />
-    <title>Dolev Atik | Software Engineer</title>
+    <meta property="og:url" content="https://dolevatik.dev/" />
+    <meta property="og:site_name" content="Dolev Atik" />
+    <meta property="og:title" content="Dolev Atik | Software Engineer, AI Developer &amp; Backend Developer" />
+    <meta property="og:description" content="Software Engineer from Israel specializing in AI engineering (RAG, LLMs), backend systems (Python, Flask, Node.js), and cloud-native DevOps (Docker, Kubernetes). Co-Founder of Web4You. Building intelligent software that ships." />
+    <meta property="og:image" content="https://dolevatik.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dolev Atik — Software Engineer, AI Developer &amp; Backend Developer from Israel" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ========== TWITTER / X CARDS ========== -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@dolevatik" />
+    <meta name="twitter:creator" content="@dolevatik" />
+    <meta name="twitter:title" content="Dolev Atik | Software Engineer, AI &amp; Backend Developer" />
+    <meta name="twitter:description" content="Software Engineer from Israel. AI engineering (RAG, LLMs), backend systems (Python, Flask), DevOps (Docker, Kubernetes). Co-Founder of Web4You. Building intelligent software that ships." />
+    <meta name="twitter:image" content="https://dolevatik.dev/og-image.png" />
+    <meta name="twitter:image:alt" content="Dolev Atik — Software Engineer from Israel" />
+
+    <!-- ========== ICONS & PWA MANIFEST ========== -->
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- ========== PERFORMANCE: FONT PRECONNECT & PRELOAD ========== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- ========== JSON-LD STRUCTURED DATA (Schema.org) ========== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://dolevatik.dev/#person",
+          "name": "Dolev Atik",
+          "givenName": "Dolev",
+          "familyName": "Atik",
+          "url": "https://dolevatik.dev/",
+          "email": "dolev5454@gmail.com",
+          "telephone": "+972-50-923-7173",
+          "jobTitle": "Software Engineer",
+          "description": "Software Engineer from Israel specializing in AI engineering (RAG systems, LLMs, ChromaDB, Ollama), backend development (Python, Flask, Node.js), and cloud-native DevOps (Docker, Kubernetes, GitHub Actions). Co-Founder of Web4You, delivering 20+ production websites.",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://dolevatik.dev/og-image.png",
+            "width": 1200,
+            "height": 630
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "IL",
+            "addressLocality": "Israel"
+          },
+          "sameAs": [
+            "https://github.com/Dolev-Atik",
+            "https://linkedin.com/in/dolev-atik",
+            "mailto:dolev5454@gmail.com"
+          ],
+          "knowsAbout": [
+            "Python", "Flask", "Node.js", "React", "TypeScript", "JavaScript", "Java", "C++", "SQL",
+            "Docker", "Kubernetes", "GitHub Actions", "CI/CD", "Linux",
+            "RAG Systems", "Large Language Models", "AI Engineering", "ChromaDB", "Ollama", "Prompt Engineering",
+            "MongoDB", "PostgreSQL", "SQLite", "REST APIs",
+            "Backend Development", "DevOps", "Full Stack Development", "Software Engineering",
+            "Cloud Native", "Microservices", "Computer Science"
+          ],
+          "hasOccupation": {
+            "@type": "Occupation",
+            "name": "Software Engineer",
+            "occupationLocation": {
+              "@type": "Country",
+              "name": "Israel"
+            },
+            "skills": "Python, Flask, Node.js, React, TypeScript, Docker, Kubernetes, RAG Systems, LLMs, ChromaDB, GitHub Actions, MongoDB, REST APIs"
+          },
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Computer Science",
+            "description": "Bachelor of Science in Computer Science — GPA 93, expected graduation October 2026"
+          },
+          "worksFor": {
+            "@type": "Organization",
+            "@id": "https://dolevatik.dev/#web4you",
+            "name": "Web4You"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://dolevatik.dev/#website",
+          "url": "https://dolevatik.dev/",
+          "name": "Dolev Atik | Software Engineer",
+          "description": "Personal portfolio of Dolev Atik — Software Engineer, AI Developer, and Backend Developer from Israel. Projects in RAG systems, LLMs, backend APIs, and cloud-native DevOps.",
+          "publisher": {
+            "@id": "https://dolevatik.dev/#person"
+          },
+          "inLanguage": "en-US",
+          "copyrightYear": "2024",
+          "keywords": "Dolev Atik, Software Engineer Israel, AI Developer, Backend Developer, Python, Flask, React, Docker, Kubernetes"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://dolevatik.dev/#web4you",
+          "name": "Web4You",
+          "description": "Software agency co-founded by Dolev Atik, delivering 20+ production websites and custom software solutions for clients across Israel. Full-stack development, DevOps, and CI/CD.",
+          "founder": {
+            "@id": "https://dolevatik.dev/#person"
+          },
+          "foundingDate": "2023",
+          "areaServed": "Israel",
+          "knowsAbout": [
+            "Web Development", "Software Engineering", "React", "Node.js", "Flask",
+            "Docker", "CI/CD", "Tailwind CSS", "GitHub Actions"
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://dolevatik.dev/#projects",
+          "name": "Software Projects by Dolev Atik",
+          "description": "Portfolio of software engineering projects by Dolev Atik, showcasing AI engineering, backend development, and full-stack applications.",
+          "numberOfItems": 4,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "AI SOC Analyst",
+                "description": "An intelligent Security Operations Center assistant using RAG (Retrieval-Augmented Generation) with ChromaDB vector search to analyze CVEs and security threats, provide actionable remediation recommendations — running locally via Ollama with zero external API calls.",
+                "applicationCategory": "SecurityApplication",
+                "author": { "@id": "https://dolevatik.dev/#person" },
+                "programmingLanguage": ["Python", "Flask"],
+                "runtimePlatform": ["Docker", "Ollama", "ChromaDB", "MongoDB"],
+                "keywords": "RAG, AI, Security, SOC, ChromaDB, MongoDB, Docker, Ollama, Flask, LLM, Threat Intelligence, GitHub Actions"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "MentConnect",
+                "description": "Full-stack mentorship platform connecting mentors and mentees via smart profile matching, JWT authentication, session scheduling, and progress tracking. React SPA backed by a Flask REST API.",
+                "applicationCategory": "SocialNetworkingApplication",
+                "author": { "@id": "https://dolevatik.dev/#person" },
+                "programmingLanguage": ["Python", "JavaScript", "TypeScript"],
+                "runtimePlatform": ["React", "Flask", "SQLite"],
+                "keywords": "Mentorship, Full Stack, React, Flask, JWT, Python, SQLite, REST API"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "WebSite",
+                "name": "Orlev Finance",
+                "description": "Performance-optimized website for a financial services firm with premium UI/UX, mobile-first responsive layout, and optimized Core Web Vitals. Built with React, Tailwind CSS, and Framer Motion.",
+                "author": { "@id": "https://dolevatik.dev/#person" },
+                "keywords": "React, Tailwind CSS, Financial Services, Web Development, Framer Motion, Vite"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "WebSite",
+                "name": "Web4You Agency Website",
+                "description": "Conversion-focused software agency website with animated sections, portfolio gallery, service pages, and lead capture forms. Built with React, Node.js, and Framer Motion.",
+                "author": { "@id": "https://dolevatik.dev/#person" },
+                "keywords": "Agency, React, Node.js, Framer Motion, Tailwind CSS, SEO"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://dolevatik.dev/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What does Dolev Atik specialize in?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Dolev Atik specializes in three areas: AI Engineering (RAG systems, LLMs, ChromaDB, Ollama, prompt engineering), Backend Development (Python, Flask, Node.js, REST APIs, MongoDB, PostgreSQL), and DevOps (Docker, Kubernetes, GitHub Actions, CI/CD pipelines). He is also proficient in full-stack development with React and TypeScript."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Dolev Atik available for hire or freelance work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Dolev Atik is available for software engineering opportunities including full-time roles and freelance projects. Contact via email at dolev5454@gmail.com or through LinkedIn at linkedin.com/in/dolev-atik."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where is Dolev Atik located?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Dolev Atik is based in Israel and is open to remote work worldwide as well as local opportunities across Israel."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is Web4You?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Web4You is a software agency co-founded by Dolev Atik in 2023 that has delivered 20+ production websites and custom software solutions for clients across Israel, handling everything from technical architecture and full-stack development to cloud infrastructure and CI/CD pipelines."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What programming languages and technologies does Dolev Atik know?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Dolev Atik is proficient in Python, JavaScript, TypeScript, Java, C++, and SQL. His core technologies include Flask, Node.js, React, Docker, Kubernetes, GitHub Actions, ChromaDB, Ollama, MongoDB, and PostgreSQL."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://dolevatik.dev/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Dolev Atik — Software Engineer",
+              "item": "https://dolevatik.dev/"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
+    <noscript>
+      <div style="padding:2rem;text-align:center;font-family:sans-serif;background:#070707;color:#fff;min-height:100vh">
+        <h1>Dolev Atik — Software Engineer, AI Developer &amp; Backend Developer</h1>
+        <p>Software Engineer from Israel specializing in AI engineering (RAG systems, LLMs, ChromaDB, Ollama), backend development (Python, Flask, Node.js), and DevOps (Docker, Kubernetes, GitHub Actions). Co-Founder of Web4You with 20+ production websites delivered.</p>
+        <p>
+          Contact:
+          <a href="mailto:dolev5454@gmail.com" style="color:#3b82f6">dolev5454@gmail.com</a> |
+          <a href="https://linkedin.com/in/dolev-atik" style="color:#3b82f6" rel="noopener noreferrer">LinkedIn</a> |
+          <a href="https://github.com/Dolev-Atik" style="color:#3b82f6" rel="noopener noreferrer">GitHub</a>
+        </p>
+        <p>Please enable JavaScript to view this interactive portfolio.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
