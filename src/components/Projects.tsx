@@ -4,9 +4,12 @@ import { projects } from '../data/portfolio'
 import { ExternalLink, ArrowRight, X, CheckCircle2, ArrowDown, Lock, AlertTriangle, Lightbulb } from 'lucide-react'
 import { GithubIcon } from './SocialIcons'
 
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px 300px 0px' })
+  if (isMobile) return <>{children}</>
   return (
     <motion.div
       ref={ref}

@@ -1,9 +1,12 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px 300px 0px' })
+  if (isMobile) return <>{children}</>
   return (
     <motion.div
       ref={ref}
