@@ -4,6 +4,7 @@ import { Mail, Download, ExternalLink } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { personalInfo } from '../data/portfolio'
 import { isMobileViewport } from '../lib/mobile'
+import { useSiteReady } from '../context/SiteReadyContext'
 
 const TYPING_SPEED = 75
 const DELETE_SPEED = 35
@@ -214,6 +215,7 @@ const childVariants: Variants = {
 export default function Hero() {
   const typedText = useTypingEffect(personalInfo.roles)
   const isMobile = isMobileViewport()
+  const siteReady = useSiteReady()
 
   const heroContent = (
     <>
@@ -360,9 +362,15 @@ export default function Hero() {
 
           {/* Left: Text */}
           {isMobile ? (
-            <div>{heroContent}</div>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={siteReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+              transition={{ duration: 0.75, delay: siteReady ? 0.1 : 0, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {heroContent}
+            </motion.div>
           ) : (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible">
+          <motion.div variants={containerVariants} initial="hidden" animate={siteReady ? 'visible' : 'hidden'}>
             {/* Status badge */}
             <motion.div variants={childVariants} className="inline-flex items-center gap-2 mb-8">
               <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"

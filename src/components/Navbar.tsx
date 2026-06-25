@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { isMobileViewport } from '../lib/mobile'
+import { useSiteReady, REVEAL_EASE } from '../context/SiteReadyContext'
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -14,6 +15,7 @@ const navLinks = [
 const sectionIds = navLinks.map((link) => link.href.slice(1))
 
 export default function Navbar() {
+  const siteReady = useSiteReady()
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState(sectionIds[0])
   const navRef = useRef<HTMLElement>(null)
@@ -86,9 +88,13 @@ export default function Navbar() {
 
   return (
     <motion.header
-      initial={isMobileViewport() ? false : { y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: isMobileViewport() ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+      initial={false}
+      animate={
+        siteReady
+          ? { y: 0, opacity: 1 }
+          : { y: isMobileViewport() ? 0 : -24, opacity: 0 }
+      }
+      transition={{ duration: 0.7, delay: siteReady ? 0.12 : 0, ease: REVEAL_EASE }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? 'bg-[#070707]/80 backdrop-blur-xl border-b border-white/[0.06]'

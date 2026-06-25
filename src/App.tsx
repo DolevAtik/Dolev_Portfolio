@@ -1,6 +1,5 @@
-import { lazy, Suspense } from 'react'
-import { useEffect, useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import Loader from './components/Loader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -13,6 +12,7 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CursorGlow from './components/CursorGlow'
 import { isMobileViewport } from './lib/mobile'
+import { SiteReadyContext, REVEAL_EASE, REVEAL_DURATION } from './context/SiteReadyContext'
 
 const JourneyDesktop = lazy(() => import('./components/JourneyDesktop'))
 const CommandPalette = lazy(() => import('./components/CommandPalette'))
@@ -28,11 +28,21 @@ function Journey() {
 
 export default function App() {
   const [loading, setLoading] = useState(true)
+  const [revealed, setRevealed] = useState(false)
   const [showPalette, setShowPalette] = useState(() => !isMobileViewport())
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth'
   }, [])
+
+  useEffect(() => {
+    if (!loading) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [loading])
 
   useEffect(() => {
     if (showPalette) return
@@ -41,20 +51,39 @@ export default function App() {
   }, [showPalette])
 
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
-      </AnimatePresence>
+    <SiteReadyContext.Provider value={revealed}>
+      {loading && (
+        <Loader
+          onExitStart={() => setRevealed(true)}
+          onComplete={() => setLoading(false)}
+        />
+      )}
 
-      <div className="min-h-screen bg-[#070707] text-white relative">
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: revealed ? 1 : 0,
+          scale: revealed ? 1 : 1.04,
+          filter: revealed ? 'blur(0px)' : 'blur(14px)',
+        }}
+        transition={{
+          duration: REVEAL_DURATION,
+          ease: REVEAL_EASE,
+          opacity: { duration: REVEAL_DURATION * 0.9, delay: 0.06 },
+          scale: { duration: REVEAL_DURATION, delay: 0.04 },
+          filter: { duration: REVEAL_DURATION * 0.75, delay: 0.02 },
+        }}
+        className="min-h-screen bg-[#070707] text-white relative origin-center"
+        style={{ willChange: revealed ? 'auto' : 'opacity, transform, filter' }}
+      >
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-blue-500 focus:text-white focus:font-medium focus:text-sm"
         >
           Skip to main content
         </a>
-        {!isMobileViewport() && <CursorGlow />}
-        {showPalette && (
+        {revealed && !isMobileViewport() && <CursorGlow />}
+        {showPalette && revealed && (
           <Suspense fallback={null}>
             <CommandPalette />
           </Suspense>
@@ -70,7 +99,7 @@ export default function App() {
           <Contact />
         </main>
         <Footer />
-      </div>
-    </>
+      </motion.div>
+    </SiteReadyContext.Provider>
   )
 }

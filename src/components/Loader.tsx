@@ -1,68 +1,152 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { REVEAL_EASE } from '../context/SiteReadyContext'
+
+const TIMING = {
+  total: 4800,
+  steps: [0, 380, 760, 1140, 1520, 1900, 2300],
+  progressComplete: 3600,
+  launchDone: 3600,
+} as const
+
+const EXIT = {
+  backdrop: 1,
+  bloom: 0.7,
+  content: 0.55,
+} as const
 
 const BOOT_STEPS = [
-  { cmd: 'initializing portfolio...', status: null, delay: 0 },
-  { cmd: 'loading dependencies', status: 'done', delay: 350 },
-  { cmd: 'connecting to docker', status: 'done', delay: 700 },
-  { cmd: 'starting kubernetes cluster', status: 'done', delay: 1050 },
-  { cmd: 'initializing AI engine', status: 'done', delay: 1400 },
-  { cmd: 'compiling projects...', status: 'done', delay: 1750 },
-  { cmd: 'launching portfolio', status: null, delay: 2100 },
-]
+  { cmd: 'initializing portfolio...', status: null },
+  { cmd: 'loading dependencies', status: 'done' },
+  { cmd: 'connecting to docker', status: 'done' },
+  { cmd: 'starting kubernetes cluster', status: 'done' },
+  { cmd: 'initializing AI engine', status: 'done' },
+  { cmd: 'compiling projects...', status: 'done' },
+  { cmd: 'launching portfolio', status: null },
+] as const
+
+const EASE = [0.16, 1, 0.3, 1] as const
+
+function progressAt(elapsed: number): number {
+  const launchAt = TIMING.steps[TIMING.steps.length - 1]
+
+  if (elapsed <= launchAt) {
+    return (elapsed / launchAt) * 85
+  }
+  if (elapsed <= TIMING.progressComplete) {
+    const t = (elapsed - launchAt) / (TIMING.progressComplete - launchAt)
+    return 85 + t * 15
+  }
+  return 100
+}
 
 interface LoaderProps {
+  onExitStart: () => void
   onComplete: () => void
 }
 
-export default function Loader({ onComplete }: LoaderProps) {
-  const [visibleSteps, setVisibleSteps] = useState<number>(0)
+export default function Loader({ onExitStart, onComplete }: LoaderProps) {
+  const [show, setShow] = useState(true)
+  const [visibleSteps, setVisibleSteps] = useState(0)
   const [progress, setProgress] = useState(0)
-  const [exiting, setExiting] = useState(false)
+  const [launchDone, setLaunchDone] = useState(false)
+  const onExitStartRef = useRef(onExitStart)
+  const onCompleteRef = useRef(onComplete)
+  onExitStartRef.current = onExitStart
+  onCompleteRef.current = onComplete
 
   useEffect(() => {
-    BOOT_STEPS.forEach((_, i) => {
-      setTimeout(() => {
-        setVisibleSteps(i + 1)
-        setProgress(Math.round(((i + 1) / BOOT_STEPS.length) * 100))
-      }, _.delay)
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    let raf = 0
+    const start = performance.now()
+
+    const tick = (now: number) => {
+      const elapsed = now - start
+      setProgress(Math.round(progressAt(elapsed)))
+
+      if (elapsed < TIMING.total) {
+        raf = requestAnimationFrame(tick)
+      }
+    }
+
+    raf = requestAnimationFrame(tick)
+
+    TIMING.steps.forEach((delay, i) => {
+      timeouts.push(window.setTimeout(() => setVisibleSteps(i + 1), delay))
     })
 
-    setTimeout(() => {
-      setExiting(true)
-      setTimeout(onComplete, 500)
-    }, 2700)
-  }, [onComplete])
+    timeouts.push(window.setTimeout(() => setLaunchDone(true), TIMING.launchDone))
+    timeouts.push(
+      window.setTimeout(() => {
+        onExitStartRef.current()
+        setShow(false)
+      }, TIMING.total)
+    )
+
+    return () => {
+      cancelAnimationFrame(raf)
+      timeouts.forEach(window.clearTimeout)
+    }
+  }, [])
 
   return (
-    <AnimatePresence>
-      {!exiting ? (
+    <AnimatePresence onExitComplete={() => onCompleteRef.current()}>
+      {show && (
         <motion.div
           key="loader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.04 }}
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#070707] overflow-hidden"
+          exit={{ opacity: 0 }}
+          transition={{ duration: EXIT.backdrop, ease: REVEAL_EASE }}
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
         >
-          {/* Animated grid background */}
-          <div className="absolute inset-0 grid-bg opacity-30" />
+          <motion.div
+            className="absolute inset-0 bg-[#070707]"
+            exit={{ opacity: 0 }}
+            transition={{ duration: EXIT.backdrop, ease: REVEAL_EASE }}
+          />
 
-          {/* Glowing orb */}
+          <motion.div
+            className="absolute inset-0 grid-bg opacity-30"
+            exit={{ opacity: 0 }}
+            transition={{ duration: EXIT.backdrop * 0.6, ease: REVEAL_EASE }}
+          />
+
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(circle at 50% 45%, rgba(59,130,246,0.18) 0%, rgba(6,182,212,0.06) 35%, transparent 65%)',
+            }}
+            initial={{ opacity: 0, scale: 0.85 }}
+            exit={{ opacity: [0.5, 0], scale: 1.35 }}
+            transition={{ duration: EXIT.bloom, ease: REVEAL_EASE }}
+          />
+
           <motion.div
             className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
             style={{
-              background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, rgba(168,85,247,0.04) 50%, transparent 70%)',
+              background:
+                'radial-gradient(circle, rgba(59,130,246,0.08) 0%, rgba(168,85,247,0.04) 50%, transparent 70%)',
             }}
-            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            animate={{ scale: [1, 1.06, 1], opacity: [0.45, 0.75, 0.45] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            exit={{ opacity: 0, scale: 1.15 }}
           />
 
-          <div className="relative z-10 w-full max-w-lg px-6">
-            {/* Logo mark */}
+          <motion.div
+            exit={{
+              opacity: 0,
+              scale: 0.92,
+              y: 28,
+              filter: 'blur(16px)',
+            }}
+            transition={{ duration: EXIT.content, ease: REVEAL_EASE }}
+            className="relative z-10 w-full max-w-lg px-6"
+          >
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4, ease: EASE }}
               className="mb-8 text-center"
             >
               <div className="inline-flex items-center gap-3">
@@ -76,15 +160,13 @@ export default function Loader({ onComplete }: LoaderProps) {
               </div>
             </motion.div>
 
-            {/* Terminal window */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.4, delay: 0.08, ease: EASE }}
               className="rounded-2xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-blue-500/5"
               style={{ background: 'rgba(10,10,12,0.95)' }}
             >
-              {/* Window chrome */}
               <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.04]">
                 <div className="w-3 h-3 rounded-full bg-red-500/70" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
@@ -92,62 +174,65 @@ export default function Loader({ onComplete }: LoaderProps) {
                 <span className="ml-3 text-xs font-mono text-white/20">portfolio.sh</span>
               </div>
 
-              {/* Terminal body */}
               <div className="p-6 space-y-2 min-h-[200px]">
                 <div className="text-xs font-mono text-white/20 mb-4">
                   bash-5.2$ ./launch-portfolio.sh
                 </div>
 
-                {BOOT_STEPS.slice(0, visibleSteps).map((step, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-3 text-xs font-mono"
-                  >
-                    <span className={
-                      step.status === 'done'
-                        ? 'text-emerald-400'
-                        : i === visibleSteps - 1
-                        ? 'text-blue-400 animate-pulse'
-                        : 'text-white/20'
-                    }>
-                      {step.status === 'done' ? '✓' : i === visibleSteps - 1 ? '▸' : '·'}
-                    </span>
-                    <span className={step.status === 'done' ? 'text-white/60' : 'text-white/90'}>
-                      {step.cmd}
-                    </span>
-                    {step.status === 'done' && (
-                      <span className="ml-auto text-emerald-400/50">done</span>
-                    )}
-                    {i === visibleSteps - 1 && step.status === null && (
-                      <span className="ml-1 w-1.5 h-3 bg-blue-400 animate-blink inline-block" />
-                    )}
-                  </motion.div>
-                ))}
+                {BOOT_STEPS.slice(0, visibleSteps).map((step, i) => {
+                  const isLaunchStep = i === BOOT_STEPS.length - 1
+                  const isDone =
+                    step.status === 'done' ||
+                    (i === 0 && visibleSteps > 1) ||
+                    (isLaunchStep && launchDone)
+                  const isActive =
+                    i === visibleSteps - 1 && !isDone && step.status === null
+
+                  return (
+                    <div
+                      key={step.cmd}
+                      className="flex items-center gap-3 text-xs font-mono loader-step-in"
+                    >
+                      <span
+                        className={
+                          isDone
+                            ? 'text-emerald-400'
+                            : isActive
+                              ? 'text-blue-400'
+                              : 'text-white/20'
+                        }
+                      >
+                        {isDone ? '✓' : isActive ? '▸' : '·'}
+                      </span>
+                      <span className={isDone ? 'text-white/60' : 'text-white/90'}>{step.cmd}</span>
+                      {isDone && <span className="ml-auto text-emerald-400/50">done</span>}
+                      {isActive && (
+                        <span className="ml-1 w-1.5 h-3 bg-blue-400 animate-blink inline-block" />
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             </motion.div>
 
-            {/* Progress bar */}
             <div className="mt-6">
               <div className="flex justify-between text-xs font-mono text-white/20 mb-2">
-                <span>loading</span>
+                <span>{launchDone ? 'ready' : 'loading'}</span>
                 <span>{progress}%</span>
               </div>
               <div className="h-px bg-white/[0.06] rounded-full overflow-hidden">
-                <motion.div
+                <div
                   className="h-full rounded-full"
-                  style={{ background: 'linear-gradient(90deg, #3b82f6, #06b6d4, #a855f7)' }}
-                  initial={{ width: '0%' }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.3 }}
+                  style={{
+                    width: `${progress}%`,
+                    background: 'linear-gradient(90deg, #3b82f6, #06b6d4, #a855f7)',
+                  }}
                 />
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
-      ) : null}
+      )}
     </AnimatePresence>
   )
 }
