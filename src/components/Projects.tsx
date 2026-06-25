@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/portfolio'
-import { ExternalLink, ArrowRight, X, CheckCircle2, ArrowDown } from 'lucide-react'
+import { ExternalLink, ArrowRight, X, CheckCircle2, ArrowDown, Lock, AlertTriangle, Lightbulb } from 'lucide-react'
 import { GithubIcon } from './SocialIcons'
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -21,9 +21,9 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 
 const architectures: Record<number, string[]> = {
   1: ['User / Browser', 'React Frontend', 'Flask REST API', 'Auth Middleware', 'Ollama LLM', 'ChromaDB Vectors', 'MongoDB Storage', 'AI Response'],
-  2: ['User', 'React SPA', 'Flask API', 'JWT Auth', 'SQLite DB', 'Match Engine', 'Session Manager'],
-  3: ['Visitor', 'React + Vite', 'Tailwind CSS', 'Framer Motion', 'Contact API', 'Email Service'],
-  4: ['Client', 'Next.js / React', 'Node.js Backend', 'Content API', 'Domain + CDN', 'Analytics'],
+  2: ['User', 'React Frontend', 'Flask Backend', 'PDF Processing', 'Embedding Model', 'ChromaDB', 'Ollama', 'AI Response'],
+  3: ['Visitor', 'React + Vite', 'Tailwind CSS', 'Framer Motion', 'Contact Form', 'Email Service', 'Business Result'],
+  4: ['Mobile App', 'Backend API', 'Authentication', 'Database', 'Rewards Engine', 'Progress Tracking', 'Notifications', 'Analytics'],
 }
 
 function ArchFlow({ nodes }: { nodes: string[] }) {
@@ -59,8 +59,11 @@ function ArchFlow({ nodes }: { nodes: string[] }) {
   )
 }
 
-function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClose: () => void }) {
+type Project = typeof projects[0]
+
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const arch = architectures[project.id]
+  const isSoon = project.isComingSoon
 
   return (
     <motion.div
@@ -104,6 +107,12 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-white/[0.04] text-white/35 border border-white/[0.06]">
                   {project.category}
                 </span>
+                {isSoon && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-medium text-amber-400 border border-amber-500/30"
+                    style={{ background: 'rgba(245,158,11,0.08)' }}>
+                    In Development
+                  </span>
+                )}
               </div>
               <p className="text-xs md:text-sm text-white/35">{project.subtitle}</p>
             </div>
@@ -144,6 +153,32 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
             </div>
           </div>
 
+          {/* Challenges */}
+          {project.challenges && (
+            <div className="mb-3 md:mb-5">
+              <div className="p-3 md:p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(245,158,11,0.04)' }}>
+                <div className="flex items-center gap-2 mb-1 md:mb-1.5">
+                  <AlertTriangle size={11} className="text-amber-400/70" />
+                  <div className="text-[10px] font-mono text-amber-400/70 uppercase tracking-widest">Challenges</div>
+                </div>
+                <p className="text-xs md:text-sm text-white/55 leading-relaxed">{project.challenges}</p>
+              </div>
+            </div>
+          )}
+
+          {/* What I Learned */}
+          {project.learned && (
+            <div className="mb-3 md:mb-5">
+              <div className="p-3 md:p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(168,85,247,0.04)' }}>
+                <div className="flex items-center gap-2 mb-1 md:mb-1.5">
+                  <Lightbulb size={11} className="text-purple-400/70" />
+                  <div className="text-[10px] font-mono text-purple-400/70 uppercase tracking-widest">What I Learned</div>
+                </div>
+                <p className="text-xs md:text-sm text-white/55 leading-relaxed">{project.learned}</p>
+              </div>
+            </div>
+          )}
+
           {/* Tech */}
           <div className="mb-3 md:mb-5">
             <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-2">Tech Stack</div>
@@ -160,19 +195,28 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
 
           {/* Links */}
           <div className="flex gap-3 pt-3 md:pt-4 border-t border-white/[0.04]">
-            <motion.a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-colors"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <GithubIcon size={15} />
-              View Source
-            </motion.a>
-            {project.live && (
+            {project.github ? (
+              <motion.a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-colors"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <GithubIcon size={15} />
+                View Source
+              </motion.a>
+            ) : isSoon ? (
+              <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-amber-400/60 cursor-default"
+                style={{ background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)' }}>
+                <Lock size={13} />
+                Coming Soon
+              </div>
+            ) : null}
+
+            {project.live ? (
               <motion.a
                 href={project.live}
                 target="_blank"
@@ -185,7 +229,13 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
                 <ExternalLink size={15} />
                 Live Demo
               </motion.a>
-            )}
+            ) : isSoon ? (
+              <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/35 cursor-default"
+                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <Lock size={13} />
+                Private Project
+              </div>
+            ) : null}
           </div>
         </div>
       </motion.div>
@@ -193,10 +243,11 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
   )
 }
 
-function ProjectCard({ project, index, large }: { project: typeof projects[0]; index: number; large?: boolean }) {
+function ProjectCard({ project, index, large }: { project: Project; index: number; large?: boolean }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
+  const isSoon = project.isComingSoon
 
   return (
     <>
@@ -206,17 +257,35 @@ function ProjectCard({ project, index, large }: { project: typeof projects[0]; i
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.65, delay: index * 0.09 }}
         className="group relative rounded-2xl overflow-hidden cursor-pointer h-full flex flex-col"
-        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
+        style={
+          isSoon
+            ? { background: 'rgba(245,158,11,0.03)', border: '1px solid rgba(245,158,11,0.18)' }
+            : { background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }
+        }
         onClick={() => setOpen(true)}
         whileHover={{ y: -6 }}
       >
         {/* Top gradient bar */}
         <div className={`h-[3px] w-full bg-gradient-to-r ${project.gradient} flex-shrink-0`} />
 
+        {/* Coming Soon animated glow */}
+        {isSoon && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            animate={{ opacity: [0.4, 0.75, 0.4] }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ boxShadow: 'inset 0 0 30px rgba(245,158,11,0.08), 0 0 40px rgba(245,158,11,0.06)' }}
+          />
+        )}
+
         {/* Hover glow */}
         <motion.div
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
-          style={{ background: 'radial-gradient(ellipse at 50% -20%, rgba(59,130,246,0.06), transparent 60%)' }}
+          style={
+            isSoon
+              ? { background: 'radial-gradient(ellipse at 50% -20%, rgba(245,158,11,0.08), transparent 60%)' }
+              : { background: 'radial-gradient(ellipse at 50% -20%, rgba(59,130,246,0.06), transparent 60%)' }
+          }
           transition={{ duration: 0.3 }}
         />
 
@@ -226,12 +295,25 @@ function ProjectCard({ project, index, large }: { project: typeof projects[0]; i
             <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-mono text-white/30 border border-white/[0.05]">
               {project.category}
             </span>
-            {project.featured && (
-              <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-medium text-blue-400 border border-blue-500/20"
-                style={{ background: 'rgba(59,130,246,0.08)' }}>
-                Featured
-              </span>
-            )}
+            <div className="flex items-center gap-1.5">
+              {project.featured && !isSoon && (
+                <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-medium text-blue-400 border border-blue-500/20"
+                  style={{ background: 'rgba(59,130,246,0.08)' }}>
+                  Featured
+                </span>
+              )}
+              {isSoon && (
+                <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-semibold text-amber-400 border border-amber-500/30"
+                  style={{ background: 'rgba(245,158,11,0.1)' }}>
+                  <motion.span
+                    animate={{ opacity: [1, 0.3, 1] }}
+                    transition={{ duration: 1.6, repeat: Infinity }}
+                    className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"
+                  />
+                  IN DEV
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Icon + title */}
@@ -271,16 +353,24 @@ function ProjectCard({ project, index, large }: { project: typeof projects[0]; i
 
           {/* Footer */}
           <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-white/[0.04]">
-            <div className="flex gap-1 md:gap-2">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <GithubIcon size={12} />
-              </a>
+            <div className="flex gap-1 md:gap-2 items-center">
+              {project.github ? (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <GithubIcon size={12} />
+                </a>
+              ) : isSoon ? (
+                <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] md:text-[10px] text-amber-400/50 border border-amber-500/15"
+                  style={{ background: 'rgba(245,158,11,0.04)' }}>
+                  <Lock size={9} />
+                  <span className="hidden md:inline">Private</span>
+                </span>
+              ) : null}
               {project.live && (
                 <a
                   href={project.live}
@@ -293,7 +383,7 @@ function ProjectCard({ project, index, large }: { project: typeof projects[0]; i
                 </a>
               )}
             </div>
-            <span className="hidden md:flex items-center gap-1 text-xs text-white/20 group-hover:text-blue-400 transition-colors">
+            <span className={`hidden md:flex items-center gap-1 text-xs transition-colors ${isSoon ? 'text-amber-400/40 group-hover:text-amber-400' : 'text-white/20 group-hover:text-blue-400'}`}>
               Case study
               <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </span>
