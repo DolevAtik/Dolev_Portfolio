@@ -61,13 +61,13 @@ export default function Contact() {
 
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left: links */}
-          <div>
+          <div className="mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none">
             <div className="grid grid-cols-2 gap-3 mb-3">
               {contactLinks.map((link, i) => {
                 const Icon = link.icon
                 const content = (
                   <motion.div
-                    className="flex flex-col gap-2 p-3 md:p-4 rounded-xl group h-full"
+                    className="flex flex-col items-center text-center gap-2 p-3 md:p-4 rounded-xl group h-full"
                     style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
                     whileHover={{ scale: 1.02, borderColor: 'rgba(59,130,246,0.15)' }}
                     transition={{ duration: 0.2 }}
@@ -78,7 +78,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <div className="text-[10px] md:text-xs text-white/30 font-mono">{link.label}</div>
-                      <div className="text-xs md:text-sm font-medium text-white/80 group-hover:text-white transition-colors truncate">{link.value}</div>
+                      <div className="text-xs md:text-sm font-medium text-white/80 group-hover:text-white transition-colors break-all">{link.value}</div>
                     </div>
                   </motion.div>
                 )
@@ -99,7 +99,7 @@ export default function Contact() {
               <motion.a
                 href="/cv.pdf"
                 download
-                className="flex items-center gap-3 p-4 rounded-xl text-sm font-semibold text-white"
+                className="flex items-center justify-center gap-3 p-4 rounded-xl text-sm font-semibold text-white w-full"
                 style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.1))', border: '1px solid rgba(59,130,246,0.2)' }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
