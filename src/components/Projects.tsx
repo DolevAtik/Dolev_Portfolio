@@ -259,23 +259,28 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
         className="group relative rounded-2xl overflow-hidden cursor-pointer h-full flex flex-col"
         style={
           isSoon
-            ? { background: 'rgba(245,158,11,0.03)', border: '1px solid rgba(245,158,11,0.18)' }
+            ? { background: 'rgba(20,10,0,0.6)', border: '1.5px solid rgba(245,158,11,0.35)' }
             : { background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }
         }
         onClick={() => setOpen(true)}
         whileHover={{ y: -6 }}
       >
-        {/* Top gradient bar */}
-        <div className={`h-[3px] w-full bg-gradient-to-r ${project.gradient} flex-shrink-0`} />
+        {/* Top gradient bar — thicker for Coming Soon */}
+        <div className={`${isSoon ? 'h-[5px]' : 'h-[3px]'} w-full bg-gradient-to-r ${project.gradient} flex-shrink-0`} />
 
-        {/* Coming Soon animated glow */}
+        {/* Coming Soon — strong pulsing border glow */}
         {isSoon && (
-          <motion.div
-            className="absolute inset-0 pointer-events-none rounded-2xl"
-            animate={{ opacity: [0.4, 0.75, 0.4] }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ boxShadow: 'inset 0 0 30px rgba(245,158,11,0.08), 0 0 40px rgba(245,158,11,0.06)' }}
-          />
+          <>
+            <motion.div
+              className="absolute inset-0 pointer-events-none rounded-2xl"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ boxShadow: 'inset 0 0 50px rgba(245,158,11,0.12), 0 0 60px rgba(245,158,11,0.14), 0 0 120px rgba(251,146,60,0.07)' }}
+            />
+            {/* subtle warm background sweep */}
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.07) 0%, transparent 65%)' }} />
+          </>
         )}
 
         {/* Hover glow */}
@@ -283,19 +288,33 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
           style={
             isSoon
-              ? { background: 'radial-gradient(ellipse at 50% -20%, rgba(245,158,11,0.08), transparent 60%)' }
+              ? { background: 'radial-gradient(ellipse at 50% -10%, rgba(245,158,11,0.14), transparent 60%)' }
               : { background: 'radial-gradient(ellipse at 50% -20%, rgba(59,130,246,0.06), transparent 60%)' }
           }
           transition={{ duration: 0.3 }}
         />
 
         <div className="p-3 md:p-6 flex flex-col flex-1">
-          {/* Badges */}
+          {/* Badges row */}
           <div className="flex items-center justify-between mb-2 md:mb-4">
-            <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-mono text-white/30 border border-white/[0.05]">
+            <span className={`px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-mono border ${isSoon ? 'text-amber-400/50 border-amber-500/20' : 'text-white/30 border-white/[0.05]'}`}>
               {project.category}
             </span>
             <div className="flex items-center gap-1.5">
+              {/* Live demo button — top of card */}
+              {project.live && (
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[9px] md:text-[10px] font-medium text-cyan-400 border border-cyan-500/25 hover:border-cyan-400/50 hover:text-cyan-300 transition-colors"
+                  style={{ background: 'rgba(6,182,212,0.07)' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ExternalLink size={9} />
+                  Live
+                </a>
+              )}
               {project.featured && !isSoon && (
                 <span className="px-1.5 py-0.5 rounded text-[9px] md:text-[10px] font-medium text-blue-400 border border-blue-500/20"
                   style={{ background: 'rgba(59,130,246,0.08)' }}>
@@ -303,14 +322,14 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
                 </span>
               )}
               {isSoon && (
-                <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-semibold text-amber-400 border border-amber-500/30"
-                  style={{ background: 'rgba(245,158,11,0.1)' }}>
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] md:text-[11px] font-bold tracking-wide text-amber-300 border border-amber-500/40"
+                  style={{ background: 'rgba(245,158,11,0.15)' }}>
                   <motion.span
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1.6, repeat: Infinity }}
+                    animate={{ opacity: [1, 0.2, 1], scale: [1, 1.3, 1] }}
+                    transition={{ duration: 1.4, repeat: Infinity }}
                     className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"
                   />
-                  IN DEV
+                  IN DEVELOPMENT
                 </span>
               )}
             </div>
@@ -320,20 +339,29 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
           <div className="flex items-start gap-2 md:gap-3 mb-2 md:mb-3">
             <span className={large ? 'text-xl md:text-3xl' : 'text-lg md:text-2xl'}>{project.icon}</span>
             <div>
-              <h3 className={`font-bold text-white leading-tight ${large ? 'text-sm md:text-xl' : 'text-xs md:text-lg'}`}>{project.title}</h3>
-              <p className="text-[10px] md:text-xs text-white/35 mt-0.5 hidden md:block">{project.subtitle}</p>
+              <h3 className={`font-bold leading-tight ${isSoon ? 'text-amber-100' : 'text-white'} ${large ? 'text-sm md:text-xl' : 'text-xs md:text-lg'}`}>{project.title}</h3>
+              <p className={`text-[10px] md:text-xs mt-0.5 hidden md:block ${isSoon ? 'text-amber-400/50' : 'text-white/35'}`}>{project.subtitle}</p>
             </div>
           </div>
 
-          <p className="text-[11px] md:text-sm text-white/45 leading-relaxed mb-3 md:mb-5 flex-1 line-clamp-2 md:line-clamp-3">
+          {/* Confidential banner — Coming Soon only */}
+          {isSoon && (
+            <div className="flex items-center gap-2 mb-2 md:mb-3 px-2 py-1.5 rounded-lg border border-amber-500/15"
+              style={{ background: 'rgba(245,158,11,0.06)' }}>
+              <Lock size={10} className="text-amber-400/60 flex-shrink-0" />
+              <span className="text-[10px] md:text-xs text-amber-400/60 font-mono">Confidential Client Project</span>
+            </div>
+          )}
+
+          <p className={`text-[11px] md:text-sm leading-relaxed mb-3 md:mb-5 flex-1 line-clamp-2 md:line-clamp-3 ${isSoon ? 'text-white/50' : 'text-white/45'}`}>
             {project.description}
           </p>
 
           {/* Tech */}
           <div className="flex flex-wrap gap-1 md:gap-1.5 mb-2 md:mb-5">
             {project.tech.slice(0, large ? 3 : 2).map((t) => (
-              <span key={t} className="px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] text-white/35 border border-white/[0.05]"
-                style={{ background: 'rgba(255,255,255,0.02)' }}>
+              <span key={t} className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
+                style={{ background: isSoon ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.02)' }}>
                 {t}
               </span>
             ))}
@@ -341,8 +369,8 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
               <span className="px-1.5 py-0.5 text-[9px] md:text-[10px] text-white/20 md:hidden">+{project.tech.length - (large ? 3 : 2)}</span>
             )}
             {project.tech.slice(large ? 3 : 2, large ? 7 : 5).map((t) => (
-              <span key={t} className="hidden md:inline px-2 py-0.5 rounded text-[10px] text-white/35 border border-white/[0.05]"
-                style={{ background: 'rgba(255,255,255,0.02)' }}>
+              <span key={t} className={`hidden md:inline px-2 py-0.5 rounded text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
+                style={{ background: isSoon ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.02)' }}>
                 {t}
               </span>
             ))}
@@ -352,7 +380,7 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-white/[0.04]">
+          <div className={`flex items-center justify-between pt-2 md:pt-4 border-t ${isSoon ? 'border-amber-500/10' : 'border-white/[0.04]'}`}>
             <div className="flex gap-1 md:gap-2 items-center">
               {project.github ? (
                 <a
