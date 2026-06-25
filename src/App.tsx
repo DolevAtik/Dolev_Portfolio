@@ -1,18 +1,17 @@
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Loader from './components/Loader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-
-const About = lazy(() => import('./components/About'))
-const Journey = lazy(() => import('./components/Journey'))
-const Projects = lazy(() => import('./components/Projects'))
-const Skills = lazy(() => import('./components/Skills'))
-const Education = lazy(() => import('./components/Education'))
-const Contact = lazy(() => import('./components/Contact'))
-const Footer = lazy(() => import('./components/Footer'))
-const CommandPalette = lazy(() => import('./components/CommandPalette'))
-const CursorGlow = lazy(() => import('./components/CursorGlow'))
+import About from './components/About'
+import Journey from './components/Journey'
+import Projects from './components/Projects'
+import Skills from './components/Skills'
+import Education from './components/Education'
+import Contact from './components/Contact'
+import Footer from './components/Footer'
+import CommandPalette from './components/CommandPalette'
+import CursorGlow from './components/CursorGlow'
 
 export default function App() {
   const [loading, setLoading] = useState(() => {
@@ -44,25 +43,19 @@ export default function App() {
         >
           Skip to main content
         </a>
-        <Suspense fallback={null}>
-          <CursorGlow />
-          <CommandPalette />
-        </Suspense>
+        <CursorGlow />
+        <CommandPalette />
         <Navbar />
         <main id="main-content" aria-label="Dolev Atik portfolio sections">
           <Hero />
-          <Suspense fallback={null}>
-            <About />
-            <Journey />
-            <Projects />
-            <Skills />
-            <Education />
-            <Contact />
-          </Suspense>
+          <About />
+          <Journey />
+          <Projects />
+          <Skills />
+          <Education />
+          <Contact />
         </main>
-        <Suspense fallback={null}>
-          <Footer />
-        </Suspense>
+        <Footer />
       </div>
     </>
   )
