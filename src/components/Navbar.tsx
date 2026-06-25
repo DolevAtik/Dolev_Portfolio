@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { isMobileViewport } from '../lib/mobile'
-import { useSiteReady, REVEAL_EASE } from '../context/SiteReadyContext'
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -15,14 +13,14 @@ const navLinks = [
 const sectionIds = navLinks.map((link) => link.href.slice(1))
 
 export default function Navbar() {
-  const siteReady = useSiteReady()
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState(sectionIds[0])
+  const headerRef = useRef<HTMLElement>(null)
   const navRef = useRef<HTMLElement>(null)
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map())
 
   const updateActiveSection = useCallback(() => {
-    const navHeight = navRef.current?.offsetHeight ?? 64
+    const navHeight = headerRef.current?.offsetHeight ?? 64
     const scrollPosition = window.scrollY + navHeight + window.innerHeight * 0.25
 
     let current = sectionIds[0]
@@ -78,8 +76,15 @@ export default function Navbar() {
   }, [updateActiveSection])
 
   useEffect(() => {
+    const nav = navRef.current
     const activeLink = linkRefs.current.get(activeSection)
-    activeLink?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    if (!nav || !activeLink || nav.scrollWidth <= nav.clientWidth) return
+
+    const linkLeft = activeLink.offsetLeft
+    const linkWidth = activeLink.offsetWidth
+    const targetLeft = linkLeft - nav.clientWidth / 2 + linkWidth / 2
+
+    nav.scrollTo({ left: targetLeft, behavior: 'smooth' })
   }, [activeSection])
 
   const handleNav = (href: string) => {
@@ -87,18 +92,10 @@ export default function Navbar() {
   }
 
   return (
-    <motion.header
-      initial={false}
-      animate={
-        siteReady
-          ? { y: 0, opacity: 1 }
-          : { y: isMobileViewport() ? 0 : -24, opacity: 0 }
-      }
-      transition={{ duration: 0.7, delay: siteReady ? 0.12 : 0, ease: REVEAL_EASE }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-[#070707]/80 backdrop-blur-xl border-b border-white/[0.06]'
-          : 'bg-transparent'
+    <header
+      ref={headerRef}
+      className={`fixed top-0 left-0 right-0 z-[100] bg-[#070707] transition-shadow duration-500 border-b border-white/[0.06] pt-[env(safe-area-inset-top,0px)] ${
+        scrolled ? 'shadow-[0_8px_32px_rgba(0,0,0,0.45)]' : ''
       }`}
     >
       <div className="max-w-7xl mx-auto px-2 md:px-8">
@@ -152,6 +149,6 @@ export default function Navbar() {
           </motion.a>
         </div>
       </div>
-    </motion.header>
+    </header>
   )
 }

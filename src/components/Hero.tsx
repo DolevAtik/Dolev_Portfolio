@@ -208,8 +208,8 @@ const containerVariants: Variants = {
   visible: { transition: { staggerChildren: 0.1 } },
 }
 const childVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6 } },
 }
 
 export default function Hero() {
@@ -238,7 +238,7 @@ export default function Hero() {
 
             {/* Headline */}
             <div className="mb-3">
-              <h1 className="text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.9]">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05]">
                 <span className="text-white">Dolev </span>
                 <span style={{
                   background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
@@ -341,7 +341,7 @@ export default function Hero() {
     <section
       id="hero"
       aria-label="Introduction — Dolev Atik, Software Engineer"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg"
+      className="relative min-h-[calc(100dvh-var(--nav-height))] overflow-hidden grid-bg"
     >
       {!isMobile && <MouseGlow />}
 
@@ -357,15 +357,15 @@ export default function Hero() {
 
       {!isMobile && <FloatingParticles />}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-8 md:py-14 pb-20">
         <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
 
           {/* Left: Text */}
           {isMobile ? (
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={siteReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-              transition={{ duration: 0.75, delay: siteReady ? 0.1 : 0, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0 }}
+              animate={siteReady ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: siteReady ? 0.08 : 0, ease: [0.22, 1, 0.36, 1] }}
             >
               {heroContent}
             </motion.div>
@@ -386,7 +386,7 @@ export default function Hero() {
 
             {/* Headline */}
             <motion.div variants={childVariants} className="mb-3">
-              <h1 className="text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.9]">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05]">
                 <span className="text-white">Dolev </span>
                 <span style={{
                   background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',

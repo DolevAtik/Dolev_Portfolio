@@ -9,6 +9,13 @@
     --color-cyan: #06b6d4;
     --color-purple: #a855f7;
     --color-white: #ffffff;
+    --nav-height: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --nav-height: 4rem;
+    }
   }
 
   *, *::before, *::after {
@@ -17,6 +24,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-height) + 0.5rem);
     background-color: #070707;
     -webkit-text-size-adjust: 100%;
   }

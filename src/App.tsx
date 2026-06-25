@@ -69,33 +69,24 @@ export default function App() {
         />
       )}
 
+      <Navbar />
+
       <motion.div
         initial={false}
         animate={
           revealSettled
             ? { opacity: 1 }
-            : {
-                opacity: revealed ? 1 : 0,
-                scale: revealed ? 1 : 1.03,
-                filter: revealed ? 'blur(0px)' : 'blur(10px)',
-              }
+            : { opacity: revealed ? 1 : 0 }
         }
         transition={{
           duration: REVEAL_DURATION,
           ease: REVEAL_EASE,
-          opacity: { duration: REVEAL_DURATION * 0.9, delay: 0.06 },
-          scale: { duration: REVEAL_DURATION, delay: 0.04 },
-          filter: { duration: REVEAL_DURATION * 0.75, delay: 0.02 },
         }}
         onAnimationComplete={() => {
           if (revealed) setRevealSettled(true)
         }}
         className="min-h-screen bg-[#070707] text-white relative"
-        style={
-          revealSettled
-            ? { transform: 'none', filter: 'none', willChange: 'auto' }
-            : { willChange: 'opacity, transform, filter' }
-        }
+        style={revealSettled ? { willChange: 'auto' } : { willChange: 'opacity' }}
       >
         <a
           href="#main-content"
@@ -109,8 +100,7 @@ export default function App() {
             <CommandPalette />
           </Suspense>
         )}
-        <Navbar />
-        <main id="main-content" aria-label="Dolev Atik portfolio sections">
+        <main id="main-content" className="pt-[var(--nav-height)]" aria-label="Dolev Atik portfolio sections">
           <Hero />
           <About />
           <Journey />
