@@ -14,23 +14,16 @@ import CommandPalette from './components/CommandPalette'
 import CursorGlow from './components/CursorGlow'
 
 export default function App() {
-  const [loading, setLoading] = useState(() => {
-    return !sessionStorage.getItem('visited')
-  })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth'
   }, [])
 
-  const handleLoaderComplete = () => {
-    sessionStorage.setItem('visited', '1')
-    setLoading(false)
-  }
-
   return (
     <>
       <AnimatePresence mode="wait">
-        {loading && <Loader key="loader" onComplete={handleLoaderComplete} />}
+        {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
       <div className="min-h-screen bg-[#070707] text-white relative">
