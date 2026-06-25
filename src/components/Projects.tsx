@@ -28,7 +28,7 @@ const architectures: Record<number, string[]> = {
 
 function ArchFlow({ nodes }: { nodes: string[] }) {
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-0.5">
       {nodes.map((node, i) => (
         <div key={i} className="flex flex-col items-center">
           <motion.div
@@ -50,7 +50,7 @@ function ArchFlow({ nodes }: { nodes: string[] }) {
               animate={{ opacity: 1, scaleY: 1 }}
               transition={{ delay: i * 0.07 + 0.05 }}
             >
-              <ArrowDown size={12} className="text-white/15 my-0.5" />
+              <ArrowDown size={10} className="text-white/15 my-0" />
             </motion.div>
           )}
         </div>
@@ -77,39 +77,41 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.93, opacity: 0, y: 16 }}
         transition={{ type: 'spring', bounce: 0.15, duration: 0.45 }}
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
+        className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl"
         style={{ background: '#0c0c10', border: '1px solid rgba(255,255,255,0.07)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Color bar */}
         <div className={`h-1 w-full bg-gradient-to-r ${project.gradient} rounded-t-2xl`} />
 
-        <div className="p-8">
+        <div className="p-7">
           {/* Close */}
           <motion.button
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="absolute top-5 right-5 p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <X size={18} />
+            <X size={17} />
           </motion.button>
 
           {/* Header */}
-          <div className="mb-6 pr-12">
-            <div className="text-4xl mb-3">{project.icon}</div>
-            <h3 className="text-2xl font-extrabold text-white mb-1">{project.title}</h3>
-            <p className="text-sm text-white/35">{project.subtitle}</p>
-            <div className="mt-2">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-mono font-medium bg-white/[0.04] text-white/40 border border-white/[0.06]">
-                {project.category}
-              </span>
+          <div className="mb-5 pr-12 flex items-center gap-4">
+            <div className="text-4xl flex-shrink-0">{project.icon}</div>
+            <div>
+              <div className="flex items-center gap-2.5 mb-1">
+                <h3 className="text-2xl font-extrabold text-white leading-tight">{project.title}</h3>
+                <span className="px-2.5 py-1 rounded text-[10px] font-mono font-medium bg-white/[0.04] text-white/35 border border-white/[0.06]">
+                  {project.category}
+                </span>
+              </div>
+              <p className="text-sm text-white/35">{project.subtitle}</p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-6 mb-6">
+          <div className="grid md:grid-cols-5 gap-5 mb-5">
             {/* Left: problem + solution */}
-            <div className="md:col-span-3 space-y-4">
+            <div className="md:col-span-3 space-y-3">
               <div className="p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(239,68,68,0.04)' }}>
                 <div className="text-[10px] font-mono text-red-400/70 uppercase tracking-widest mb-1.5">Problem</div>
                 <p className="text-sm text-white/55 leading-relaxed">{project.problem}</p>
@@ -130,8 +132,8 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
           </div>
 
           {/* Features */}
-          <div className="mb-6">
-            <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-3">Key Features</div>
+          <div className="mb-5">
+            <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-2.5">Key Features</div>
             <div className="grid sm:grid-cols-2 gap-2">
               {project.features.map((f) => (
                 <div key={f} className="flex items-center gap-2.5 text-sm text-white/55">
@@ -143,8 +145,8 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
           </div>
 
           {/* Tech */}
-          <div className="mb-7">
-            <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-3">Tech Stack</div>
+          <div className="mb-5">
+            <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-2.5">Tech Stack</div>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((t) => (
                 <span key={t}
@@ -157,7 +159,7 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
           </div>
 
           {/* Links */}
-          <div className="flex gap-3 pt-5 border-t border-white/[0.04]">
+          <div className="flex gap-3 pt-4 border-t border-white/[0.04]">
             <motion.a
               href={project.github}
               target="_blank"
