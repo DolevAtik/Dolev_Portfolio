@@ -80,112 +80,108 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.93, opacity: 0, y: 16 }}
         transition={{ type: 'spring', bounce: 0.15, duration: 0.45 }}
-        className="relative w-full max-w-3xl max-h-[88vh] md:max-h-[92vh] overflow-y-auto rounded-2xl"
+        className="relative w-full max-w-3xl rounded-2xl"
         style={{ background: '#0c0c10', border: '1px solid rgba(255,255,255,0.07)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Color bar */}
         <div className={`h-1 w-full bg-gradient-to-r ${project.gradient} rounded-t-2xl`} />
 
-        <div className="p-4 md:p-7">
+        <div className="p-3 md:p-5">
           {/* Close */}
           <motion.button
             onClick={onClose}
-            className="absolute top-3 right-3 md:top-5 md:right-5 p-1.5 md:p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="absolute top-2 right-2 md:top-4 md:right-4 p-1.5 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <X size={16} />
+            <X size={15} />
           </motion.button>
 
           {/* Header */}
-          <div className="mb-3 md:mb-5 pr-10 flex items-center gap-3">
-            <div className="text-3xl md:text-4xl flex-shrink-0">{project.icon}</div>
+          <div className="mb-2 md:mb-3 pr-8 flex items-center gap-2.5">
+            <div className="text-2xl md:text-3xl flex-shrink-0">{project.icon}</div>
             <div>
-              <div className="flex items-center flex-wrap gap-2 mb-0.5 md:mb-1">
-                <h3 className="text-lg md:text-2xl font-extrabold text-white leading-tight">{project.title}</h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-white/[0.04] text-white/35 border border-white/[0.06]">
+              <div className="flex items-center flex-wrap gap-1.5 mb-0.5">
+                <h3 className="text-base md:text-xl font-extrabold text-white leading-tight">{project.title}</h3>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-white/[0.04] text-white/35 border border-white/[0.06]">
                   {project.category}
                 </span>
                 {isSoon && (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-medium text-amber-400 border border-amber-500/30"
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium text-amber-400 border border-amber-500/30"
                     style={{ background: 'rgba(245,158,11,0.08)' }}>
                     In Development
                   </span>
                 )}
               </div>
-              <p className="text-xs md:text-sm text-white/35">{project.subtitle}</p>
+              <p className="text-[11px] md:text-xs text-white/35">{project.subtitle}</p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-3 md:gap-5 mb-3 md:mb-5">
-            {/* Left: problem + solution */}
-            <div className="md:col-span-3 space-y-2 md:space-y-3">
-              <div className="p-3 md:p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(239,68,68,0.04)' }}>
-                <div className="text-[10px] font-mono text-red-400/70 uppercase tracking-widest mb-1 md:mb-1.5">Problem</div>
-                <p className="text-xs md:text-sm text-white/55 leading-relaxed">{project.problem}</p>
+          {/* Problem + Solution + Architecture */}
+          <div className="grid md:grid-cols-5 gap-2 md:gap-3 mb-2 md:mb-3">
+            <div className="md:col-span-3 space-y-1.5">
+              <div className="p-2 md:p-3 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(239,68,68,0.04)' }}>
+                <div className="text-[9px] font-mono text-red-400/70 uppercase tracking-widest mb-1">Problem</div>
+                <p className="text-[11px] md:text-xs text-white/55 leading-relaxed line-clamp-2">{project.problem}</p>
               </div>
-              <div className="p-3 md:p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(16,185,129,0.04)' }}>
-                <div className="text-[10px] font-mono text-emerald-400/70 uppercase tracking-widest mb-1 md:mb-1.5">Solution</div>
-                <p className="text-xs md:text-sm text-white/55 leading-relaxed">{project.solution}</p>
+              <div className="p-2 md:p-3 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(16,185,129,0.04)' }}>
+                <div className="text-[9px] font-mono text-emerald-400/70 uppercase tracking-widest mb-1">Solution</div>
+                <p className="text-[11px] md:text-xs text-white/55 leading-relaxed line-clamp-2">{project.solution}</p>
               </div>
             </div>
-
-            {/* Right: architecture — desktop only */}
             {arch && (
               <div className="hidden md:block md:col-span-2">
-                <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-3 text-center">Architecture</div>
+                <div className="text-[9px] font-mono text-white/25 uppercase tracking-widest mb-2 text-center">Architecture</div>
                 <ArchFlow nodes={arch} />
               </div>
             )}
           </div>
 
-          {/* Features */}
-          <div className="mb-3 md:mb-5">
-            <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-2">Key Features</div>
-            <div className="grid grid-cols-2 gap-1.5 md:gap-2">
+          {/* Features — 4-col on desktop to save vertical space */}
+          <div className="mb-2 md:mb-3">
+            <div className="text-[9px] font-mono text-white/25 uppercase tracking-widest mb-1.5">Key Features</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-1.5">
               {project.features.map((f) => (
-                <div key={f} className="flex items-center gap-2 text-xs md:text-sm text-white/55">
-                  <CheckCircle2 size={12} className="text-blue-400 flex-shrink-0" />
-                  {f}
+                <div key={f} className="flex items-center gap-1.5 text-[10px] md:text-[11px] text-white/55">
+                  <CheckCircle2 size={10} className="text-blue-400 flex-shrink-0" />
+                  <span className="leading-tight">{f}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Challenges */}
-          {project.challenges && (
-            <div className="mb-3 md:mb-5">
-              <div className="p-3 md:p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(245,158,11,0.04)' }}>
-                <div className="flex items-center gap-2 mb-1 md:mb-1.5">
-                  <AlertTriangle size={11} className="text-amber-400/70" />
-                  <div className="text-[10px] font-mono text-amber-400/70 uppercase tracking-widest">Challenges</div>
+          {/* Challenges + What I Learned — side by side, hidden on mobile */}
+          {(project.challenges || project.learned) && (
+            <div className="hidden md:grid md:grid-cols-2 gap-2 mb-2 md:mb-3">
+              {project.challenges && (
+                <div className="p-2 md:p-3 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(245,158,11,0.04)' }}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <AlertTriangle size={10} className="text-amber-400/70" />
+                    <div className="text-[9px] font-mono text-amber-400/70 uppercase tracking-widest">Challenges</div>
+                  </div>
+                  <p className="text-[11px] text-white/55 leading-relaxed line-clamp-3">{project.challenges}</p>
                 </div>
-                <p className="text-xs md:text-sm text-white/55 leading-relaxed">{project.challenges}</p>
-              </div>
-            </div>
-          )}
-
-          {/* What I Learned */}
-          {project.learned && (
-            <div className="mb-3 md:mb-5">
-              <div className="p-3 md:p-4 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(168,85,247,0.04)' }}>
-                <div className="flex items-center gap-2 mb-1 md:mb-1.5">
-                  <Lightbulb size={11} className="text-purple-400/70" />
-                  <div className="text-[10px] font-mono text-purple-400/70 uppercase tracking-widest">What I Learned</div>
+              )}
+              {project.learned && (
+                <div className="p-2 md:p-3 rounded-xl border border-white/[0.04]" style={{ background: 'rgba(168,85,247,0.04)' }}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <Lightbulb size={10} className="text-purple-400/70" />
+                    <div className="text-[9px] font-mono text-purple-400/70 uppercase tracking-widest">What I Learned</div>
+                  </div>
+                  <p className="text-[11px] text-white/55 leading-relaxed line-clamp-3">{project.learned}</p>
                 </div>
-                <p className="text-xs md:text-sm text-white/55 leading-relaxed">{project.learned}</p>
-              </div>
+              )}
             </div>
           )}
 
           {/* Tech */}
-          <div className="mb-3 md:mb-5">
-            <div className="text-[10px] font-mono text-white/25 uppercase tracking-widest mb-2">Tech Stack</div>
-            <div className="flex flex-wrap gap-1.5 md:gap-2">
+          <div className="mb-2 md:mb-3">
+            <div className="text-[9px] font-mono text-white/25 uppercase tracking-widest mb-1.5">Tech Stack</div>
+            <div className="flex flex-wrap gap-1 md:gap-1.5">
               {project.tech.map((t) => (
                 <span key={t}
-                  className="px-2 md:px-2.5 py-0.5 md:py-1 rounded-lg text-[11px] md:text-xs font-medium border text-white/60"
+                  className="px-2 py-0.5 rounded-lg text-[10px] md:text-[11px] font-medium border text-white/60"
                   style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.07)' }}>
                   {t}
                 </span>
@@ -194,24 +190,24 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           </div>
 
           {/* Links */}
-          <div className="flex gap-3 pt-3 md:pt-4 border-t border-white/[0.04]">
+          <div className="flex gap-2 pt-2 border-t border-white/[0.04]">
             {project.github ? (
               <motion.a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-white/60 hover:text-white transition-colors"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                <GithubIcon size={15} />
+                <GithubIcon size={13} />
                 View Source
               </motion.a>
             ) : isSoon ? (
-              <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-amber-400/60 cursor-default"
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-amber-400/60 cursor-default"
                 style={{ background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)' }}>
-                <Lock size={13} />
+                <Lock size={12} />
                 Coming Soon
               </div>
             ) : null}
@@ -221,18 +217,18 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 href={project.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-white"
                 style={{ background: 'linear-gradient(135deg, #3b82f6, #06b6d4)' }}
                 whileHover={{ scale: 1.03, boxShadow: '0 8px 30px rgba(59,130,246,0.3)' }}
                 whileTap={{ scale: 0.97 }}
               >
-                <ExternalLink size={15} />
+                <ExternalLink size={13} />
                 Live Demo
               </motion.a>
             ) : isSoon ? (
-              <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/35 cursor-default"
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-white/35 cursor-default"
                 style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <Lock size={13} />
+                <Lock size={12} />
                 Private Project
               </div>
             ) : null}
