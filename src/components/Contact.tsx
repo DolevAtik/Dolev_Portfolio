@@ -6,11 +6,11 @@ import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './SocialIcons'
 import FadeIn from './FadeIn'
 
 const contactLinks = [
-  { icon: Mail,        label: 'Email',    value: personalInfo.email,            href: `mailto:${personalInfo.email}`,  color: 'blue'   },
-  { icon: Phone,       label: 'Phone',    value: '050-923-7173',                href: 'tel:0509237173',                color: 'green'  },
-  { icon: GithubIcon,  label: 'GitHub',   value: 'github.com/Dolev-Atik',      href: personalInfo.github,             color: 'purple' },
-  { icon: LinkedinIcon,  label: 'LinkedIn',  value: 'linkedin.com/in/dolev-atik', href: personalInfo.linkedin,              color: 'cyan'   },
-  { icon: WhatsAppIcon,  label: 'WhatsApp',  value: '050-923-7173',               href: 'https://wa.me/972509237173',       color: 'whatsapp' },
+  { icon: Phone,         label: 'Phone',    value: '050-923-7173',                href: 'tel:0509237173',               color: 'green'    },
+  { icon: WhatsAppIcon,  label: 'WhatsApp', value: '050-923-7173',                href: 'https://wa.me/972509237173',   color: 'whatsapp' },
+  { icon: Mail,          label: 'Email',    value: personalInfo.email,            href: `mailto:${personalInfo.email}`, color: 'blue'     },
+  { icon: LinkedinIcon,  label: 'LinkedIn', value: 'linkedin.com/in/dolev-atik', href: personalInfo.linkedin,          color: 'cyan'     },
+  { icon: GithubIcon,    label: 'GitHub',   value: 'github.com/Dolev-Atik',      href: personalInfo.github,            color: 'purple'   },
 ]
 
 const colorClasses: Record<string, string> = {
@@ -79,7 +79,7 @@ export default function Contact() {
               <h2 id="contact-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
                 <span className="text-white">Let's build</span>
                 <br />
-                <span className="text-gradient-blue">something.</span>
+                <span className="text-gradient-blue">something together.</span>
               </h2>
               <p className="text-white/40 text-base mb-10 max-w-lg">
                 Open to new opportunities, freelance projects, and interesting collaborations.

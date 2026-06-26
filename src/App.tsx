@@ -9,6 +9,7 @@ import Education from './components/Education'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CursorGlow from './components/CursorGlow'
+import ScrollProgress from './components/ScrollProgress'
 import { useMobileViewport } from './lib/mobile'
 
 const CommandPalette = lazy(() => import('./components/CommandPalette'))
@@ -19,35 +20,35 @@ export default function App() {
   const [showPalette, setShowPalette] = useState(false)
 
   useEffect(() => {
-    if (!isMobile) {
-      setShowPalette(true)
-      return
-    }
-    const id = window.setTimeout(() => setShowPalette(true), 800)
-    return () => window.clearTimeout(id)
-  }, [isMobile])
-
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth'
+    setShowPalette(true)
   }, [])
 
   useEffect(() => {
     if (!loading) return
 
-    const prevBody = document.body.style.overflow
-    const prevHtml = document.documentElement.style.overflow
+    const prev = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+    }
     document.body.style.overflow = 'hidden'
-    document.documentElement.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = '0'
+    document.body.style.width = '100%'
 
     return () => {
-      document.body.style.overflow = prevBody
-      document.documentElement.style.overflow = prevHtml
+      document.body.style.overflow = prev.overflow
+      document.body.style.position = prev.position
+      document.body.style.top = prev.top
+      document.body.style.width = prev.width
     }
   }, [loading])
 
   return (
     <>
       {loading && <Loader onComplete={() => setLoading(false)} />}
+      {!loading && <ScrollProgress />}
 
       <Navbar />
 

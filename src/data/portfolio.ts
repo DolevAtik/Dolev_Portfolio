@@ -218,22 +218,34 @@ export const skills = {
 }
 
 export const techStack = [
-  { name: 'Python', color: '#3b82f6' },
-  { name: 'Java', color: '#f97316' },
-  { name: 'Docker', color: '#06b6d4' },
-  { name: 'Kubernetes', color: '#3b82f6' },
-  { name: 'ArgoCD', color: '#a855f7' },
+  // Row 1 — Languages
+  { name: 'Python',         color: '#3b82f6' },
+  { name: 'TypeScript',     color: '#3178c6' },
+  { name: 'Java',           color: '#f97316' },
+  { name: 'C++',            color: '#00599c' },
+  { name: 'SQL',            color: '#3b82f6' },
+  { name: 'HTML5',          color: '#e34f26' },
+  // Row 2 — DevOps
+  { name: 'Docker',         color: '#06b6d4' },
+  { name: 'Kubernetes',     color: '#3b82f6' },
+  { name: 'ArgoCD',         color: '#a855f7' },
   { name: 'GitHub Actions', color: '#a855f7' },
-  { name: 'Linux', color: '#a855f7' },
-  { name: 'Git', color: '#f97316' },
-  { name: 'PostgreSQL', color: '#3b82f6' },
-  { name: 'MongoDB', color: '#06b6d4' },
-  { name: 'ChromaDB', color: '#3b82f6' },
-  { name: 'Supabase', color: '#06b6d4' },
-  { name: 'LangChain', color: '#a855f7' },
-  { name: 'React', color: '#06b6d4' },
-  { name: 'Node.js', color: '#06b6d4' },
-  { name: 'LLM / AI', color: '#a855f7' },
+  { name: 'Linux',          color: '#f97316' },
+  { name: 'Git',            color: '#f97316' },
+  // Row 3 — Backend & Databases
+  { name: 'Node.js',        color: '#06b6d4' },
+  { name: 'Express',        color: '#06b6d4' },
+  { name: 'Flask',          color: '#06b6d4' },
+  { name: 'PostgreSQL',     color: '#3b82f6' },
+  { name: 'MongoDB',        color: '#06b6d4' },
+  { name: 'Supabase',       color: '#06b6d4' },
+  // Row 4 — Frontend & AI
+  { name: 'React',          color: '#06b6d4' },
+  { name: 'Tailwind CSS',   color: '#06b6d4' },
+  { name: 'Vite',           color: '#a855f7' },
+  { name: 'LangChain',      color: '#a855f7' },
+  { name: 'Ollama',         color: '#a855f7' },
+  { name: 'LLM / AI',       color: '#a855f7' },
 ]
 
 export const education = [

@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
 const TIMING = {
-  total: 4800,
-  steps: [0, 380, 760, 1140, 1520, 1900, 2300],
-  progressComplete: 3600,
-  launchDone: 3600,
+  total: 3800,
+  steps: [0, 220, 440, 660, 880, 1100, 1300],
+  progressComplete: 2600,
+  launchDone: 2600,
 } as const
 
 const BOOT_STEPS = [

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, ArrowRight, Code2, Briefcase, User, GraduationCap, Mail, FileDown, Terminal } from 'lucide-react'
+import { Search, ArrowRight, Code2, User, GraduationCap, Mail, FileDown, Terminal } from 'lucide-react'
 import { GithubIcon } from './SocialIcons'
 
 interface Command {
@@ -31,7 +31,6 @@ function getCommands(): Command[] {
   return [
     { id: 'projects', label: 'View Projects', description: 'AI SOC Analyst, MentConnect & more', icon: <Code2 size={16} />, action: () => scrollTo('#projects'), category: 'Navigate', keywords: ['projects', 'work', 'portfolio'] },
     { id: 'about', label: 'About Dolev', description: 'CS student, Co-Founder of Web4You', icon: <User size={16} />, action: () => scrollTo('#about'), category: 'Navigate', keywords: ['about', 'bio', 'me'] },
-    { id: 'journey', label: 'Journey', description: 'Web4You — Co-Founder & Developer', icon: <Briefcase size={16} />, action: () => scrollTo('#journey'), category: 'Navigate', keywords: ['journey', 'experience', 'job', 'work'] },
     { id: 'skills', label: 'Skills & Stack', description: 'Python, Docker, React, K8s, AI/LLMs', icon: <Terminal size={16} />, action: () => scrollTo('#skills'), category: 'Navigate', keywords: ['skills', 'tech', 'stack', 'languages'] },
     { id: 'education', label: 'Education', description: 'CS Degree, GPA 93 + DevOps Training', icon: <GraduationCap size={16} />, action: () => scrollTo('#education'), category: 'Navigate', keywords: ['education', 'degree', 'university', 'gpa'] },
     { id: 'contact', label: 'Contact', description: 'dolev5454@gmail.com', icon: <Mail size={16} />, action: () => scrollTo('#contact'), category: 'Navigate', keywords: ['contact', 'email', 'hire', 'reach'] },
@@ -78,8 +77,14 @@ export default function CommandPalette() {
   }, [])
 
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 50)
-    else { setQuery(''); setSelected(0); setEasterResult(null) }
+    if (open) {
+      const prev = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      setTimeout(() => inputRef.current?.focus(), 50)
+      return () => { document.body.style.overflow = prev }
+    } else {
+      setQuery(''); setSelected(0); setEasterResult(null)
+    }
   }, [open])
 
   useEffect(() => { setSelected(0) }, [query])
@@ -109,7 +114,7 @@ export default function CommandPalette() {
 
   return (
     <>
-      {/* Trigger hint */}
+      {/* Desktop trigger hint */}
       <button
         type="button"
         aria-label="Open command palette"
@@ -119,6 +124,19 @@ export default function CommandPalette() {
         <span className="font-mono">{shortcutLabel}</span>
         <span>Command</span>
       </button>
+
+      {/* Mobile trigger button */}
+      <motion.button
+        type="button"
+        aria-label="Open command palette"
+        className="fixed bottom-6 right-6 z-40 flex md:hidden items-center justify-center w-12 h-12 rounded-full border border-white/[0.08]"
+        style={{ background: 'rgba(13,13,16,0.9)', backdropFilter: 'blur(12px)' }}
+        onClick={() => setOpen(true)}
+        whileHover={{ scale: 1.1, borderColor: 'rgba(59,130,246,0.4)' }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Search size={18} className="text-white/50" />
+      </motion.button>
 
       <AnimatePresence>
         {open && (
