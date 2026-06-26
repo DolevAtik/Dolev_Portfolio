@@ -98,18 +98,6 @@ export default function Navbar() {
     >
       <div className="max-w-[1400px] mx-auto px-2 md:px-8">
         <div className="flex items-center justify-between h-12 md:h-16 gap-2">
-          {/* Logo */}
-          <motion.a
-            href="#hero"
-            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            aria-label="Back to top"
-            className="shrink-0 mr-2 md:mr-4"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <img src="/logo.png" alt="Dolev Atik" className="h-7 md:h-9 w-auto object-contain" />
-          </motion.a>
-
           <nav
             ref={navRef}
             className="flex flex-1 min-w-0 items-center justify-center gap-0 md:gap-2"
