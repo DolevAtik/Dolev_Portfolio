@@ -257,23 +257,34 @@ export default function Skills() {
           { label: 'Frontend & AI',      color: '#c084fc', items: techStack.slice(18, 24) },
         ].map((row, rowIdx) => (
           <FadeIn key={row.label} delay={rowIdx * 0.08}>
-            <div className="flex items-stretch gap-3 md:gap-5 mb-2">
-              {/* Category label */}
-              <div className="w-20 md:w-28 flex-shrink-0 flex items-center justify-end pr-1 md:pr-2">
+            <div className="mb-4 md:mb-2">
+              {/* Mobile: label above the grid */}
+              <div className="md:hidden mb-2 pl-1">
                 <span
-                  className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-right leading-tight"
+                  className="font-mono text-[10px] uppercase tracking-widest leading-tight"
                   style={{ color: row.color }}
                 >
                   {row.label}
                 </span>
               </div>
-              {/* Vertical divider */}
-              <div className="w-px bg-white/[0.05] self-stretch flex-shrink-0" />
-              {/* Icons */}
-              <div className="flex-1 grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {row.items.map((tech, i) => (
-                  <TechLogo key={tech.name} tech={tech} index={rowIdx * 6 + i} />
-                ))}
+              <div className="flex items-stretch gap-3 md:gap-5">
+                {/* Category label — desktop only */}
+                <div className="hidden md:flex w-28 flex-shrink-0 items-center justify-end pr-2">
+                  <span
+                    className="font-mono text-xs uppercase tracking-widest text-right leading-tight"
+                    style={{ color: row.color }}
+                  >
+                    {row.label}
+                  </span>
+                </div>
+                {/* Vertical divider — desktop only */}
+                <div className="hidden md:block w-px bg-white/[0.05] self-stretch flex-shrink-0" />
+                {/* Icons */}
+                <div className="flex-1 grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {row.items.map((tech, i) => (
+                    <TechLogo key={tech.name} tech={tech} index={rowIdx * 6 + i} />
+                  ))}
+                </div>
               </div>
             </div>
           </FadeIn>
