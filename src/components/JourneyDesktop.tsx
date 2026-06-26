@@ -541,7 +541,7 @@ export default function JourneyDesktop() {
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8">
         <div ref={headerRef}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

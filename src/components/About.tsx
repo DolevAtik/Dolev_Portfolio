@@ -64,7 +64,7 @@ export default function About() {
           style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.04), transparent)' }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8">
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">01 — About</span>
@@ -108,22 +108,22 @@ export default function About() {
 
           {/* Right: cards + stats */}
           <div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-5">
               {pillars.map((p, i) => {
                 const c = colorMap[p.color]
                 const Icon = p.icon
                 return (
                   <FadeIn key={p.label} delay={0.05 + i * 0.04}>
                     <motion.div
-                      className={`p-5 rounded-2xl bg-gradient-to-br border ${c.card} h-full`}
+                      className={`p-8 rounded-2xl bg-gradient-to-br border ${c.card} h-full`}
                       whileHover={{ scale: 1.03, y: -4 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-3 ${c.iconBg}`}>
-                        <Icon size={16} className={c.icon} />
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${c.iconBg}`}>
+                        <Icon size={22} className={c.icon} />
                       </div>
-                      <div className="font-semibold text-white text-sm mb-1">{p.label}</div>
-                      <p className="text-xs text-white/35 leading-relaxed">{p.desc}</p>
+                      <div className="font-semibold text-white text-base mb-2">{p.label}</div>
+                      <p className="text-sm text-white/40 leading-relaxed">{p.desc}</p>
                     </motion.div>
                   </FadeIn>
                 )

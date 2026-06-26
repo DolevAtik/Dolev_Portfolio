@@ -13,7 +13,7 @@ export default function Education() {
         <div className="absolute right-0 bottom-0 w-[400px] h-[400px] bg-cyan-600/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8">
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">04 — Education</span>

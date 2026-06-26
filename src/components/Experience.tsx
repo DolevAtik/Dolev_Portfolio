@@ -25,7 +25,7 @@ export default function Experience() {
         <div className="absolute left-0 top-1/2 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8">
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">02 — Experience</span>

@@ -96,7 +96,7 @@ export default function Navbar() {
         scrolled ? 'shadow-[0_8px_32px_rgba(0,0,0,0.45)]' : ''
       }`}
     >
-      <div className="max-w-7xl mx-auto px-2 md:px-8">
+      <div className="max-w-[1400px] mx-auto px-2 md:px-8">
         <div className="flex items-center justify-between h-12 md:h-16 gap-2">
           {/* Logo */}
           <motion.a

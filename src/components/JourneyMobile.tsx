@@ -262,7 +262,7 @@ export default function JourneyMobile() {
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.05), transparent)' }}
       />
 
-      <div className="relative z-10 max-w-5xl mx-auto">
+      <div className="relative z-10 max-w-[1400px] mx-auto">
         <div className="px-6">
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">02 — Journey</span>

@@ -370,7 +370,7 @@ export default function Hero() {
 
       {!isMobile && <FloatingParticles />}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-8 md:py-14 pb-20">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 py-8 md:py-14 pb-20">
         <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
 
           {/* Left: Text */}

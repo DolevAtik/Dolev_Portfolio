@@ -47,7 +47,7 @@ export default function GitHub() {
         <div className="absolute left-1/4 bottom-0 w-[500px] h-[300px] bg-blue-600/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8">
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">06 — Open Source</span>

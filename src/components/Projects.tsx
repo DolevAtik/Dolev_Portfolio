@@ -108,17 +108,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    const scrollY = window.scrollY
-    const prev = {
-      overflow: document.body.style.overflow,
-      position: document.body.style.position,
-      top: document.body.style.top,
-      width: document.body.style.width,
-    }
+    const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY}px`
-    document.body.style.width = '100%'
 
     closeRef.current?.focus({ preventScroll: true })
 
@@ -128,11 +119,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     window.addEventListener('keydown', onKeyDown)
 
     return () => {
-      document.body.style.overflow = prev.overflow
-      document.body.style.position = prev.position
-      document.body.style.top = prev.top
-      document.body.style.width = prev.width
-      window.scrollTo(0, scrollY)
+      document.body.style.overflow = prevOverflow
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [onClose])
@@ -718,7 +705,7 @@ export default function Projects() {
           style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.05), transparent)' }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8">
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">02 — Projects</span>
