@@ -643,7 +643,7 @@ export default function Projects() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <FadeIn>
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">03 — Projects</span>
+            <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">02 — Projects</span>
             <div className="flex-1 h-px bg-gradient-to-r from-purple-500/30 to-transparent" />
           </div>
         </FadeIn>
@@ -659,13 +659,14 @@ export default function Projects() {
           </p>
         </FadeIn>
 
-        {/* Mobile: 2 per row × 2 rows | Desktop: unchanged */}
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-5 lg:gap-6 mb-3 md:mb-6 lg:mb-8">
+        {/* Row 1: 2 featured large cards */}
+        <div className="grid grid-cols-2 gap-3 md:gap-5 lg:gap-6 mb-3 md:mb-6 lg:mb-8">
           {projects.slice(0, 2).map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} large />
           ))}
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-5 lg:gap-6">
+        {/* Row 2: remaining cards — 3-col on desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 lg:gap-6">
           {projects.slice(2).map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i + 2} />
           ))}

@@ -1,31 +1,31 @@
 import { motion } from 'framer-motion'
 import { personalInfo } from '../data/portfolio'
-import { Zap, Server, Brain, Shield, ArrowRight } from 'lucide-react'
+import { Zap, Server, Brain, Shield } from 'lucide-react'
 import FadeIn from './FadeIn'
 
 const pillars = [
   {
     icon: Brain,
     label: 'AI Engineering',
-    desc: 'RAG pipelines, vector databases, local LLM integration with Ollama',
+    desc: 'LangChain, RAG pipelines, LLM integration — locally and in production',
     color: 'blue',
   },
   {
     icon: Server,
     label: 'Backend Systems',
-    desc: 'Flask, Node.js, REST APIs built to handle real production load',
+    desc: 'Python, Node.js, REST APIs — architected for real production load',
     color: 'cyan',
   },
   {
     icon: Shield,
-    label: 'DevOps & Security',
-    desc: 'Docker, Kubernetes, CI/CD — and an AI SOC analyst to prove it',
+    label: 'DevOps & Cloud',
+    desc: 'Docker, Kubernetes, ArgoCD, GitHub Actions — full GitOps pipelines',
     color: 'purple',
   },
   {
     icon: Zap,
     label: 'Full Product',
-    desc: '20+ sites delivered end-to-end: design, dev, deploy, maintain',
+    desc: '20+ client websites delivered end-to-end: design, dev, deploy, maintain',
     color: 'blue',
   },
 ]
@@ -49,9 +49,9 @@ const colorMap: Record<string, { card: string; icon: string; iconBg: string }> =
 }
 
 const bioHighlights = [
-  'I don\'t just write code — I ship software.',
+  'I don\'t just write code — I architect, deploy, and maintain.',
   'Co-Founder of Web4You. 20+ production websites. Real clients, real pressure.',
-  'Currently at the intersection of backend engineering and AI systems.',
+  'DevOps + AI: GitOps pipelines, LLM-powered systems, cloud-native deployments.',
 ]
 
 export default function About() {
@@ -104,22 +104,11 @@ export default function About() {
               ))}
             </div>
 
-            {/* CTA to journey */}
-            <FadeIn delay={0.15}>
-              <motion.a
-                href="#journey"
-                onClick={(e) => { e.preventDefault(); document.querySelector('#journey')?.scrollIntoView({ behavior: 'smooth' }) }}
-                className="inline-flex items-center gap-2 mt-8 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors group"
-              >
-                See my full story
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </motion.a>
-            </FadeIn>
           </div>
 
           {/* Right: cards + stats */}
           <div>
-            <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="grid grid-cols-2 gap-3">
               {pillars.map((p, i) => {
                 const c = colorMap[p.color]
                 const Icon = p.icon
@@ -141,38 +130,6 @@ export default function About() {
               })}
             </div>
 
-            {/* Stats card */}
-            <FadeIn delay={0.1}>
-              <div
-                className="p-5 rounded-2xl border border-white/[0.05] relative overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.02)' }}
-              >
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{ background: 'radial-gradient(ellipse at 80% 0%, rgba(59,130,246,0.06), transparent 60%)' }} />
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-xs font-mono text-white/25 uppercase tracking-widest">At a glance</div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { val: '93', label: 'GPA', sub: 'CS Degree' },
-                      { val: '20+', label: 'Sites', sub: 'Production' },
-                      { val: '3+', label: 'Years', sub: 'Experience' },
-                    ].map((s) => (
-                      <div key={s.label} className="text-center">
-                        <div className="text-2xl font-black text-white">{s.val}</div>
-                        <div className="text-xs font-semibold text-blue-400 mt-0.5">{s.label}</div>
-                        <div className="text-[10px] text-white/25">{s.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-white/[0.04] flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs text-white/30">Co-Founder, <span className="text-white/60">Web4You</span> — Active</span>
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
           </div>
         </div>
       </div>

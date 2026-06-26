@@ -212,6 +212,9 @@ const childVariants: Variants = {
   visible: { opacity: 1, transition: { duration: 0.6 } },
 }
 
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
+const shortcutLabel = isMac ? '⌘K' : 'Ctrl+K'
+
 export default function Hero() {
   const typedText = useTypingEffect(personalInfo.roles)
   const isMobile = useMobileViewport()
@@ -237,18 +240,28 @@ export default function Hero() {
 
             {/* Headline */}
             <div className="mb-3">
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05]">
-                <span className="text-white">Dolev </span>
-                <span style={{
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  backgroundSize: '200% 200%',
-                }}>
-                  Atik
-                </span>
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05]">
+                  <span className="text-white">Dolev </span>
+                  <span style={{
+                    background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    backgroundSize: '200% 200%',
+                  }}>
+                    Atik
+                  </span>
+                </h1>
+                <div className="flex-shrink-0 p-[2px] rounded-full" style={{ background: 'linear-gradient(135deg, #60a5fa, #06b6d4, #a855f7)' }}>
+                  <img
+                    src="/about.jpg"
+                    alt="Dolev Atik"
+                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover block"
+                    style={{ background: '#0f0f14' }}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Typing role */}
@@ -287,26 +300,26 @@ export default function Hero() {
             {/* CTA */}
             <div className="flex flex-wrap gap-3">
               <a
-                href="#projects"
-                onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+                href="/cv.pdf"
+                download
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
                 style={{
                   background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
                   boxShadow: '0 0 0 0 rgba(59,130,246,0.3)',
                 }}
               >
-                <ExternalLink size={15} />
-                View Projects
+                <Download size={15} />
+                Download Resume
               </a>
 
               <a
-                href="/cv.pdf"
-                download
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
+                href="#projects"
+                onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                <Download size={15} />
-                Resume
+                <ExternalLink size={15} />
+                View Projects
               </a>
 
               {[
@@ -330,7 +343,7 @@ export default function Hero() {
 
             {!isMobile && (
               <div className="mt-6 flex items-center gap-2 text-xs text-white/20">
-                <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">⌘K</kbd>
+                <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">{shortcutLabel}</kbd>
                 <span>to open command palette</span>
               </div>
             )}
@@ -386,18 +399,28 @@ export default function Hero() {
 
             {/* Headline */}
             <motion.div variants={childVariants} className="mb-3">
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05]">
-                <span className="text-white">Dolev </span>
-                <span style={{
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  backgroundSize: '200% 200%',
-                }}>
-                  Atik
-                </span>
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05]">
+                  <span className="text-white">Dolev </span>
+                  <span style={{
+                    background: 'linear-gradient(135deg, #60a5fa 0%, #06b6d4 50%, #a855f7 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    backgroundSize: '200% 200%',
+                  }}>
+                    Atik
+                  </span>
+                </h1>
+                <div className="flex-shrink-0 p-[2px] rounded-full" style={{ background: 'linear-gradient(135deg, #60a5fa, #06b6d4, #a855f7)' }}>
+                  <img
+                    src="/about.jpg"
+                    alt="Dolev Atik"
+                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover block"
+                    style={{ background: '#0f0f14' }}
+                  />
+                </div>
+              </div>
             </motion.div>
 
             {/* Typing role */}
@@ -436,9 +459,9 @@ export default function Hero() {
             {/* CTA */}
             <motion.div variants={childVariants} className="flex flex-wrap gap-3">
               <motion.a
-                href="#projects"
-                onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+                href="/cv.pdf"
+                download
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
                 style={{
                   background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
                   boxShadow: '0 0 0 0 rgba(59,130,246,0.3)',
@@ -446,20 +469,20 @@ export default function Hero() {
                 whileHover={{ scale: 1.04, y: -2, boxShadow: '0 8px 30px rgba(59,130,246,0.35)' }}
                 whileTap={{ scale: 0.97 }}
               >
-                <ExternalLink size={15} className="group-hover:rotate-12 transition-transform duration-200" />
-                View Projects
+                <Download size={15} />
+                Download Resume
               </motion.a>
 
               <motion.a
-                href="/cv.pdf"
-                download
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
+                href="#projects"
+                onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
                 whileHover={{ scale: 1.04, y: -2, background: 'rgba(255,255,255,0.07)' }}
                 whileTap={{ scale: 0.97 }}
               >
-                <Download size={15} />
-                Resume
+                <ExternalLink size={15} className="group-hover:rotate-12 transition-transform duration-200" />
+                View Projects
               </motion.a>
 
               {[
@@ -485,7 +508,7 @@ export default function Hero() {
 
             {/* Keyboard shortcut hint */}
             <motion.div variants={childVariants} className="mt-6 flex items-center gap-2 text-xs text-white/20">
-              <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">⌘K</kbd>
+              <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">{shortcutLabel}</kbd>
               <span>to open command palette</span>
             </motion.div>
           </motion.div>

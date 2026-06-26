@@ -41,6 +41,9 @@ function getCommands(): Command[] {
   ]
 }
 
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
+const shortcutLabel = isMac ? '⌘K' : 'Ctrl+K'
+
 export default function CommandPalette() {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -113,7 +116,7 @@ export default function CommandPalette() {
         className="fixed bottom-6 right-6 z-40 hidden md:flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-lg glass border border-white/[0.08] text-xs text-white/45 cursor-pointer hover:text-white/70 transition-colors"
         onClick={() => setOpen(true)}
       >
-        <span className="font-mono">⌘K</span>
+        <span className="font-mono">{shortcutLabel}</span>
         <span>Command</span>
       </button>
 

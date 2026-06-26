@@ -3,11 +3,9 @@ import { motion } from 'framer-motion'
 
 const navLinks = [
   { label: 'About', href: '#about' },
-  { label: 'Journey', href: '#journey' },
   { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
+  { label: 'Tech Stack', href: '#skills' },
   { label: 'Education', href: '#education' },
-  { label: 'Contact', href: '#contact' },
 ]
 
 const sectionIds = navLinks.map((link) => link.href.slice(1))
@@ -100,9 +98,21 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-2 md:px-8">
         <div className="flex items-center justify-between h-12 md:h-16 gap-2">
+          {/* Logo */}
+          <motion.a
+            href="#hero"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            aria-label="Back to top"
+            className="shrink-0 mr-2 md:mr-4"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <img src="/logo.png" alt="Dolev Atik" className="h-7 md:h-9 w-auto object-contain" />
+          </motion.a>
+
           <nav
             ref={navRef}
-            className="flex flex-1 min-w-0 items-center overflow-x-auto scrollbar-none gap-0.5 md:gap-1 md:justify-between"
+            className="flex flex-1 min-w-0 items-center justify-center gap-0 md:gap-2"
             aria-label="Main navigation"
           >
             {navLinks.map((link) => {
@@ -119,7 +129,7 @@ export default function Navbar() {
                   href={link.href}
                   data-nav-link={id}
                   onClick={(e) => { e.preventDefault(); handleNav(link.href) }}
-                  className={`relative shrink-0 px-2 md:px-4 py-2 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  className={`relative shrink-0 px-1.5 md:px-4 py-2 text-[10px] md:text-sm font-medium rounded-lg transition-colors duration-200 ${
                     isActive ? 'text-white' : 'text-white/50 hover:text-white/90'
                   }`}
                   whileHover={{ scale: 1.02 }}
@@ -141,7 +151,7 @@ export default function Navbar() {
           <motion.a
             href="#contact"
             onClick={(e) => { e.preventDefault(); handleNav('#contact') }}
-            className="shrink-0 px-2.5 md:px-4 py-1.5 md:py-2 text-[11px] md:text-sm font-medium rounded-lg bg-blue-500 text-white hover:bg-blue-400 transition-colors duration-200 shadow-lg shadow-blue-500/20"
+            className="shrink-0 px-2 md:px-4 py-1.5 md:py-2 text-[10px] md:text-sm font-medium rounded-lg bg-blue-500 text-white hover:bg-blue-400 transition-colors duration-200 shadow-lg shadow-blue-500/20"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
           >

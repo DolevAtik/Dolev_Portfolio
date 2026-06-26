@@ -2,34 +2,58 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { personalInfo } from '../data/portfolio'
 import { Mail, Send, Download, Phone } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from './SocialIcons'
+import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './SocialIcons'
 import FadeIn from './FadeIn'
 
 const contactLinks = [
-  { icon: Mail,        label: 'Email',    value: personalInfo.email,              href: `mailto:${personalInfo.email}`,                   color: 'blue'   },
-  { icon: Phone,       label: 'Phone',    value: personalInfo.phone,              href: `tel:${personalInfo.phone.replace(/-/g, '')}`,     color: 'blue'   },
-  { icon: GithubIcon,  label: 'GitHub',   value: 'github.com/Dolev-Atik',        href: personalInfo.github,                              color: 'purple' },
-  { icon: LinkedinIcon,label: 'LinkedIn', value: 'linkedin.com/in/dolev-atik',   href: personalInfo.linkedin,                            color: 'cyan'   },
+  { icon: Mail,        label: 'Email',    value: personalInfo.email,            href: `mailto:${personalInfo.email}`,  color: 'blue'   },
+  { icon: Phone,       label: 'Phone',    value: '050-923-7173',                href: 'tel:0509237173',                color: 'green'  },
+  { icon: GithubIcon,  label: 'GitHub',   value: 'github.com/Dolev-Atik',      href: personalInfo.github,             color: 'purple' },
+  { icon: LinkedinIcon,  label: 'LinkedIn',  value: 'linkedin.com/in/dolev-atik', href: personalInfo.linkedin,              color: 'cyan'   },
+  { icon: WhatsAppIcon,  label: 'WhatsApp',  value: '050-923-7173',               href: 'https://wa.me/972509237173',       color: 'whatsapp' },
 ]
 
 const colorClasses: Record<string, string> = {
   blue: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
   cyan: 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400',
   purple: 'bg-purple-500/10 border-purple-500/20 text-purple-400',
+  green: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+  whatsapp: 'bg-green-500/10 border-green-500/20 text-green-400',
 }
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' })
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSending(true)
-    setTimeout(() => {
+    setError(null)
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          subject: `Portfolio contact from ${formState.name}`,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSent(true)
+      } else {
+        setError('Something went wrong. Please email me directly.')
+      }
+    } catch {
+      setError('Network error. Please email me directly.')
+    } finally {
       setSending(false)
-      setSent(true)
-    }, 1500)
+    }
   }
 
   return (
@@ -41,56 +65,44 @@ export default function Contact() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        <FadeIn>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">07 — Contact</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-blue-500/30 to-transparent" />
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={0.1}>
-          <h2 id="contact-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-            <span className="text-white">Let's build</span>
-            <br />
-            <span className="text-gradient-blue">something.</span>
-          </h2>
-          <p className="text-white/40 text-base mb-16 max-w-lg">
-            Open to new opportunities, freelance projects, and interesting collaborations.
-          </p>
-        </FadeIn>
-
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Left: links */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left: heading + links */}
           <div className="mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none">
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <FadeIn>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono text-xs text-blue-400 uppercase tracking-widest">05 — Contact</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-blue-500/30 to-transparent" />
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.1}>
+              <h2 id="contact-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+                <span className="text-white">Let's build</span>
+                <br />
+                <span className="text-gradient-blue">something.</span>
+              </h2>
+              <p className="text-white/40 text-base mb-10 max-w-lg">
+                Open to new opportunities, freelance projects, and interesting collaborations.
+              </p>
+            </FadeIn>
+            <div className="flex gap-3 mb-3">
               {contactLinks.map((link, i) => {
                 const Icon = link.icon
-                const content = (
-                  <motion.div
-                    className="flex flex-col items-center text-center gap-2 p-3 md:p-4 rounded-xl group h-full"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
-                    whileHover={{ scale: 1.02, borderColor: 'rgba(59,130,246,0.15)' }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 border ${colorClasses[link.color]}`}>
-                      <Icon size={15} className="md:hidden" />
-                      <Icon size={18} className="hidden md:block" />
-                    </div>
-                    <div>
-                      <div className="text-[10px] md:text-xs text-white/30 font-mono">{link.label}</div>
-                      <div className="text-xs md:text-sm font-medium text-white/80 group-hover:text-white transition-colors break-all">{link.value}</div>
-                    </div>
-                  </motion.div>
-                )
-
                 return (
-                  <FadeIn key={link.label} delay={0.15 + i * 0.08}>
-                    {link.href ? (
-                      <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="block h-full">
-                        {content}
-                      </a>
-                    ) : content}
-                  </FadeIn>
+                  <div key={link.label} className="flex-1">
+                    <motion.a
+                      href={link.href}
+                      target={link.href.startsWith('http') ? '_blank' : undefined}
+                      rel="noopener noreferrer"
+                      aria-label={link.label}
+                      className={`flex items-center justify-center p-3 md:p-4 rounded-xl border ${colorClasses[link.color]}`}
+                      whileHover={{ scale: 1.06 }}
+                      whileTap={{ scale: 0.96 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Icon size={20} />
+                    </motion.a>
+                  </div>
                 )
               })}
             </div>
@@ -180,10 +192,14 @@ export default function Contact() {
                     />
                   </div>
 
+                  {error && (
+                    <p className="text-xs text-red-400 text-center -mt-1">{error}</p>
+                  )}
+
                   <motion.button
                     type="submit"
                     disabled={sending}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60"
                     style={{ background: 'linear-gradient(135deg, #3b82f6, #06b6d4)' }}
                     whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(59,130,246,0.3)' }}
                     whileTap={{ scale: 0.98 }}
