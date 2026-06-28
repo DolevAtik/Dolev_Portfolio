@@ -77,30 +77,96 @@ function TechOrbit() {
     { Icon: Container, label: 'Docker', r: 130, startAngle: 144, speed: 18, color: '#60a5fa' },
     { Icon: Network, label: 'K8s', r: 130, startAngle: 216, speed: 18, color: '#a78bfa' },
     { Icon: Bot, label: 'AI', r: 130, startAngle: 288, speed: 18, color: '#c084fc' },
-    { Icon: FlaskConical, label: 'Flask', r: 75, startAngle: 0, speed: -12, color: '#34d399' },
-    { Icon: Database, label: 'MongoDB', r: 75, startAngle: 120, speed: -12, color: '#22d3ee' },
-    { Icon: GitBranch, label: 'CI/CD', r: 75, startAngle: 240, speed: -12, color: '#60a5fa' },
+    { Icon: FlaskConical, label: 'Flask', r: 98, startAngle: 30, speed: -12, color: '#34d399' },
+    { Icon: Database, label: 'MongoDB', r: 98, startAngle: 150, speed: -12, color: '#22d3ee' },
+    { Icon: GitBranch, label: 'CI/CD', r: 98, startAngle: 270, speed: -12, color: '#60a5fa' },
   ]
+
+  const C = 170 // svg center
 
   return (
     <div className="relative w-[340px] h-[340px] flex items-center justify-center">
+      {/* Connection lines core → outer nodes (static spokes that the radar sweeps over) */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 340 340">
+        <defs>
+          <radialGradient id="orbit-spoke" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(59,130,246,0.35)" />
+            <stop offset="100%" stopColor="rgba(59,130,246,0)" />
+          </radialGradient>
+        </defs>
+        {nodes.filter((n) => n.r === 130).map((n, i) => {
+          const a = (n.startAngle - 90) * (Math.PI / 180)
+          return (
+            <line
+              key={i}
+              x1={C}
+              y1={C}
+              x2={C + n.r * Math.cos(a)}
+              y2={C + n.r * Math.sin(a)}
+              stroke="url(#orbit-spoke)"
+              strokeWidth="1"
+            />
+          )
+        })}
+      </svg>
+
+      {/* Radar sweep ring (conic gradient) */}
+      <motion.div
+        className="absolute w-64 h-64 rounded-full pointer-events-none"
+        style={{
+          background: 'conic-gradient(from 0deg, transparent 0deg, rgba(59,130,246,0.12) 40deg, rgba(6,182,212,0.18) 60deg, transparent 75deg)',
+          maskImage: 'radial-gradient(circle, transparent 46%, #000 47%, #000 50%, transparent 51%)',
+          WebkitMaskImage: 'radial-gradient(circle, transparent 46%, #000 47%, #000 50%, transparent 51%)',
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+      />
+
       {/* Rings */}
-      <motion.div className="absolute w-64 h-64 rounded-full" style={{ border: '1px solid rgba(59,130,246,0.08)' }}
+      <motion.div className="absolute w-64 h-64 rounded-full" style={{ border: '1px solid rgba(59,130,246,0.1)' }}
         animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: 'linear' }} />
-      <motion.div className="absolute w-40 h-40 rounded-full" style={{ border: '1px dashed rgba(6,182,212,0.12)' }}
+      <motion.div className="absolute w-[196px] h-[196px] rounded-full" style={{ border: '1px dashed rgba(6,182,212,0.14)' }}
         animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: 'linear' }} />
+
+      {/* Comet pulses travelling along the orbit rings */}
+      {[
+        { r: 130, dur: 9, delay: 0, color: '#22d3ee' },
+        { r: 130, dur: 9, delay: 4.5, color: '#a78bfa' },
+        { r: 98, dur: 6, delay: 2, color: '#34d399' },
+      ].map((c, i) => (
+        <motion.div
+          key={`comet-${i}`}
+          className="absolute"
+          style={{ width: c.r * 2, height: c.r * 2 }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: c.dur, repeat: Infinity, ease: 'linear', delay: c.delay }}
+        >
+          <div
+            className="absolute rounded-full"
+            style={{
+              top: -2,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 4,
+              height: 4,
+              background: c.color,
+              boxShadow: `0 0 8px 2px ${c.color}`,
+            }}
+          />
+        </motion.div>
+      ))}
 
       {/* Glow core */}
       <motion.div
         className="absolute w-40 h-40 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.14), transparent 70%)' }}
         animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Core */}
       <motion.div
-        className="relative z-10 w-28 h-28 rounded-2xl flex flex-col items-center justify-center gap-1"
+        className="relative z-10 w-28 h-28 rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-1"
         style={{
           background: 'linear-gradient(135deg, rgba(59,130,246,0.12), rgba(168,85,247,0.08))',
           border: '1px solid rgba(59,130,246,0.25)',
@@ -110,8 +176,32 @@ function TechOrbit() {
         animate={{ y: [-6, 6, -6] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <span className="font-mono text-xs text-blue-400">{'<DA/>'}</span>
-        <span className="text-xs text-white/45 font-mono">engineer</span>
+        {/* Rotating gradient border glow */}
+        <motion.div
+          className="absolute -inset-8 pointer-events-none"
+          style={{ background: 'conic-gradient(from 0deg, transparent, rgba(96,165,250,0.5), transparent 30%)' }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+        />
+        {/* Inner mask so only a thin border glows */}
+        <div className="absolute inset-[1px] rounded-2xl" style={{ background: 'rgba(10,10,14,0.92)' }} />
+        {/* Scanline sweep */}
+        <motion.div
+          className="absolute left-0 right-0 h-8 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, transparent, rgba(34,211,238,0.18), transparent)' }}
+          animate={{ y: [-40, 60] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <span className="relative font-mono text-xs text-blue-400">{'<DA/>'}</span>
+        <span className="relative text-xs text-white/45 font-mono">engineer</span>
+        <span className="relative flex items-center gap-1 mt-0.5">
+          <motion.span
+            className="w-1 h-1 rounded-full bg-emerald-400"
+            animate={{ opacity: [1, 0.3, 1] }}
+            transition={{ duration: 1.4, repeat: Infinity }}
+          />
+          <span className="text-[8px] font-mono text-emerald-400/70 tracking-wider">online</span>
+        </span>
       </motion.div>
 
       {/* Orbiting nodes */}
@@ -132,7 +222,7 @@ function TechOrbit() {
             }}
           >
             <motion.div
-              className="flex items-center justify-center w-9 h-9 rounded-xl cursor-default"
+              className="group relative flex items-center justify-center w-9 h-9 rounded-xl cursor-default"
               style={{
                 background: 'rgba(15,15,20,0.8)',
                 border: '1px solid rgba(59,130,246,0.15)',
@@ -140,10 +230,15 @@ function TechOrbit() {
               }}
               animate={{ rotate: node.speed > 0 ? [-node.startAngle, -node.startAngle - 360] : [-node.startAngle, -node.startAngle + 360] }}
               transition={{ duration: Math.abs(node.speed), repeat: Infinity, ease: 'linear' }}
-              whileHover={{ scale: 1.3, borderColor: 'rgba(59,130,246,0.5)' }}
+              whileHover={{ scale: 1.35, borderColor: 'rgba(59,130,246,0.5)' }}
               title={node.label}
             >
-              <node.Icon size={16} style={{ color: node.color }} aria-hidden />
+              {/* Colored glow halo behind icon */}
+              <div
+                className="absolute inset-0 rounded-xl opacity-60 group-hover:opacity-100 transition-opacity"
+                style={{ background: `radial-gradient(circle, ${node.color}33, transparent 70%)` }}
+              />
+              <node.Icon size={16} style={{ color: node.color, filter: `drop-shadow(0 0 4px ${node.color}99)` }} aria-hidden />
             </motion.div>
           </div>
         </motion.div>
@@ -159,7 +254,7 @@ function TechOrbit() {
         <motion.div
           key={i}
           className="absolute font-mono text-xs font-medium pointer-events-none select-none"
-          style={{ color: snip.color, x: snip.x, y: snip.y, opacity: 0.55 }}
+          style={{ color: snip.color, x: snip.x, y: snip.y, opacity: 0.55, textShadow: `0 0 12px ${snip.color}55` }}
           animate={{ opacity: [0.3, 0.7, 0.3], y: [snip.y, snip.y - 8, snip.y] }}
           transition={{ duration: 3 + i * 0.8, repeat: Infinity, delay: i * 0.9 }}
         >
