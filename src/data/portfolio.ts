@@ -6,7 +6,7 @@ export const personalInfo = {
   github: 'https://github.com/Dolev-Atik',
   linkedin: 'https://linkedin.com/in/dolev-atik',
   roles: ['Software Developer', 'DevOps Engineer', 'AI Developer', 'Backend Developer'],
-  tagline: 'Software developer with hands-on experience in DevOps and AI — building scalable backend systems, cloud-native pipelines, and LLM-powered applications.',
+  tagline: 'I build production-ready software from AI powered applications and scalable backend systems to cloud-native infrastructure and deployment pipelines.',
   bio: [
     "B.Sc. Computer Science student with a 93 GPA and a passion for building software that actually ships. Proficient in Python, Java, Docker, Kubernetes, and modern backend technologies.",
     "As Co-Founder of Web4You, I've engineered and delivered 20+ production web applications for clients — leading everything from system design and backend architecture to deployment, CI/CD, and long-term maintenance.",
@@ -252,7 +252,7 @@ export const education = [
   {
     id: 1,
     degree: 'B.Sc. Computer Science',
-    institution: 'Academic Ramat Gan',
+    institution: 'Ramat Gan Academic College',
     period: '2023 — October 2026 (Expected)',
     gpa: '93',
     highlights: [

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useMotionValue, useSpring, type Variants } from 'framer-motion'
-import { Mail, Download, ExternalLink, Code2, Atom, Container, Network, Bot, FlaskConical, Database, GitBranch, type LucideIcon } from 'lucide-react'
+import { Mail, Download, ExternalLink, Code2, Atom, Container, Network, Bot, FlaskConical, Database, GitBranch, Briefcase, type LucideIcon } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { personalInfo } from '../data/portfolio'
 import { useMobileViewport } from '../lib/mobile'
@@ -279,66 +279,110 @@ export default function Hero() {
             </p>
 
             {/* Stats */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
+            <div className="grid grid-cols-2 justify-items-center sm:flex sm:flex-wrap items-center gap-y-6 gap-x-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
               {[
-                { val: '93', unit: 'GPA', desc: 'Computer Science' },
-                { val: '20+', unit: 'Sites', desc: 'In production' },
-                { val: '3+', unit: 'Years', desc: 'Building software' },
+                { emoji: '🎓', val: '93', unit: 'GPA', desc: 'Computer Science' },
+                { emoji: '🚀', val: '20+', unit: 'Production Projects', desc: 'Shipped to clients' },
+                { emoji: '🤖', val: 'Multiple', unit: 'AI & RAG Systems', desc: 'LangChain · LLMs', mid: true },
+                { emoji: '☁️', val: 'Docker · K8s · GitOps', unit: 'Cloud & DevOps', desc: 'Cloud-native', wide: true },
               ].map((s, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-2xl font-black text-white">{s.val}</div>
-                  <div className="text-xs font-bold text-blue-400 mt-0.5">{s.unit}</div>
+                  <div className={`${s.wide ? 'text-sm' : s.mid ? 'text-lg' : 'text-2xl'} font-black text-white leading-tight`}>{s.val}</div>
+                  <div className="text-xs font-bold text-blue-400 mt-0.5">{s.emoji} {s.unit}</div>
                   <div className="text-[10px] text-white/30 mt-0.5">{s.desc}</div>
                 </div>
               ))}
-              <div className="w-px h-10 bg-white/[0.06] mx-2" />
-              <div className="text-xs text-white/30 leading-relaxed max-w-[120px]">
-                Co-Founder<br /><span className="text-blue-400">Web4You</span> Agency
-              </div>
+              <div className="hidden sm:block w-px h-10 bg-white/[0.06] mx-2" />
+              <a
+                href="https://web4-you.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Web4You website"
+                className="group col-span-2 w-full sm:w-auto flex items-center gap-3 px-5 py-3 rounded-xl sm:flex-1 min-w-0 sm:min-w-[260px] transition-all hover:-translate-y-0.5 hover:border-blue-400/40"
+                style={{ background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.12)' }}
+              >
+                <div
+                  className="flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg, rgba(96,165,250,0.15), rgba(168,85,247,0.12))', border: '1px solid rgba(59,130,246,0.2)' }}
+                >
+                  <Briefcase size={16} className="text-blue-400" />
+                </div>
+                <div className="leading-tight flex-shrink-0">
+                  <div className="text-[10px] uppercase tracking-wider text-white/35 font-semibold">Co-Founder</div>
+                  <div className="text-sm font-bold">
+                    <span style={{
+                      background: 'linear-gradient(135deg, #60a5fa, #a855f7)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}>Web4You</span>
+                    <span className="text-white/40 font-medium"> Agency</span>
+                  </div>
+                </div>
+                <p className="hidden md:block flex-1 pl-4 ml-1 border-l border-white/[0.08] text-xs text-white/40 leading-snug">
+                  Designing & shipping custom, production-grade web apps for growing businesses.
+                </p>
+                <span
+                  className="ml-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-semibold text-xs text-white flex-shrink-0"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6, #a855f7)',
+                    boxShadow: '0 4px 16px rgba(59,130,246,0.25)',
+                  }}
+                >
+                  Visit Site
+                  <ExternalLink size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </a>
             </div>
 
             {/* CTA */}
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="/cv.pdf"
-                download
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
-                style={{
-                  background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
-                  boxShadow: '0 0 0 0 rgba(59,130,246,0.3)',
-                }}
-              >
-                <Download size={15} />
-                Download Resume
-              </a>
-
-              <a
-                href="#projects"
-                onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              >
-                <ExternalLink size={15} />
-                View Projects
-              </a>
-
-              {[
-                { icon: <GithubIcon size={16} />, href: personalInfo.github, label: 'GitHub' },
-                { icon: <LinkedinIcon size={16} />, href: personalInfo.linkedin, label: 'LinkedIn' },
-                { icon: <Mail size={16} />, href: `mailto:${personalInfo.email}`, label: 'Email' },
-              ].map(({ icon, href, label }) => (
+            <div className="flex flex-col gap-3">
+              {/* Primary actions — one row */}
+              <div className="flex gap-3">
                 <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="inline-flex items-center justify-center w-11 h-11 rounded-xl text-white/50 hover:text-white transition-colors"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  href="/cv.pdf"
+                  download
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+                    boxShadow: '0 0 0 0 rgba(59,130,246,0.3)',
+                  }}
                 >
-                  {icon}
+                  <Download size={15} />
+                  Download Resume
                 </a>
-              ))}
+
+                <a
+                  href="#projects"
+                  onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
+                  className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                >
+                  <ExternalLink size={15} />
+                  View Projects
+                </a>
+              </div>
+
+              {/* Social icons — separate row */}
+              <div className="flex gap-3">
+                {[
+                  { icon: <GithubIcon size={16} />, href: personalInfo.github, label: 'GitHub' },
+                  { icon: <LinkedinIcon size={16} />, href: personalInfo.linkedin, label: 'LinkedIn' },
+                  { icon: <Mail size={16} />, href: `mailto:${personalInfo.email}`, label: 'Email' },
+                ].map(({ icon, href, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith('http') ? '_blank' : undefined}
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex-1 inline-flex items-center justify-center h-12 rounded-xl text-white/50 hover:text-white transition-colors"
+                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  >
+                    {icon}
+                  </a>
+                ))}
+              </div>
             </div>
 
             {!isMobile && (
@@ -438,22 +482,60 @@ export default function Hero() {
             </motion.p>
 
             {/* Stats */}
-            <motion.div variants={childVariants} className="flex flex-wrap items-center gap-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
+            <motion.div variants={childVariants} className="grid grid-cols-2 justify-items-center sm:flex sm:flex-wrap items-center gap-y-6 gap-x-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
               {[
-                { val: '93', unit: 'GPA', desc: 'Computer Science' },
-                { val: '20+', unit: 'Sites', desc: 'In production' },
-                { val: '3+', unit: 'Years', desc: 'Building software' },
+                { emoji: '🎓', val: '93', unit: 'GPA', desc: 'Computer Science' },
+                { emoji: '🚀', val: '20+', unit: 'Production Projects', desc: 'Shipped to clients' },
+                { emoji: '🤖', val: 'Multiple', unit: 'AI & RAG Systems', desc: 'LangChain · LLMs', mid: true },
+                { emoji: '☁️', val: 'Docker · K8s · GitOps', unit: 'Cloud & DevOps', desc: 'Cloud-native', wide: true },
               ].map((s, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-2xl font-black text-white">{s.val}</div>
-                  <div className="text-xs font-bold text-blue-400 mt-0.5">{s.unit}</div>
+                  <div className={`${s.wide ? 'text-sm' : s.mid ? 'text-lg' : 'text-2xl'} font-black text-white leading-tight`}>{s.val}</div>
+                  <div className="text-xs font-bold text-blue-400 mt-0.5">{s.emoji} {s.unit}</div>
                   <div className="text-[10px] text-white/30 mt-0.5">{s.desc}</div>
                 </div>
               ))}
-              <div className="w-px h-10 bg-white/[0.06] mx-2" />
-              <div className="text-xs text-white/30 leading-relaxed max-w-[120px]">
-                Co-Founder<br /><span className="text-blue-400">Web4You</span> Agency
-              </div>
+              <div className="hidden sm:block w-px h-10 bg-white/[0.06] mx-2" />
+              <a
+                href="https://web4-you.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Web4You website"
+                className="group col-span-2 w-full sm:w-auto flex items-center gap-3 px-5 py-3 rounded-xl sm:flex-1 min-w-0 sm:min-w-[260px] transition-all hover:-translate-y-0.5 hover:border-blue-400/40"
+                style={{ background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.12)' }}
+              >
+                <div
+                  className="flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg, rgba(96,165,250,0.15), rgba(168,85,247,0.12))', border: '1px solid rgba(59,130,246,0.2)' }}
+                >
+                  <Briefcase size={16} className="text-blue-400" />
+                </div>
+                <div className="leading-tight flex-shrink-0">
+                  <div className="text-[10px] uppercase tracking-wider text-white/35 font-semibold">Co-Founder</div>
+                  <div className="text-sm font-bold">
+                    <span style={{
+                      background: 'linear-gradient(135deg, #60a5fa, #a855f7)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}>Web4You</span>
+                    <span className="text-white/40 font-medium"> Agency</span>
+                  </div>
+                </div>
+                <p className="hidden md:block flex-1 pl-4 ml-1 border-l border-white/[0.08] text-xs text-white/40 leading-snug">
+                  Designing & shipping custom, production-grade web apps for growing businesses.
+                </p>
+                <span
+                  className="ml-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-semibold text-xs text-white flex-shrink-0"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6, #a855f7)',
+                    boxShadow: '0 4px 16px rgba(59,130,246,0.25)',
+                  }}
+                >
+                  Visit Site
+                  <ExternalLink size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </a>
             </motion.div>
 
             {/* CTA */}

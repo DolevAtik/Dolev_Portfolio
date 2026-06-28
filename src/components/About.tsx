@@ -7,25 +7,25 @@ const pillars = [
   {
     icon: Brain,
     label: 'AI Engineering',
-    desc: 'LangChain, RAG pipelines, LLM integration — locally and in production',
+    desc: 'Building intelligent applications with RAG architectures, local LLMs, vector databases, and production AI workflows.',
     color: 'blue',
   },
   {
     icon: Server,
     label: 'Backend Systems',
-    desc: 'Python, Node.js, REST APIs — architected for real production load',
+    desc: 'Designing scalable REST APIs, backend services, authentication, and database architectures for real-world applications.',
     color: 'cyan',
   },
   {
     icon: Shield,
     label: 'DevOps & Cloud',
-    desc: 'Docker, Kubernetes, ArgoCD, GitHub Actions — full GitOps pipelines',
+    desc: 'Automating deployments with Docker, Kubernetes, GitHub Actions and GitOps workflows using ArgoCD.',
     color: 'purple',
   },
   {
     icon: Zap,
-    label: 'Full Product',
-    desc: '20+ client websites delivered end-to-end: design, dev, deploy, maintain',
+    label: 'Full Product development',
+    desc: 'Taking products from idea to production — planning, development, deployment, and long-term maintenance.',
     color: 'blue',
   },
 ]
@@ -49,9 +49,9 @@ const colorMap: Record<string, { card: string; icon: string; iconBg: string }> =
 }
 
 const bioHighlights = [
-  'I don\'t just write code — I architect, deploy, and maintain.',
   'Co-Founder of Web4You. 20+ production websites. Real clients, real pressure.',
-  'DevOps + AI: GitOps pipelines, LLM-powered systems, cloud-native deployments.',
+  'Built 20+ production websites for clients, with real pressure.',
+  'DevOps + AI: GitOps pipelines, LLM systems, cloud-native deployments.',
 ]
 
 export default function About() {
@@ -115,7 +115,7 @@ export default function About() {
                 return (
                   <FadeIn key={p.label} delay={0.05 + i * 0.04}>
                     <motion.div
-                      className={`p-8 rounded-2xl bg-gradient-to-br border ${c.card} h-full`}
+                      className={`p-8 rounded-2xl bg-gradient-to-br border ${c.card} h-full flex flex-col items-center text-center`}
                       whileHover={{ scale: 1.03, y: -4 }}
                       transition={{ duration: 0.2 }}
                     >
