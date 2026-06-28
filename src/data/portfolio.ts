@@ -37,7 +37,7 @@ export const projects = [
   {
     id: 1,
     title: 'AI SOC Analyst',
-    subtitle: 'agent ',
+    subtitle: 'Intelligent log analysis and cybersecurity threat detection.',
     description: 'An intelligent SOC assistant that uses RAG (Retrieval-Augmented Generation) to analyze security threats, query a vector knowledge base of CVEs and threat intelligence, and provide actionable remediation recommendations — all running locally with Ollama.',
     problem: 'Security teams are overwhelmed by alert fatigue, spending hours manually correlating threat intelligence across disconnected data sources. Analysts need instant, contextual answers from vast security knowledge bases — without sending sensitive data to external cloud APIs.',
     solution: 'Built a full RAG pipeline that ingests security documents and CVE data into ChromaDB vector storage, retrieves context-relevant threat intelligence at query time, and feeds it to a local LLM via Ollama — giving analysts instant, cited answers with complete data sovereignty.',
