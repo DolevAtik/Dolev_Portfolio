@@ -50,8 +50,8 @@ const colorMap: Record<string, { card: string; icon: string; iconBg: string }> =
 
 const bioHighlights = [
   'Co-Founder of Web4You. 20+ production websites. Real clients, real pressure.',
-  'Built 20+ production websites for clients, with real pressure.',
-  'DevOps + AI: GitOps pipelines, LLM systems, cloud-native deployments.',
+  'Backend engineering with scalable APIs, authentication, and database design.',
+  'Cloud-native deployments with Docker, Kubernetes, GitHub Actions, and ArgoCD.',
 ]
 
 export default function About() {
@@ -79,7 +79,7 @@ export default function About() {
               <h2 id="about-heading" className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">
                 <span className="text-white">Building software</span>
                 <br />
-                <span className="text-gradient-blue">that actually ships.</span>
+                <span className="text-gradient-blue">that makes an impact.</span>
               </h2>
             </FadeIn>
 
