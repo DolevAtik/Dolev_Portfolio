@@ -106,8 +106,8 @@ export default function About() {
 
           </div>
 
-          {/* Right: cards + stats */}
-          <div>
+          {/* Right: cards + stats — hidden on mobile */}
+          <div className="hidden lg:block">
             <div className="grid grid-cols-2 gap-5">
               {pillars.map((p, i) => {
                 const c = colorMap[p.color]
