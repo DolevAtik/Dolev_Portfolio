@@ -45,6 +45,15 @@ function CompactArchFlow({ nodes }: { nodes: string[] }) {
 
 type Project = typeof projects[0]
 
+// Per-project accent — drives tech-badge color so tags pop in line with each screenshot
+const accents: Record<number, string> = {
+  1: '#38bdf8', // AI SOC Analyst — sky
+  5: '#22d3ee', // Cloud-Native CI/CD — cyan
+  2: '#a78bfa', // AI Agent RAG PDF — violet
+  3: '#60a5fa', // Liel Edri Baking — blue
+  4: '#fbbf24', // Coming Soon — amber
+}
+
 const storeBtnSm = 'inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium border text-amber-400/70 border-amber-500/25'
 const storeBtnMd = 'inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-amber-400/70 border border-amber-500/25'
 const storeBtnStyle = { background: 'rgba(245,158,11,0.06)' }
@@ -383,7 +392,286 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   return createPortal(modal, document.body)
 }
 
+/* ── Card preview (hero image / CSS mockup fallback) ───────────────── */
+
+function mockUrl(p: Project) {
+  if (p.live) return p.live.replace(/^https?:\/\//, '').replace(/\/$/, '')
+  return `${p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}.app`
+}
+
+function BrowserChrome({ url, gradient, children }: { url: string; gradient: string; children: React.ReactNode }) {
+  return (
+    <div className="absolute inset-0 flex flex-col">
+      <div className="flex items-center gap-1.5 px-3 h-7 flex-shrink-0 border-b border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <span className="w-2 h-2 rounded-full bg-red-400/40" />
+        <span className="w-2 h-2 rounded-full bg-amber-400/40" />
+        <span className="w-2 h-2 rounded-full bg-emerald-400/40" />
+        <div className="ml-2 flex-1 h-4 rounded-md flex items-center px-2 border border-white/[0.04]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+          <span className="text-[8px] font-mono text-white/30 truncate">{url}</span>
+        </div>
+        <div className={`w-3.5 h-1.5 rounded-full bg-gradient-to-r ${gradient} opacity-50`} />
+      </div>
+      <div className="relative flex-1 overflow-hidden">{children}</div>
+    </div>
+  )
+}
+
+function DashboardMock({ gradient }: { gradient: string }) {
+  return (
+    <div className="absolute inset-0 flex">
+      <div className="w-1/4 p-2 space-y-1.5 border-r border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.012)' }}>
+        <div className={`h-3 w-3 rounded-md bg-gradient-to-br ${gradient} opacity-70 mb-2`} />
+        {[72, 60, 64, 52, 58].map((w, i) => (
+          <div key={i} className="h-1.5 rounded bg-white/[0.07]" style={{ width: `${w}%` }} />
+        ))}
+      </div>
+      <div className="flex-1 p-2.5 space-y-2">
+        <div className="grid grid-cols-3 gap-1.5">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="rounded-md p-1.5 border border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.02)' }}>
+              <div className={`h-1.5 w-2/3 rounded bg-gradient-to-r ${gradient} opacity-70`} />
+              <div className="h-2.5 w-1/2 rounded bg-white/[0.1] mt-1.5" />
+            </div>
+          ))}
+        </div>
+        <div className="rounded-md p-2 h-[58%] flex items-end gap-1 border border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.02)' }}>
+          {[42, 66, 50, 82, 60, 92, 70, 56].map((h, i) => (
+            <div key={i} className={`flex-1 rounded-sm bg-gradient-to-t ${gradient} opacity-60`} style={{ height: `${h}%` }} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ChatMock({ gradient }: { gradient: string }) {
+  return (
+    <div className="absolute inset-0 p-3 flex flex-col gap-2 justify-end">
+      <div className="self-start max-w-[70%] rounded-xl rounded-bl-sm px-2 py-1.5 space-y-1 border border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+        <div className="h-1.5 w-24 rounded bg-white/[0.14]" />
+        <div className="h-1.5 w-16 rounded bg-white/[0.08]" />
+      </div>
+      <div className={`self-end max-w-[70%] rounded-xl rounded-br-sm px-2 py-1.5 space-y-1 bg-gradient-to-r ${gradient} opacity-80`}>
+        <div className="h-1.5 w-20 rounded bg-white/45" />
+        <div className="h-1.5 w-28 rounded bg-white/25" />
+      </div>
+      <div className="self-start max-w-[78%] rounded-xl rounded-bl-sm px-2 py-1.5 space-y-1 border border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+        <div className="h-1.5 w-32 rounded bg-white/[0.14]" />
+        <div className="h-1.5 w-24 rounded bg-white/[0.08]" />
+        <div className="h-1.5 w-20 rounded bg-white/[0.06]" />
+      </div>
+      <div className="mt-1 h-5 rounded-lg flex items-center px-2 border border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <div className="h-1.5 w-20 rounded bg-white/[0.07]" />
+        <div className={`ml-auto w-3.5 h-3.5 rounded-md bg-gradient-to-r ${gradient}`} />
+      </div>
+    </div>
+  )
+}
+
+function WebsiteMock({ gradient }: { gradient: string }) {
+  return (
+    <div className="absolute inset-0 flex flex-col">
+      <div className={`h-1/2 flex flex-col items-center justify-center gap-1.5 bg-gradient-to-br ${gradient}`} style={{ opacity: 0.28 }}>
+        <div className="h-2.5 w-28 rounded bg-white/60" />
+        <div className="h-1.5 w-20 rounded bg-white/35" />
+        <div className="h-3 w-14 rounded-full bg-white/80 mt-1" />
+      </div>
+      <div className="flex-1 p-2.5 grid grid-cols-3 gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-md overflow-hidden border border-white/[0.05]" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <div className={`h-6 bg-gradient-to-br ${gradient}`} style={{ opacity: 0.22 }} />
+            <div className="p-1 space-y-1">
+              <div className="h-1.5 w-full rounded bg-white/[0.1]" />
+              <div className="h-1.5 w-2/3 rounded bg-white/[0.06]" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MobileMock({ project }: { project: Project }) {
+  const [imgOk, setImgOk] = useState(true)
+  const showImg = Boolean(project.image) && imgOk
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(245,158,11,0.13), transparent 65%)' }} />
+      <div
+        className="relative w-[40%] aspect-[9/19] rounded-[1.1rem] overflow-hidden border border-amber-500/25"
+        style={{ background: '#0d0a05', boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(245,158,11,0.1)' }}
+      >
+        <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-black/60 z-10" />
+        {/* confidential app preview — real screenshot, lightly blurred to protect the client */}
+        {showImg ? (
+          <img
+            src={project.image as string}
+            alt={`${project.title} preview`}
+            loading="lazy"
+            onError={() => setImgOk(false)}
+            className="absolute inset-0 w-full h-full object-cover object-top blur-[3px] scale-105 opacity-90"
+          />
+        ) : (
+          <div className="absolute inset-0 blur-[6px] scale-110 opacity-80">
+            <div className="h-1/3 bg-gradient-to-br from-amber-500/40 via-orange-500/30 to-rose-500/30" />
+            <div className="p-2 space-y-1.5">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="h-4 rounded-lg bg-white/[0.06]" />
+              ))}
+            </div>
+          </div>
+        )}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5" style={{ background: 'rgba(0,0,0,0.32)' }}>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center border border-amber-500/30" style={{ background: 'rgba(245,158,11,0.12)' }}>
+            <Lock size={13} className="text-amber-300/80" />
+          </div>
+          <span className="text-[7px] font-mono text-amber-300/70 uppercase tracking-wider">Confidential</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewMock({ project }: { project: Project }) {
+  switch (project.preview) {
+    case 'mobile':
+      return <MobileMock project={project} />
+    case 'chat':
+      return (
+        <BrowserChrome url={mockUrl(project)} gradient={project.gradient}>
+          <ChatMock gradient={project.gradient} />
+        </BrowserChrome>
+      )
+    case 'website':
+      return (
+        <BrowserChrome url={mockUrl(project)} gradient={project.gradient}>
+          <WebsiteMock gradient={project.gradient} />
+        </BrowserChrome>
+      )
+    default:
+      return (
+        <BrowserChrome url={mockUrl(project)} gradient={project.gradient}>
+          <DashboardMock gradient={project.gradient} />
+        </BrowserChrome>
+      )
+  }
+}
+
+function ProjectPreview({ project }: { project: Project }) {
+  const [imgOk, setImgOk] = useState(true)
+  // 'mobile' = confidential client app → always render the blurred phone mock, never the raw screenshot
+  const showImg = project.preview !== 'mobile' && Boolean(project.image) && imgOk
+  return (
+    <div className="absolute inset-0">
+      <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient}`} style={{ opacity: 0.06 }} />
+      <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.05]">
+        {showImg ? (
+          <img
+            src={project.image as string}
+            alt={`${project.title} preview`}
+            loading="lazy"
+            onError={() => setImgOk(false)}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
+        ) : (
+          <PreviewMock project={project} />
+        )}
+      </div>
+      {/* fade into the meta panel below */}
+      <div className="absolute inset-x-0 bottom-0 h-14 pointer-events-none" style={{ background: 'linear-gradient(to top, #0b0b0f, transparent)' }} />
+    </div>
+  )
+}
+
+function StatusBadge({ project }: { project: Project }) {
+  const base = 'flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-semibold backdrop-blur-md border'
+  if (project.isComingSoon) {
+    return (
+      <span className={`${base} text-amber-200 border-amber-400/40`} style={{ background: 'rgba(245,158,11,0.18)' }}>
+        <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.4, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-amber-300" />
+        In Development
+      </span>
+    )
+  }
+  if (project.live) {
+    return (
+      <span className={`${base} text-cyan-200 border-cyan-400/30`} style={{ background: 'rgba(6,182,212,0.18)' }}>
+        <span className="w-1.5 h-1.5 rounded-full bg-cyan-300" />
+        Live
+      </span>
+    )
+  }
+  if ('localOnly' in project && project.localOnly) {
+    return (
+      <span className={`${base} text-purple-200 border-purple-400/30`} style={{ background: 'rgba(168,85,247,0.18)' }}>
+        <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
+        Local
+      </span>
+    )
+  }
+  if (project.featured) {
+    return (
+      <span className={`${base} text-blue-200 border-blue-400/30`} style={{ background: 'rgba(59,130,246,0.18)' }}>
+        ★ Featured
+      </span>
+    )
+  }
+  return null
+}
+
+function QuickLinks({ project, accent }: { project: Project; accent: string }) {
+  const stop = (e: React.MouseEvent) => e.stopPropagation()
+
+  if (project.isComingSoon) {
+    return (
+      <div className="flex items-center gap-1.5" onClick={stop}>
+        <StoreLinks
+          appStore={'appStore' in project ? project.appStore : null}
+          googlePlay={'googlePlay' in project ? project.googlePlay : null}
+          size="md"
+          onClick={stop}
+        />
+      </div>
+    )
+  }
+
+  const btn = 'inline-flex items-center justify-center w-10 h-10 rounded-xl border transition-all'
+  return (
+    <div className="flex items-center gap-2" onClick={stop}>
+      {project.github && (
+        <a
+          href={project.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`GitHub: ${project.title}`}
+          title="View source on GitHub"
+          className={`${btn} text-white/55 border-white/[0.1] hover:text-white hover:border-white/25 hover:scale-105`}
+          style={{ background: 'rgba(255,255,255,0.04)' }}
+          onClick={stop}
+        >
+          <GithubIcon size={17} />
+        </a>
+      )}
+      {project.live && (
+        <a
+          href={project.live}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Live demo: ${project.title}`}
+          title="Open live demo"
+          className={`${btn} hover:scale-105`}
+          style={{ color: accent, borderColor: `${accent}66`, background: `${accent}22` }}
+          onClick={stop}
+        >
+          <ExternalLink size={17} />
+        </a>
+      )}
+    </div>
+  )
+}
+
 function ProjectCard({ project, index, large }: { project: Project; index: number; large?: boolean }) {
+  const accent = accents[project.id] ?? '#60a5fa'
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
@@ -398,293 +686,117 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
         ref={ref}
         initial={isMobile ? false : { opacity: 0, y: 40 }}
         animate={visible ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: isMobile ? 0 : 0.65, delay: isMobile ? 0 : index * 0.09 }}
-        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full aspect-square md:aspect-auto md:min-h-[400px] lg:min-h-[440px]"
-        style={
-          isSoon
-            ? { background: 'rgba(20,10,0,0.6)', border: '1.5px solid rgba(245,158,11,0.35)' }
-            : { background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }
-        }
+        transition={{ duration: isMobile ? 0 : 0.6, delay: isMobile ? 0 : index * 0.09 }}
+        className={`group relative rounded-2xl cursor-pointer h-full ${large ? 'min-h-[380px] md:min-h-[460px] lg:min-h-[500px]' : 'min-h-[340px] md:min-h-[420px] lg:min-h-[460px]'}`}
         onClick={() => setOpen(true)}
-        whileHover={{ y: -6 }}
-      >
-        {/* Top gradient bar — thicker for Coming Soon */}
-        <div className={`${isSoon ? 'h-[5px]' : 'h-[3px]'} w-full bg-gradient-to-r ${project.gradient} flex-shrink-0`} />
-
-        {/* Coming Soon — strong pulsing border glow */}
-        {isSoon && (
-          <>
-            <motion.div
-              className="absolute inset-0 pointer-events-none rounded-2xl"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ boxShadow: 'inset 0 0 50px rgba(245,158,11,0.12), 0 0 60px rgba(245,158,11,0.14), 0 0 120px rgba(251,146,60,0.07)' }}
-            />
-            {/* subtle warm background sweep */}
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.07) 0%, transparent 65%)' }} />
-          </>
-        )}
-
-        {/* Hover glow */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
-          style={
-            isSoon
-              ? { background: 'radial-gradient(ellipse at 50% -10%, rgba(245,158,11,0.14), transparent 60%)' }
-              : { background: 'radial-gradient(ellipse at 50% -20%, rgba(59,130,246,0.06), transparent 60%)' }
+        whileHover={{ y: -8 }}
+        role="button"
+        tabIndex={0}
+        aria-label={`${project.title} — open case study`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setOpen(true)
           }
-          transition={{ duration: 0.3 }}
+        }}
+      >
+        {/* Soft outer glow on hover */}
+        <div
+          aria-hidden
+          className={`absolute -inset-2 rounded-[1.4rem] bg-gradient-to-r ${project.gradient} opacity-0 group-hover:opacity-25 blur-2xl transition-opacity duration-500 pointer-events-none`}
         />
 
-        <div className="p-3 md:p-7 flex flex-col flex-1 min-w-0 h-full">
-        {/* Mobile: visual tile — icon-first, minimal text */}
-        <div className="md:hidden flex flex-col h-full relative">
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: isSoon
-                ? 'radial-gradient(circle at 50% 20%, rgba(245,158,11,0.12), transparent 65%)'
-                : 'radial-gradient(circle at 50% 20%, rgba(59,130,246,0.08), transparent 65%)',
-            }}
+        {/* Coming Soon — gentle persistent glow */}
+        {isSoon && (
+          <motion.div
+            aria-hidden
+            className="absolute -inset-1.5 rounded-[1.3rem] bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 blur-xl pointer-events-none"
+            animate={{ opacity: [0.12, 0.24, 0.12] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
           />
+        )}
 
-          <div className="relative z-10 flex items-center justify-between gap-1 mb-1">
-            <span className={`text-[8px] font-mono uppercase tracking-widest truncate ${isSoon ? 'text-amber-400/45' : 'text-white/30'}`}>
-              {project.category.split('/')[0].trim()}
-            </span>
-            {isSoon ? (
-              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[7px] font-bold text-amber-300/90 border border-amber-500/30"
-                style={{ background: 'rgba(245,158,11,0.12)' }}>
-                <motion.span
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1.4, repeat: Infinity }}
-                  className="w-1 h-1 rounded-full bg-amber-400"
-                />
-                SOON
+        {/* Animated gradient border ring (hover) */}
+        <motion.div
+          aria-hidden
+          className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${project.gradient} transition-opacity duration-500 pointer-events-none ${isSoon ? 'opacity-60' : 'opacity-0 group-hover:opacity-100'}`}
+          style={{
+            padding: '1px',
+            backgroundSize: '200% 200%',
+            WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+            WebkitMaskComposite: 'xor',
+            maskComposite: 'exclude',
+          }}
+          animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+        />
+
+        {/* Card body */}
+        <div
+          className="relative h-full rounded-2xl overflow-hidden flex flex-col"
+          style={
+            isSoon
+              ? { background: 'rgba(20,10,0,0.6)', border: '1px solid rgba(245,158,11,0.25)' }
+              : { background: '#0b0b0f', border: '1px solid rgba(255,255,255,0.06)' }
+          }
+        >
+          {/* Top gradient bar */}
+          <div className={`${isSoon ? 'h-[4px]' : 'h-[3px]'} w-full bg-gradient-to-r ${project.gradient} flex-shrink-0`} />
+
+          {/* HERO PREVIEW — grows to fill the card */}
+          <div className="relative w-full flex-1 min-h-[180px] overflow-hidden">
+            <ProjectPreview project={project} />
+
+            {/* Status badge */}
+            <div className="absolute top-2.5 left-2.5 z-10">
+              <StatusBadge project={project} />
+            </div>
+
+            {/* Category chip */}
+            <div className="absolute top-2.5 right-2.5 z-10">
+              <span
+                className="px-2 py-0.5 rounded-full text-[9px] font-mono font-medium backdrop-blur-md border"
+                style={{ background: 'rgba(0,0,0,0.4)', color: accent, borderColor: `${accent}40` }}
+              >
+                {project.category}
               </span>
-            ) : project.live ? (
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[7px] font-semibold text-cyan-300/90 border border-cyan-500/25"
-                style={{ background: 'rgba(6,182,212,0.1)' }}>
-                <span className="w-1 h-1 rounded-full bg-cyan-400" />
-                ON AIR
-              </span>
-            ) : 'localOnly' in project && project.localOnly ? (
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[7px] font-semibold text-purple-300/90 border border-purple-500/25"
-                style={{ background: 'rgba(168,85,247,0.1)' }}>
-                <span className="w-1 h-1 rounded-full bg-purple-400" />
-                Locally
-              </span>
-            ) : project.featured ? (
-              <span className="text-[8px] text-blue-400/70">★</span>
-            ) : null}
+            </div>
           </div>
 
-          <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-1 py-1">
-            <div
-              className={`w-11 h-11 rounded-2xl flex items-center justify-center text-2xl mb-2 border ${isSoon ? 'border-amber-500/20' : 'border-white/[0.06]'}`}
-              style={{
-                background: isSoon
-                  ? 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(251,146,60,0.05))'
-                  : 'linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
-                boxShadow: isSoon ? '0 8px 24px rgba(245,158,11,0.12)' : '0 8px 24px rgba(0,0,0,0.2)',
-              }}
-            >
-              {project.icon}
-            </div>
-            <h3 className={`font-bold text-[13px] leading-snug line-clamp-2 ${isSoon ? 'text-amber-50' : 'text-white'}`}>
+          {/* META */}
+          <div className="relative z-10 p-4 md:p-5 flex flex-col flex-shrink-0 min-w-0">
+            <h3 className={`font-bold leading-tight ${isSoon ? 'text-amber-50' : 'text-white'} ${large ? 'text-lg md:text-2xl' : 'text-base md:text-lg'}`}>
               {project.title}
             </h3>
-            <p className={`text-[9px] leading-tight line-clamp-1 mt-1 max-w-[95%] ${isSoon ? 'text-amber-400/50' : 'text-white/35'}`}>
+            <p className={`text-xs md:text-sm mt-1 truncate ${isSoon ? 'text-amber-400/60' : 'text-white/45'}`}>
               {project.subtitle}
             </p>
-            <div className="flex flex-wrap justify-center gap-1 mt-2 max-w-full px-0.5">
-              {project.tech.slice(0, 2).map((t) => (
+
+            {/* Tech badges — accent-tinted so they pop with the screenshot */}
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {project.tech.slice(0, large ? 4 : 3).map((t) => (
                 <span
                   key={t}
-                  className={`px-1.5 py-0.5 rounded-md text-[8px] font-medium border truncate max-w-[78px] ${isSoon ? 'text-amber-400/60 border-amber-500/20 bg-amber-500/[0.06]' : 'text-white/45 border-white/[0.07] bg-white/[0.03]'}`}
+                  className="px-2 py-0.5 rounded-md text-[10px] font-semibold border"
+                  style={{ color: accent, borderColor: `${accent}38`, background: `${accent}14` }}
                 >
                   {t}
                 </span>
               ))}
-              {project.tech.length > 2 && (
-                <span className={`px-1 py-0.5 text-[8px] font-mono ${isSoon ? 'text-amber-400/35' : 'text-white/25'}`}>
-                  +{project.tech.length - 2}
+              {project.tech.length > (large ? 4 : 3) && (
+                <span className="px-1.5 py-0.5 text-[10px] font-mono" style={{ color: `${accent}99` }}>
+                  +{project.tech.length - (large ? 4 : 3)}
                 </span>
               )}
             </div>
-          </div>
 
-          <div className="relative z-10 flex items-center justify-between gap-1 pt-2 mt-auto border-t border-white/[0.05]">
-            <div className="flex items-center gap-1 min-w-0 flex-wrap">
-              {isSoon ? (
-                <StoreLinks
-                  appStore={'appStore' in project ? project.appStore : null}
-                  googlePlay={'googlePlay' in project ? project.googlePlay : null}
-                  size="sm"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                <>
-                  {project.live && (
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Live demo: ${project.title}`}
-                      className="inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium text-cyan-300/90 border border-cyan-500/25"
-                      style={{ background: 'rgba(6,182,212,0.08)' }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ExternalLink size={9} />
-                      Live
-                    </a>
-                  )}
-                  {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`GitHub: ${project.title}`}
-                      className="inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium border text-white/45 border-white/[0.08]"
-                      style={{ background: 'rgba(255,255,255,0.03)' }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <GithubIcon size={9} />
-                      GitHub
-                    </a>
-                  )}
-                </>
-              )}
-            </div>
-            <span className={`flex items-center gap-0.5 text-[8px] font-mono shrink-0 ${isSoon ? 'text-amber-400/40' : 'text-white/25'}`}>
-              Open
-              <ArrowRight size={9} />
-            </span>
-          </div>
-        </div>
-
-          {/* Desktop — unchanged */}
-          <div className="hidden md:flex md:flex-col md:flex-1">
-            <div className="flex items-center justify-between mb-4 gap-1">
-              <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono border ${isSoon ? 'text-amber-400/50 border-amber-500/20' : 'text-white/30 border-white/[0.05]'}`}>
-                {project.category}
+            {/* Bottom row — View Case Study + quick-open links */}
+            <div className={`flex items-center justify-between gap-2 mt-4 pt-3 border-t ${isSoon ? 'border-amber-500/10' : 'border-white/[0.05]'}`}>
+              <span className={`flex items-center gap-1.5 text-xs md:text-sm font-semibold transition-colors ${isSoon ? 'text-amber-400/70 group-hover:text-amber-200' : 'text-white/55 group-hover:text-white'}`}>
+                View Case Study
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" style={{ color: accent }} />
               </span>
-              <div className="flex items-center gap-1.5 shrink-0">
-                {project.live && (
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open live demo: ${project.title}`}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-cyan-400 border border-cyan-500/25 hover:border-cyan-400/50 hover:text-cyan-300 transition-colors"
-                    style={{ background: 'rgba(6,182,212,0.07)' }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <ExternalLink size={10} />
-                    Live
-                  </a>
-                )}
-                {project.featured && !isSoon && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium text-blue-400 border border-blue-500/20"
-                    style={{ background: 'rgba(59,130,246,0.08)' }}>
-                    Featured
-                  </span>
-                )}
-                {isSoon && (
-                  <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide text-amber-300 border border-amber-500/40"
-                    style={{ background: 'rgba(245,158,11,0.15)' }}>
-                    <motion.span
-                      animate={{ opacity: [1, 0.2, 1], scale: [1, 1.3, 1] }}
-                      transition={{ duration: 1.4, repeat: Infinity }}
-                      className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"
-                    />
-                    IN DEVELOPMENT
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-4">
-              <span className={large ? 'text-4xl' : 'text-3xl'}>{project.icon}</span>
-              <div>
-                <h3 className={`font-bold leading-tight ${isSoon ? 'text-amber-100' : 'text-white'} ${large ? 'text-2xl' : 'text-xl'}`}>{project.title}</h3>
-                <p className={`text-sm mt-1 ${isSoon ? 'text-amber-400/60' : 'text-white/50'}`}>{project.subtitle}</p>
-              </div>
-            </div>
-
-            {isSoon && (
-              <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg border border-amber-500/15"
-                style={{ background: 'rgba(245,158,11,0.06)' }}>
-                <Lock size={11} className="text-amber-400/60 flex-shrink-0" />
-                <span className="text-sm text-amber-400/70 font-mono">Confidential Client Project</span>
-              </div>
-            )}
-
-            <p className={`text-sm leading-relaxed mb-6 flex-1 ${isSoon ? 'text-white/60' : 'text-white/55'}`}>
-              {project.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              {project.tech.slice(0, large ? 3 : 2).map((t) => (
-                <span key={t} className={`px-2 py-0.5 rounded text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
-                  style={{ background: isSoon ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.02)' }}>
-                  {t}
-                </span>
-              ))}
-              {project.tech.slice(large ? 3 : 2, large ? 7 : 5).map((t) => (
-                <span key={t} className={`px-2 py-0.5 rounded text-[10px] border ${isSoon ? 'text-amber-400/40 border-amber-500/15' : 'text-white/35 border-white/[0.05]'}`}
-                  style={{ background: isSoon ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.02)' }}>
-                  {t}
-                </span>
-              ))}
-              {project.tech.length > (large ? 7 : 5) && (
-                <span className="px-2 py-0.5 text-[10px] text-white/20">+{project.tech.length - (large ? 7 : 5)}</span>
-              )}
-            </div>
-
-            <div className={`flex items-center justify-between pt-4 border-t ${isSoon ? 'border-amber-500/10' : 'border-white/[0.04]'}`}>
-              <div className="flex gap-2 items-center flex-wrap">
-                {isSoon ? (
-                  <StoreLinks
-                    appStore={'appStore' in project ? project.appStore : null}
-                    googlePlay={'googlePlay' in project ? project.googlePlay : null}
-                    size="md"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                ) : (
-                  <>
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`GitHub: ${project.title}`}
-                        className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <GithubIcon size={14} />
-                      </a>
-                    )}
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Live demo: ${project.title}`}
-                        className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ExternalLink size={14} />
-                      </a>
-                    )}
-                  </>
-                )}
-              </div>
-              <span className={`flex items-center gap-1 text-xs transition-colors ${isSoon ? 'text-amber-400/55 group-hover:text-amber-400' : 'text-white/40 group-hover:text-blue-400'}`}>
-                Case study
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </span>
+              <QuickLinks project={project} accent={accent} />
             </div>
           </div>
         </div>
@@ -725,13 +837,13 @@ export default function Projects() {
         </FadeIn>
 
         {/* Row 1: 2 featured large cards */}
-        <div className="grid grid-cols-2 gap-3 md:gap-5 lg:gap-6 mb-3 md:mb-6 lg:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-5 lg:gap-6 mb-3 md:mb-5 lg:mb-6">
           {projects.slice(0, 2).map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} large />
           ))}
         </div>
         {/* Row 2: remaining cards — 3-col on desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 lg:gap-6">
           {projects.slice(2).map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i + 2} />
           ))}
