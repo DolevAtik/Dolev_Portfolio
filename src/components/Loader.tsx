@@ -91,7 +91,7 @@ export default function Loader({ onComplete }: LoaderProps) {
         if (exiting && e.target === e.currentTarget && e.propertyName === 'opacity') finish()
       }}
     >
-      <div className="absolute inset-0 bg-[#070707]" />
+      <div className="absolute inset-0 bg-black" />
       <div className="absolute inset-0 grid-bg opacity-30" />
 
       <motion.div
@@ -115,22 +115,18 @@ export default function Loader({ onComplete }: LoaderProps) {
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <div className="relative z-10 w-full max-w-lg px-6">
+      <div className="relative z-10 w-full max-w-3xl px-6">
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: EASE }}
-          className="mb-8 text-center"
+          className="mb-4 text-center"
         >
-          <div className="inline-flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
-              <span className="font-bold text-white text-lg font-mono">D</span>
-            </div>
-            <div>
-              <div className="font-bold text-white text-lg tracking-tight">Dolev Atik</div>
-              <div className="text-xs text-white/30 font-mono">Software Engineer</div>
-            </div>
-          </div>
+          <img
+            src="/logo.png"
+            alt="Dolev Atik"
+            className="w-72 h-72 mx-auto object-contain mix-blend-screen drop-shadow-lg drop-shadow-blue-500/30"
+          />
         </motion.div>
 
         <motion.div
@@ -147,7 +143,7 @@ export default function Loader({ onComplete }: LoaderProps) {
             <span className="ml-3 text-xs font-mono text-white/20">portfolio.sh</span>
           </div>
 
-          <div className="p-6 space-y-2 min-h-[200px]">
+          <div className="p-6 space-y-2 min-h-[180px]">
             <div className="text-xs font-mono text-white/20 mb-4">
               bash-5.2$ ./launch-portfolio.sh
             </div>

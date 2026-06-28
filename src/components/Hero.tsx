@@ -414,7 +414,7 @@ export default function Hero() {
 
       {!isMobile && <FloatingParticles />}
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 py-8 md:py-14 pb-20">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 py-8 md:py-10 pb-20 lg:pb-10">
         <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
 
           {/* Left: Text */}
@@ -429,7 +429,7 @@ export default function Hero() {
           ) : (
           <motion.div variants={containerVariants} initial="hidden" animate="visible">
             {/* Status badge */}
-            <motion.div variants={childVariants} className="inline-flex items-center gap-2 mb-8">
+            <motion.div variants={childVariants} className="inline-flex items-center gap-2 mb-4">
               <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"
                 style={{ background: 'rgba(16,185,129,0.05)', borderColor: 'rgba(16,185,129,0.2)', color: '#34d399' }}>
                 <motion.span
@@ -468,7 +468,7 @@ export default function Hero() {
             </motion.div>
 
             {/* Typing role */}
-            <motion.div variants={childVariants} className="flex items-center gap-2 h-9 mb-5">
+            <motion.div variants={childVariants} className="flex items-center gap-2 h-9 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
               <span className="text-lg md:text-xl font-semibold text-white/80">
                 {typedText}
@@ -477,12 +477,12 @@ export default function Hero() {
             </motion.div>
 
             {/* Tagline */}
-            <motion.p variants={childVariants} className="text-base md:text-lg text-white/45 leading-relaxed max-w-lg mb-8">
+            <motion.p variants={childVariants} className="text-base md:text-lg text-white/45 leading-relaxed max-w-lg mb-5">
               {personalInfo.tagline}
             </motion.p>
 
             {/* Stats */}
-            <motion.div variants={childVariants} className="grid grid-cols-2 justify-items-center sm:flex sm:flex-wrap items-center gap-y-6 gap-x-4 sm:gap-6 mb-10 py-5 border-y border-white/[0.04]">
+            <motion.div variants={childVariants} className="grid grid-cols-2 justify-items-center sm:flex sm:flex-wrap items-center gap-y-6 gap-x-4 sm:gap-6 mb-5 py-3 border-y border-white/[0.04]">
               {[
                 { emoji: '🎓', val: '93', unit: 'GPA', desc: 'Computer Science' },
                 { emoji: '🚀', val: '20+', unit: 'Production Projects', desc: 'Shipped to clients' },
@@ -589,7 +589,7 @@ export default function Hero() {
             </motion.div>
 
             {/* Keyboard shortcut hint */}
-            <motion.div variants={childVariants} className="mt-6 flex items-center gap-2 text-xs text-white/20">
+            <motion.div variants={childVariants} className="mt-5 flex items-center gap-2 text-xs text-white/20">
               <kbd className="px-2 py-0.5 rounded border border-white/[0.08] font-mono text-white/25">{shortcutLabel}</kbd>
               <span>to open command palette</span>
             </motion.div>
