@@ -11,7 +11,7 @@ const architectures: Record<number, string[]> = {
   1: ['User / Browser', 'React Frontend', 'Flask REST API', 'Auth Middleware', 'Ollama LLM', 'ChromaDB Vectors', 'MongoDB Storage', 'AI Response'],
   2: ['User', 'React Frontend', 'Flask Backend', 'PDF Processing', 'Embedding Model', 'ChromaDB', 'Ollama', 'AI Response'],
   3: ['Visitor', 'React + Vite', 'Tailwind CSS', 'Framer Motion', 'Contact Form', 'Email Service', 'Business Result'],
-  4: ['Mobile App', 'Backend API', 'Authentication', 'Database', 'Rewards Engine', 'Progress Tracking', 'Notifications', 'Analytics'],
+  4: ['iOS / Android / PWA', 'React + Capacitor', 'FastAPI REST + WebSocket', 'JWT Auth + RBAC', 'Gamification Engine', 'PostgreSQL', 'FCM Push + Scheduler', 'Admin Dashboard'],
 }
 
 function CompactArchFlow({ nodes }: { nodes: string[] }) {
@@ -51,7 +51,7 @@ const accents: Record<number, string> = {
   5: '#22d3ee', // Cloud-Native CI/CD — cyan
   2: '#a78bfa', // AI Agent RAG PDF — violet
   3: '#60a5fa', // Liel Edri Baking — blue
-  4: '#fbbf24', // Coming Soon — amber
+  4: '#fbbf24', // MyMojo — amber
 }
 
 const storeBtnSm = 'inline-flex items-center gap-0.5 px-1.5 py-1 rounded-md text-[8px] font-medium border text-amber-400/70 border-amber-500/25'
@@ -267,7 +267,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                       style={{ background: 'rgba(245,158,11,0.08)' }}>
                       <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.4, repeat: Infinity }}
                         className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
-                      In Dev
+                      {project.live ? 'Live · Stores soon' : 'In Dev'}
                     </span>
                   )}
                 </div>
@@ -353,13 +353,14 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   <ExternalLink size={14} />
                   Live Demo
                 </motion.a>
-              ) : isSoon ? (
+              ) : null}
+              {isSoon && (
                 <StoreLinks
                   appStore={'appStore' in project ? project.appStore : null}
                   googlePlay={'googlePlay' in project ? project.googlePlay : null}
                   size="md"
                 />
-              ) : null}
+              )}
             </div>
           </div>
 
@@ -492,42 +493,27 @@ function WebsiteMock({ gradient }: { gradient: string }) {
 }
 
 function MobileMock({ project }: { project: Project }) {
-  const [imgOk, setImgOk] = useState(true)
-  const showImg = Boolean(project.image) && imgOk
+  const shots = (project.gallery ?? []).slice(0, 3)
+  // left / center / right phones — center sits on top, sides fan out on hover
+  const layout = [
+    { cls: 'h-[74%] -translate-x-[78%] -rotate-[8deg] group-hover:-translate-x-[92%] group-hover:-rotate-[11deg]', z: 1 },
+    { cls: 'h-[90%] group-hover:-translate-y-1', z: 3 },
+    { cls: 'h-[74%] translate-x-[78%] rotate-[8deg] group-hover:translate-x-[92%] group-hover:rotate-[11deg]', z: 2 },
+  ]
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(245,158,11,0.13), transparent 65%)' }} />
-      <div
-        className="relative w-[40%] aspect-[9/19] rounded-[1.1rem] overflow-hidden border border-amber-500/25"
-        style={{ background: '#0d0a05', boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(245,158,11,0.1)' }}
-      >
-        <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-black/60 z-10" />
-        {/* confidential app preview — real screenshot, lightly blurred to protect the client */}
-        {showImg ? (
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 45%, rgba(168,85,247,0.28), rgba(245,158,11,0.08) 45%, transparent 72%)' }} />
+      {shots.map((src, i) => (
+        <div key={src} className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: layout[i].z }}>
           <img
-            src={project.image as string}
-            alt={`${project.title} preview`}
+            src={src}
+            alt={`${project.title} screen ${i + 1}`}
             loading="lazy"
-            onError={() => setImgOk(false)}
-            className="absolute inset-0 w-full h-full object-cover object-top blur-[3px] scale-105 opacity-90"
+            className={`w-auto aspect-[1242/2688] rounded-[10px] md:rounded-[14px] border border-white/15 object-cover transition-transform duration-500 ease-out ${layout[i].cls}`}
+            style={{ boxShadow: '0 18px 40px rgba(0,0,0,0.55)' }}
           />
-        ) : (
-          <div className="absolute inset-0 blur-[6px] scale-110 opacity-80">
-            <div className="h-1/3 bg-gradient-to-br from-amber-500/40 via-orange-500/30 to-rose-500/30" />
-            <div className="p-2 space-y-1.5">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-4 rounded-lg bg-white/[0.06]" />
-              ))}
-            </div>
-          </div>
-        )}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5" style={{ background: 'rgba(0,0,0,0.32)' }}>
-          <div className="w-7 h-7 rounded-full flex items-center justify-center border border-amber-500/30" style={{ background: 'rgba(245,158,11,0.12)' }}>
-            <Lock size={13} className="text-amber-300/80" />
-          </div>
-          <span className="text-[7px] font-mono text-amber-300/70 uppercase tracking-wider">Confidential</span>
         </div>
-      </div>
+      ))}
     </div>
   )
 }
@@ -589,7 +575,7 @@ function StatusBadge({ project }: { project: Project }) {
     return (
       <span className={`${base} text-amber-200 border-amber-400/40`} style={{ background: 'rgba(245,158,11,0.18)' }}>
         <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.4, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-amber-300" />
-        In Development
+        {project.live ? 'Live · Stores Soon' : 'In Development'}
       </span>
     )
   }
@@ -622,9 +608,26 @@ function StatusBadge({ project }: { project: Project }) {
 function QuickLinks({ project, accent }: { project: Project; accent: string }) {
   const stop = (e: React.MouseEvent) => e.stopPropagation()
 
+  const btn = 'inline-flex items-center justify-center w-10 h-10 rounded-xl border transition-all'
+  const liveBtn = project.live && (
+    <a
+      href={project.live}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Live demo: ${project.title}`}
+      title="Open live demo"
+      className={`${btn} hover:scale-105 flex-shrink-0`}
+      style={{ color: accent, borderColor: `${accent}66`, background: `${accent}22` }}
+      onClick={stop}
+    >
+      <ExternalLink size={17} />
+    </a>
+  )
+
   if (project.isComingSoon) {
     return (
       <div className="flex items-center gap-1.5" onClick={stop}>
+        {liveBtn}
         <StoreLinks
           appStore={'appStore' in project ? project.appStore : null}
           googlePlay={'googlePlay' in project ? project.googlePlay : null}
@@ -635,7 +638,6 @@ function QuickLinks({ project, accent }: { project: Project; accent: string }) {
     )
   }
 
-  const btn = 'inline-flex items-center justify-center w-10 h-10 rounded-xl border transition-all'
   return (
     <div className="flex items-center gap-2" onClick={stop}>
       {project.github && (
@@ -652,20 +654,7 @@ function QuickLinks({ project, accent }: { project: Project; accent: string }) {
           <GithubIcon size={17} />
         </a>
       )}
-      {project.live && (
-        <a
-          href={project.live}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Live demo: ${project.title}`}
-          title="Open live demo"
-          className={`${btn} hover:scale-105`}
-          style={{ color: accent, borderColor: `${accent}66`, background: `${accent}22` }}
-          onClick={stop}
-        >
-          <ExternalLink size={17} />
-        </a>
-      )}
+      {liveBtn}
     </div>
   )
 }
@@ -710,7 +699,7 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
         {isSoon && (
           <motion.div
             aria-hidden
-            className="absolute -inset-1.5 rounded-[1.3rem] bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 blur-xl pointer-events-none"
+            className={`absolute -inset-1.5 rounded-[1.3rem] bg-gradient-to-r ${project.gradient} blur-xl pointer-events-none`}
             animate={{ opacity: [0.12, 0.24, 0.12] }}
             transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -736,7 +725,7 @@ function ProjectCard({ project, index, large }: { project: Project; index: numbe
           className="relative h-full rounded-2xl overflow-hidden flex flex-col"
           style={
             isSoon
-              ? { background: 'rgba(20,10,0,0.6)', border: '1px solid rgba(245,158,11,0.25)' }
+              ? { background: 'rgba(16,8,28,0.75)', border: '1px solid rgba(245,158,11,0.25)' }
               : { background: '#0b0b0f', border: '1px solid rgba(255,255,255,0.06)' }
           }
         >
