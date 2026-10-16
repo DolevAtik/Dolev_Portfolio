@@ -10,6 +10,6 @@ Project card screenshots
   liel-edri-baking.png     → Liel Edri Baking (דף הבית)
 
 הערות:
-- "Coming Soon" נשאר עם mockup נייד מטושטש בכוונה (פרויקט חסוי) — לא צריך תמונה.
+- MyMojo משתמש בתיקייה mymojo/ (צילומי מסך מ-store-assets, webp ברוחב 620px). שלושת הראשונים בשדה gallery מוצגים בכרטיס.
 - יחס מומלץ: 16:10 (למשל 1280x800). התמונה נחתכת מהחלק העליון (object-top).
 - אפשר גם .jpg — רק עדכן את הסיומת ב-src/data/portfolio.ts בשדה image.
